@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://yes5144.github.io/</id>
     <title>Talk is cheap. Show me the code</title>
-    <updated>2019-06-01T04:18:10.995Z</updated>
+    <updated>2019-06-01T06:03:58.071Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://yes5144.github.io/"/>
     <link rel="self" href="https://yes5144.github.io//atom.xml"/>
@@ -10,6 +10,36 @@
     <logo>https://yes5144.github.io//images/avatar.png</logo>
     <icon>https://yes5144.github.io//favicon.ico</icon>
     <rights>All rights reserved 2019, Talk is cheap. Show me the code</rights>
+    <entry>
+        <title type="html"><![CDATA[python多进程（multiprocessing）共享变量]]></title>
+        <id>https://yes5144.github.io//post/python-duo-jin-cheng-multiprocessinggong-xiang-bian-liang</id>
+        <link href="https://yes5144.github.io//post/python-duo-jin-cheng-multiprocessinggong-xiang-bian-liang">
+        </link>
+        <updated>2019-06-01T05:54:36.000Z</updated>
+        <content type="html"><![CDATA[<pre><code>#!/usr/bin/env python2
+# coding: utf8
+import multiprocessing
+
+def foo(h,context):
+    if h%2 == 0:
+        print (h)
+    else:
+        context.append(h)
+
+if __name__ == &quot;__main__&quot;:
+    ## 设置共享list
+    con = multiprocessing.Manager().list()
+    ## 设置进程池大小
+    p = multiprocessing.Pool(2)
+    for i in range(18):
+        # con = multiprocessing.Manager().list()
+        p.apply_async(foo,args=(i,con))
+    p.close()
+    p.join()
+    print con
+</code></pre>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[我的运维笔记]]></title>
         <id>https://yes5144.github.io//post/wo-de-yun-wei-bi-ji</id>
