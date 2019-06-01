@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://yes5144.github.io/</id>
-    <title>Blog</title>
-    <updated>2019-06-01T04:00:10.524Z</updated>
+    <title>Talk is cheap. Show me the code</title>
+    <updated>2019-06-01T04:16:44.365Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://yes5144.github.io/"/>
     <link rel="self" href="https://yes5144.github.io//atom.xml"/>
-    <subtitle>温故而知新</subtitle>
+    <subtitle>唯手熟尔</subtitle>
     <logo>https://yes5144.github.io//images/avatar.png</logo>
     <icon>https://yes5144.github.io//favicon.ico</icon>
-    <rights>All rights reserved 2019, Blog</rights>
+    <rights>All rights reserved 2019, Talk is cheap. Show me the code</rights>
     <entry>
         <title type="html"><![CDATA[我的运维笔记]]></title>
         <id>https://yes5144.github.io//post/wo-de-yun-wei-bi-ji</id>
