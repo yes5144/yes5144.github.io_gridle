@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://yes5144.github.io/</id>
     <title>Talk is cheap. Show me the code</title>
-    <updated>2019-06-11T14:35:19.973Z</updated>
+    <updated>2019-06-11T16:27:23.985Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://yes5144.github.io/"/>
     <link rel="self" href="https://yes5144.github.io//atom.xml"/>
@@ -11,13 +11,28 @@
     <icon>https://yes5144.github.io//favicon.ico</icon>
     <rights>All rights reserved 2019, Talk is cheap. Show me the code</rights>
     <entry>
-        <title type="html"><![CDATA[pip常用]]></title>
+        <title type="html"><![CDATA[pip常用命令组合]]></title>
         <id>https://yes5144.github.io//post/pip-chang-yong</id>
         <link href="https://yes5144.github.io//post/pip-chang-yong">
         </link>
         <updated>2019-06-11T14:34:02.000Z</updated>
         <content type="html"><![CDATA[<p>pip freeze
-pip list</p>
+pip list
+pip check
+pip search
+pip install numpy
+pip uninstall numpy</p>
+<p>pip install ipython</p>
+<p>print ('*'.join(['2','8','4','5']))</p>
+<p>a = &quot;This sentence will be split to word list.&quot;
+print(a.split())
+此外需要注意的是split()和split(&quot; &quot;)是有区别的，后者在遇到连续多个空格的时候会分割出多个空字符串。</p>
+<p>filename = 'image00015'
+print(filename.startswith('image'))</p>
+<p>index = '15'
+filename = 'image' + index.zfill(7)
+print(filename)
+zfill(width)指定一个宽度，如果数字的长度大于宽度则什么也不做，但是如果小于宽度剩下的位会用0补齐。</p>
 ]]></content>
     </entry>
     <entry>

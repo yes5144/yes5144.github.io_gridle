@@ -3,13 +3,13 @@
   <head>
     <meta charset="utf-8" >
 
-<title>pip常用 | Talk is cheap. Show me the code</title>
+<title>pip常用命令组合 | Talk is cheap. Show me the code</title>
 <meta name="description" content="唯手熟尔">
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://yes5144.github.io//favicon.ico?v=1560263708234">
+<link rel="shortcut icon" href="https://yes5144.github.io//favicon.ico?v=1560270431728">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
 <link rel="stylesheet" href="https://yes5144.github.io//styles/main.css">
 
@@ -30,7 +30,7 @@
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://yes5144.github.io/">
-        <img src="https://yes5144.github.io//images/avatar.png?v=1560263708234" class="site-logo">
+        <img src="https://yes5144.github.io//images/avatar.png?v=1560270431728" class="site-logo">
         <h1 class="site-title">Talk is cheap. Show me the code</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -92,12 +92,27 @@
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
           <div class="post-detail">
-            <h2 class="post-title">pip常用</h2>
+            <h2 class="post-title">pip常用命令组合</h2>
             <div class="post-date">2019-06-11</div>
             
             <div class="post-content">
               <p>pip freeze
-pip list</p>
+pip list
+pip check
+pip search
+pip install numpy
+pip uninstall numpy</p>
+<p>pip install ipython</p>
+<p>print ('*'.join(['2','8','4','5']))</p>
+<p>a = &quot;This sentence will be split to word list.&quot;
+print(a.split())
+此外需要注意的是split()和split(&quot; &quot;)是有区别的，后者在遇到连续多个空格的时候会分割出多个空字符串。</p>
+<p>filename = 'image00015'
+print(filename.startswith('image'))</p>
+<p>index = '15'
+filename = 'image' + index.zfill(7)
+print(filename)
+zfill(width)指定一个宽度，如果数字的长度大于宽度则什么也不做，但是如果小于宽度剩下的位会用0补齐。</p>
 
             </div>
             
