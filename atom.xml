@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://yes5144.github.io/</id>
     <title>Talk is cheap. Show me the code</title>
-    <updated>2019-06-11T16:27:23.985Z</updated>
+    <updated>2019-06-12T15:45:46.662Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://yes5144.github.io/"/>
     <link rel="self" href="https://yes5144.github.io//atom.xml"/>
@@ -10,6 +10,46 @@
     <logo>https://yes5144.github.io//images/avatar.png</logo>
     <icon>https://yes5144.github.io//favicon.ico</icon>
     <rights>All rights reserved 2019, Talk is cheap. Show me the code</rights>
+    <entry>
+        <title type="html"><![CDATA[GO语言入门]]></title>
+        <id>https://yes5144.github.io//post/go-yu-yan-ru-men</id>
+        <link href="https://yes5144.github.io//post/go-yu-yan-ru-men">
+        </link>
+        <updated>2019-06-12T13:39:09.000Z</updated>
+        <content type="html"><![CDATA[<h3 id="go安装">go安装</h3>
+<pre><code>1，二进制安装
+2，GVM第三方工具安装
+</code></pre>
+<h3 id="gopath设置">GOPATH设置</h3>
+<pre><code>export GOPATH=/home/apple/mygo
+</code></pre>
+<h3 id="获取远程包">获取远程包</h3>
+<pre><code>go get github.com/astaxie/beedb
+
+go build
+
+go clean 移除当前源码包里面编译生成的文件。
+
+go fmt 
+
+go get 
+
+go install 这个命令在内部实际上分成两步操作：第一步是生成结果文件（可执行文件或者.a包），第二步会把编译好的结果移到$GOPATH、pkg或者$GOPATH/bin
+</code></pre>
+<h4 id="go-doc">go doc</h4>
+<pre><code>如果是buildin包，那么执行 go doc buildin;
+如果是http包，那么执行 go doc net/http;
+查看某一个包里面的函数，则执行godoc fmt Printf;
+查看相应的代码，执行godoc -src fmt Printf
+
+</code></pre>
+<p>go env
+go  list</p>
+<h3 id="if-for-switch">if  for  switch</h3>
+<pre><code>
+</code></pre>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[pip常用命令组合]]></title>
         <id>https://yes5144.github.io//post/pip-chang-yong</id>
