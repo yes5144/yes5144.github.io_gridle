@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>python多进程（multiprocessing）共享变量 | Talk is cheap. Show me the code</title>
+<title>我在百度什么 | Talk is cheap. Show me the code</title>
 <meta name="description" content="唯手熟尔">
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
@@ -92,31 +92,67 @@
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
           <div class="post-detail">
-            <h2 class="post-title">python多进程（multiprocessing）共享变量</h2>
-            <div class="post-date">2019-06-01</div>
+            <h2 class="post-title">我在百度什么</h2>
+            <div class="post-date">2019-06-16</div>
             
             <div class="post-content">
-              <pre><code>#!/usr/bin/env python2
-# coding: utf8
-import multiprocessing
+              <h3 id="2019-06-16">2019-06-16</h3>
+<pre><code>
+## 监控redis，consul自动发现
+https://blog.csdn.net/qq_25934401/article/details/82118008
 
-def foo(h,context):
-    if h%2 == 0:
-        print (h)
-    else:
-        context.append(h)
+## Go语言学习之html/template包(The way to go)
+https://blog.csdn.net/wangshubo1989/article/details/73473412
 
-if __name__ == &quot;__main__&quot;:
-    ## 设置共享list
-    con = multiprocessing.Manager().list()
-    ## 设置进程池大小
-    p = multiprocessing.Pool(2)
-    for i in range(18):
-        # con = multiprocessing.Manager().list()
-        p.apply_async(foo,args=(i,con))
-    p.close()
-    p.join()
-    print con
+
+## golang 模板(template)的常用基本语法
+https://blog.csdn.net/sryan/article/details/52353937
+
+## Golang Template 简明笔记
+https://www.jianshu.com/p/05671bab2357
+
+## Prometheus 和 Alertmanager实战配置
+https://www.cnblogs.com/longcnblogs/p/9620733.html
+
+
+## RESTful API 设计指南
+http://www.ruanyifeng.com/blog/2014/05/restful_api.html
+
+## vue实例
+https://cn.vuejs.org/v2/guide/instance.html
+
+## webpack,
+## vue, vuex, vue-router, axios
+## ES6, babel
+
+## jenkins 安装
+https://blog.csdn.net/yuanfang_jlht/article/details/51577773
+
+## win7 下载在H盘，powershell 执行 java -jar jenkins.war
+## 访问127.0.0.1:8080
+[jenkins_notify_email002.html] was not found in $JENKINS_HOME/email-templates.
+默认$JENKINS_HOME在C:\Users\Admin\.jenkins
+
+## jenkins
+http://www.eryajf.net/category/%E6%9C%AF%E4%B8%9A%E4%B8%93%E6%94%BB/%E8%87%AA%E5%8A%A8%E5%8C%96%E8%BF%90%E7%BB%B4/jenkins
+
+## Jenkins 持续集成综合实战(转)
+https://www.cnblogs.com/zuxing/articles/9360315.html
+
+## salt-api 安装
+https://www.cnblogs.com/xiewenming/p/7716660.html
+
+
+## beego.me
+https://beego.me/docs/intro/
+
+## gin
+https://github.com/gin-gonic/gin#installation
+https://gin-gonic.com/zh-cn/docs/quickstart/
+
+## edisonlz/Gin_API_Framework
+https://github.com/edisonlz/Gin_API_Framework#readme
+
 </code></pre>
 
             </div>
@@ -124,9 +160,9 @@ if __name__ == &quot;__main__&quot;:
             
               <div class="next-post">
                 <div class="next">下一篇</div>
-                <a href="https://yes5144.github.io//post/wo-de-yun-wei-bi-ji">
+                <a href="https://yes5144.github.io//post/go-yu-yan-ru-men">
                   <h3 class="post-title">
-                    我的运维笔记
+                    GO语言入门
                   </h3>
                 </a>
               </div>

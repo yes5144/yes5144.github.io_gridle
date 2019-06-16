@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://yes5144.github.io/</id>
     <title>Talk is cheap. Show me the code</title>
-    <updated>2019-06-12T15:45:46.662Z</updated>
+    <updated>2019-06-16T15:48:10.632Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://yes5144.github.io/"/>
     <link rel="self" href="https://yes5144.github.io//atom.xml"/>
@@ -10,6 +10,72 @@
     <logo>https://yes5144.github.io//images/avatar.png</logo>
     <icon>https://yes5144.github.io//favicon.ico</icon>
     <rights>All rights reserved 2019, Talk is cheap. Show me the code</rights>
+    <entry>
+        <title type="html"><![CDATA[我在百度什么]]></title>
+        <id>https://yes5144.github.io//post/wo-zai-bai-du-shi-me</id>
+        <link href="https://yes5144.github.io//post/wo-zai-bai-du-shi-me">
+        </link>
+        <updated>2019-06-16T15:47:31.000Z</updated>
+        <content type="html"><![CDATA[<h3 id="2019-06-16">2019-06-16</h3>
+<pre><code>
+## 监控redis，consul自动发现
+https://blog.csdn.net/qq_25934401/article/details/82118008
+
+## Go语言学习之html/template包(The way to go)
+https://blog.csdn.net/wangshubo1989/article/details/73473412
+
+
+## golang 模板(template)的常用基本语法
+https://blog.csdn.net/sryan/article/details/52353937
+
+## Golang Template 简明笔记
+https://www.jianshu.com/p/05671bab2357
+
+## Prometheus 和 Alertmanager实战配置
+https://www.cnblogs.com/longcnblogs/p/9620733.html
+
+
+## RESTful API 设计指南
+http://www.ruanyifeng.com/blog/2014/05/restful_api.html
+
+## vue实例
+https://cn.vuejs.org/v2/guide/instance.html
+
+## webpack,
+## vue, vuex, vue-router, axios
+## ES6, babel
+
+## jenkins 安装
+https://blog.csdn.net/yuanfang_jlht/article/details/51577773
+
+## win7 下载在H盘，powershell 执行 java -jar jenkins.war
+## 访问127.0.0.1:8080
+[jenkins_notify_email002.html] was not found in $JENKINS_HOME/email-templates.
+默认$JENKINS_HOME在C:\Users\Admin\.jenkins
+
+## jenkins
+http://www.eryajf.net/category/%E6%9C%AF%E4%B8%9A%E4%B8%93%E6%94%BB/%E8%87%AA%E5%8A%A8%E5%8C%96%E8%BF%90%E7%BB%B4/jenkins
+
+## Jenkins 持续集成综合实战(转)
+https://www.cnblogs.com/zuxing/articles/9360315.html
+
+## salt-api 安装
+https://www.cnblogs.com/xiewenming/p/7716660.html
+
+
+## beego.me
+https://beego.me/docs/intro/
+
+## gin
+https://github.com/gin-gonic/gin#installation
+https://gin-gonic.com/zh-cn/docs/quickstart/
+
+## edisonlz/Gin_API_Framework
+https://github.com/edisonlz/Gin_API_Framework#readme
+
+</code></pre>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[GO语言入门]]></title>
         <id>https://yes5144.github.io//post/go-yu-yan-ru-men</id>
