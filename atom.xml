@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://yes5144.github.io/</id>
     <title>Talk is cheap. Show me the code</title>
-    <updated>2019-06-16T15:48:10.632Z</updated>
+    <updated>2019-06-22T13:22:25.766Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://yes5144.github.io/"/>
     <link rel="self" href="https://yes5144.github.io//atom.xml"/>
@@ -10,6 +10,39 @@
     <logo>https://yes5144.github.io//images/avatar.png</logo>
     <icon>https://yes5144.github.io//favicon.ico</icon>
     <rights>All rights reserved 2019, Talk is cheap. Show me the code</rights>
+    <entry>
+        <title type="html"><![CDATA[python生成器]]></title>
+        <id>https://yes5144.github.io//post/python-sheng-cheng-qi</id>
+        <link href="https://yes5144.github.io//post/python-sheng-cheng-qi">
+        </link>
+        <updated>2019-06-22T08:23:33.000Z</updated>
+        <content type="html"><![CDATA[<blockquote>
+<p>创建生成器的一种方法是利用yield关键字，他的作用和return类似，解释器在函数中遇到yield后会立即返回响应的值。但是yield跟return的最大的不同是，在下次调用这个函数的时候不会从头开始执行，而是会从上次yield返回后的下一句开始执行，并且这时候函数的上下文，简单来说就是各变量的值，也是和上次yield返回的时候是一致的。
+形象的说，普通使用return的函数每次执行就像是一条线段，从一个端点到另一个端点，但是使用了yield的函数每次执行更像是一个圆，从一个起点开始在固定位置返回后继续绕圈执行。同时关键的一点事，任何使用yield的函数返回值就会成为一个生成器对象。</p>
+</blockquote>
+<pre><code>def  my_range(end):
+    i = 0
+    while i &lt; end:
+        yield i   ## 这里返回 i
+        i += 1
+
+## print 函数返回对象的类型：
+g = my_range(10)
+print(type(g))
+</code></pre>
+<h4 id="生成器推导式">生成器推导式</h4>
+<blockquote>
+<p>你知道列表推导式吗？其实生成器推导式与列表推导式很相近，只是把中括号变成小括号：</p>
+</blockquote>
+<pre><code>gen = (x * x for x in range(5) if x % 2 ==0)
+print (type(gen))
+for i in gen:
+  print(i)
+
+</code></pre>
+<h4 id=""></h4>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[我在百度什么]]></title>
         <id>https://yes5144.github.io//post/wo-zai-bai-du-shi-me</id>
