@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://yes5144.github.io/</id>
     <title>Talk is cheap. Show me the code</title>
-    <updated>2019-06-22T13:22:25.766Z</updated>
+    <updated>2019-06-23T16:19:15.162Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://yes5144.github.io/"/>
     <link rel="self" href="https://yes5144.github.io//atom.xml"/>
@@ -10,6 +10,128 @@
     <logo>https://yes5144.github.io//images/avatar.png</logo>
     <icon>https://yes5144.github.io//favicon.ico</icon>
     <rights>All rights reserved 2019, Talk is cheap. Show me the code</rights>
+    <entry>
+        <title type="html"><![CDATA[saltstack常用操作]]></title>
+        <id>https://yes5144.github.io//post/saltstack-chang-yong-cao-zuo</id>
+        <link href="https://yes5144.github.io//post/saltstack-chang-yong-cao-zuo">
+        </link>
+        <updated>2019-06-23T04:37:32.000Z</updated>
+        <content type="html"><![CDATA[<blockquote>
+<p>saltstack采用c/s架构，角色分为master/slave，建议采用yum部署</p>
+</blockquote>
+<h4 id="配置minion">配置minion</h4>
+<pre><code>vim  /etc/salt/minion
+master: master-id
+id: hostname&lt;weiyi&gt;
+
+</code></pre>
+<h4 id="管理-salt-key">管理 salt key</h4>
+<pre><code>salt-key  -L
+salt-key  -A
+salt-key  -D
+salt-key  -a &lt;ID&gt;
+salt-key  -d &lt;ID&gt;
+salt-key  -l acc|grep -c -v 'Accepted Keys:'
+</code></pre>
+<h4 id="组织主机节点">组织主机节点</h4>
+<pre><code>vim  /etc/salt/master
+nodegroups:
+  web: 'L@192.168.204.12,192.168.204.13'
+  db: 'L@192.168.204.32,192.168.204.33'
+## 无需重启salt-master，保存即可生效
+salt -N web test.ping
+salt -N db test.ping
+</code></pre>
+<h4 id="模块的调用">模块的调用</h4>
+<pre><code>## ping模块
+salt node1 test.ping
+## cmd模块
+salt node2 cmd.run 'id'
+salt node2 cmd.run 'curl -L http://scripts.example.com/scripts/example.sh |bash'
+### 想携带参数？
+salt node2 cmd.scripts salt://scripts/example.sh &quot;arg1 arg2 'arg   3'&quot;
+salt node2 cmd.scripts http://scripts.example.com/scripts/example.sh &quot;arguments&quot;
+
+## pkg模块
+salt node2 pkg.install 'vsftpd,lftp'
+salt node2 pkg.remove 'vsftpd,lftp'
+
+## file.replace
+salt node1 file.replace /ets/ssh/sshd_config pattern='#Port 22' repl='Port 22'
+
+## manage
+</code></pre>
+<h4 id="slssalt-state">SLS(salt state)</h4>
+<h4 id="grain">Grain</h4>
+<pre><code>salt node1 grains.ls |wc -l
+salt node1 grains.item server_type
+salt node1 grains.item ip4_interfaces:eth0
+
+</code></pre>
+<h4 id="pillar">Pillar</h4>
+<blockquote>
+<p>Pillar和Grain的区别是什么？
+Grain是在Master上面创建的，但它的取值来自于Minion，而且Grain的代码是通过调用模块saltutil.sync_grains将其同步到Minion上面执行的。在执行结果没有返回之前，Grain的值时未知的，需要根据Minion的实际环境确认。
+和Grain不同的是，Pillar是在Master上定义和存储的，是为了编写sls文件时便于引用而创建的，它的变量和赋值在执行之前就已经确定好了，和Minion的状态没有关系。</p>
+</blockquote>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[python字符编码转换Unicode和str]]></title>
+        <id>https://yes5144.github.io//post/python-zi-fu-bian-ma-zhuan-huan-unicode-he-str</id>
+        <link href="https://yes5144.github.io//post/python-zi-fu-bian-ma-zhuan-huan-unicode-he-str">
+        </link>
+        <updated>2019-06-22T16:56:44.000Z</updated>
+        <content type="html"><![CDATA[<p>参考链接1：https://blog.csdn.net/VictoriaW/article/details/75314737</p>
+<p>参考链接2：https://blog.csdn.net/sheldonwong/article/details/86684761
+Unicode和str</p>
+<pre><code>## str 我们平时写的用引号括起来的字符串都是str类型的。
+&gt;&gt;&gt; x = '哈哈'
+&gt;&gt;&gt; x
+'\xb9\xfe\xb9\xfe'
+### 根据上面的打印结果，可以知道str类型的x存的其实是二进制序列，而非字符串。为什么会出现这种情况呢？我们赋给x的明明是字符串。
+其实很简单，x经过了一次隐形的编码过程encode()。应该采用的是系统默认编码方案。 
+
+## unicode 如果在引号的前面加上字符u，那么我们就得到一个unicode字符串：
+&gt;&gt;&gt; x = u'哈哈'
+&gt;&gt;&gt; x
+u'\u54c8\u54c8'
+### unicode对象保存的是字符串本身，而非二进制序列。比如程序中的unicode字符串中包含两个U+54c8字符。
+
+### 为了避免错误，在写入文件之前，应该用utf-8或者gbk编码方案对unicode字符串编码
+&gt;&gt;&gt; x = u'哈哈'
+&gt;&gt;&gt; x
+u'\u54c8\u54c8'
+&gt;&gt;&gt; f = open('test.txt', 'w');
+&gt;&gt;&gt; x = x.encode('utf-8') #unicode -&gt; str
+&gt;&gt;&gt;x
+'\xe5\x93\x88\xe5\x93\x88'
+&gt;&gt;&gt; f.write(x)
+
+</code></pre>
+<blockquote>
+<p>Unicode strings can be encoded in plain strings in a variety of ways, according to whichever encoding you choose:
+Unicode字符串可以用多种方式编码为普通字符串, 依照你所选择的编码(encoding):</p>
+</blockquote>
+<pre><code>   1 #将Unicode转换成普通的Python字符串:&quot;编码(encode)&quot;
+   2 unicodestring = u&quot;Hello world&quot;
+   3 utf8string = unicodestring.encode(&quot;utf-8&quot;)
+   4 asciistring = unicodestring.encode(&quot;ascii&quot;)
+   5 isostring = unicodestring.encode(&quot;ISO-8859-1&quot;)
+   6 utf16string = unicodestring.encode(&quot;utf-16&quot;)
+   7 
+   8 
+   9 #将普通的Python字符串转换成Unicode: &quot;解码(decode)&quot;
+  10 plainstring1 = unicode(utf8string, &quot;utf-8&quot;)
+  11 plainstring2 = unicode(asciistring, &quot;ascii&quot;)
+  12 plainstring3 = unicode(isostring, &quot;ISO-8859-1&quot;)
+  13 plainstring4 = unicode(utf16string, &quot;utf-16&quot;)
+  14 
+  15 assert plainstring1==plainstring2==plainstring3==plainstring4
+
+</code></pre>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[python生成器]]></title>
         <id>https://yes5144.github.io//post/python-sheng-cheng-qi</id>
