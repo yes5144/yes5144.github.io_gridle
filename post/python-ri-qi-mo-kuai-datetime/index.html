@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>Gridea | Talk is cheap. Show me the code</title>
+<title>python日期模块datetime | Talk is cheap. Show me the code</title>
 <meta name="description" content="唯手熟尔">
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
@@ -91,30 +91,53 @@
 
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
-          <h2 class="current-tag">标签: Gridea</h2>
-          
-            <article class="post-item">
-              <div class="left">
-                <a href="https://yes5144.github.io//post/hello-gridea">
-                  <h2 class="post-title">Hello Gridea</h2>
+          <div class="post-detail">
+            <h2 class="post-title">python日期模块datetime</h2>
+            <div class="post-date">2019-06-23</div>
+            
+            <div class="post-content">
+              <p>参考链接：https://blog.csdn.net/cmzsteven/article/details/64906245</p>
+<pre><code># coding: utf8
+import  os
+import datetime
+print(os.getcwd())
+print(os.listdir())
+
+dict_host = [
+{u'connections': 2900.0, u'update_time': u'2019-06-22 15:23:32',  u'cpu_idle': 91.0231, u'load_5': 0.16, u'swap_use': 1.6046, u'opt_free': 77.2042, u'server_db': u'74', u'host_name': u'HD-WEB106', u'mem_use': 72.5713, u'db_qps': 0.0, u'id': 8302},
+{u'connections': 2888.0, u'update_time': u'2019-06-23 00:32:12',  u'cpu_idle': 91.2088, u'load_5': 0.28, u'swap_use': 1.6081, u'opt_free': 70.3049, u'server_db': u'73', u'host_name': u'HD-WEB110', u'mem_use': 72.1353, u'db_qps': 0.0, u'id': 8319},
+{u'connections': 10260.0, u'update_time': u'2019-06-22 17:39:33',  u'cpu_idle': 84.0146, u'load_5': 0.53, u'swap_use': 0.0, u'opt_free': 91.1708, u'server_db': u'86', u'host_name': u'HD-WEB167', u'mem_use': 50.3518, u'db_qps': 0.0, u'id': 8445},
+]
+# now = datetime.datetime.now().strftime(&quot;%Y-%m-%d %H:%M:%S&quot;)
+now = datetime.datetime.now()
+last_hour = (datetime.datetime.now() + datetime.timedelta(hours = -0.4)).strftime(&quot;%Y-%m-%d %H:%M:%S&quot;)
+print (type(now),'\t',now)
+print (type(last_hour),'\t',last_hour)
+
+print(&quot;#-&quot;*10)
+for i in dict_host:
+    if i[&quot;update_time&quot;] &gt; last_hour:
+        print(type(i[&quot;update_time&quot;]),i[&quot;update_time&quot;])
+    else:
+        print (&quot;资源信息已过期&quot;)
+</code></pre>
+
+            </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://yes5144.github.io//post/python-sheng-cheng-qi">
+                  <h3 class="post-title">
+                    python生成器
+                  </h3>
                 </a>
-                <div class="post-date">
-                  2018-12-12
-                </div>
-                <div class="post-abstract">
-                  <p>👏  欢迎使用 <strong>Gridea</strong> ！<br>
-✍️  <strong>Gridea</strong> 一个静态博客写作客户端。你可以用它来记录你的生活、心情、知识、笔记、创意... ...</p>
-
-                </div>
               </div>
-              
-            </article>
-          
+            
 
-          <div class="pagination-container">
-  
-  
-</div>
+            
+
+          </div>
 
         </div>
       </div>
