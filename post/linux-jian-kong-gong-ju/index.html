@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>GO语言入门 | Talk is cheap. Show me the code</title>
+<title>Linux 监控工具 | Talk is cheap. Show me the code</title>
 <meta name="description" content="唯手熟尔">
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
@@ -92,89 +92,49 @@
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
           <div class="post-detail">
-            <h2 class="post-title">GO语言入门</h2>
-            <div class="post-date">2019-06-12</div>
+            <h2 class="post-title">Linux 监控工具</h2>
+            <div class="post-date">2019-06-30</div>
             
             <div class="post-content">
-              <h3 id="go安装">go安装</h3>
-<pre><code>1，二进制安装
-2，GVM第三方工具安装
+              <h4 id="top">top</h4>
+<h4 id="进程实时监控-htop">进程实时监控 - HTop</h4>
+<h4 id="实时监控磁盘-io-iotop">实时监控磁盘 IO-IOTop</h4>
+<blockquote>
+<p>IOTop 命令是专门显示硬盘 IO 的命令, 界面风格类似 top 命令。</p>
+</blockquote>
+<pre><code>yum install iotop
 </code></pre>
-<h3 id="gopath设置">GOPATH设置</h3>
-<pre><code>export GOPATH=/home/apple/mygo
+<h4 id="系统资源监控-nmon">系统资源监控 - NMON</h4>
+<blockquote>
+<p>NMON 是一种在 AIX 与各种 Linux 操作系统上广泛使用的监控与分析工具</p>
+</blockquote>
+<pre><code>yum install nmon
 </code></pre>
-<h3 id="获取远程包">获取远程包</h3>
-<pre><code>go get github.com/astaxie/beedb
-
-go build
-
-go clean 移除当前源码包里面编译生成的文件。
-
-go fmt 
-
-go get 
-这个命令在内部实际上分为两步操作，1、下载；2、go install
-
-go install 这个命令在内部实际上分成两步操作：第一步是生成结果文件（可执行文件或者.a包），第二步会把编译好的结果移到$GOPATH、pkg或者$GOPATH/bin
+<h4 id="网络流量监控-iftop">网络流量监控 - IFTop</h4>
+<blockquote>
+<p>iftop 是类似于 linux 下面 top 的实时流量监控工具。比 iptraf 直观些。</p>
+</blockquote>
+<pre><code>yum install iftop 
 </code></pre>
-<h4 id="go-doc">go doc</h4>
-<pre><code>如果是buildin包，那么执行 go doc buildin;
-如果是http包，那么执行 go doc net/http;
-查看某一个包里面的函数，则执行godoc fmt Printf;
-查看相应的代码，执行godoc -src fmt Printf
-
-</code></pre>
-<h4 id="其他命令">其他命令</h4>
-<pre><code>go fix 
-go version
-go run
-go env 
-go  list
-go help get
-</code></pre>
-<h3 id="22-go语言基础">2.2 Go语言基础</h3>
-<pre><code>## 定义变量
-var  varName type
-var  vName1,  vName2, vName3 type
-var  vName type = value
-var  vName1, vName2 type =v1, v2
-
-var vName1, vName2 = v1, v2
-vName1, vName2 := v1, v2 ## 简短说明，只能在函数内部使用
-
-## 常量
-const  constantName = value
-const Pi float32 = 3.141592
-const i =10000
-const MaxThread =90
-const prefix = &quot;channel&quot;
-
-## 内置数据类型
-### Boolean
-### 数值类型
-### 字符串
-### 错误类型
-err := errors.New(&quot;emit macho dwarf: elf header corrupted&quot;)
-if err != nil {
-    fmt.Print(err)
-}
-
-</code></pre>
-<h3 id="array-slice-map">array  slice  map</h3>
-<pre><code>var  arr [n]type
-
-var arr [10]int
-</code></pre>
-<h3 id="if-for-switch">if  for  switch</h3>
+<h4 id="网络流量监控-iptraf">网络流量监控 - IPtraf</h4>
+<blockquote>
+<p>IPtraf 是一个运行在 Linux 下的简单的网络状况分析工具。</p>
+</blockquote>
 <pre><code>
+</code></pre>
+<h4 id="查看进程占用带宽情况-nethogs">查看进程占用带宽情况 - Nethogs</h4>
+<blockquote>
+<p>Nethogs 是一个终端下的网络流量监控工具可以直观的显示每个进程占用的带宽。</p>
+</blockquote>
+<pre><code>yum install nethogs
 </code></pre>
 
             </div>
             
               <div class="tag-container">
                 
-                  <a href="https://yes5144.github.io//tag/og9FawtfV" class="tag">
-                    Go
+                  <a href="https://yes5144.github.io//tag/m7A29lASg" class="tag">
+                    Linux小工具
                   </a>
                 
               </div>
@@ -182,9 +142,9 @@ var arr [10]int
             
               <div class="next-post">
                 <div class="next">下一篇</div>
-                <a href="https://yes5144.github.io//post/pip-chang-yong">
+                <a href="https://yes5144.github.io//post/linux-bao-chi-hui-hua">
                   <h3 class="post-title">
-                    pip常用命令组合
+                    Linux 保持会话
                   </h3>
                 </a>
               </div>

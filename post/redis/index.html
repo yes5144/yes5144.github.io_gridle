@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>redis入门 | Talk is cheap. Show me the code</title>
+<meta name="description" content="唯手熟尔">
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://yes5144.github.io//favicon.ico?v=1561830182358">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+<link rel="stylesheet" href="https://yes5144.github.io//styles/main.css">
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+
+
+
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://yes5144.github.io/">
+        <img src="https://yes5144.github.io//images/avatar.png?v=1561830182358" class="site-logo">
+        <h1 class="site-title">Talk is cheap. Show me the code</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            归档
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      唯手熟尔
+    </div>
+    <div class="site-footer">
+      Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | <a class="rss" href="https://yes5144.github.io//atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">redis入门</h2>
+            <div class="post-date">2019-06-01</div>
+            
+            <div class="post-content">
+              <h4 id="支持的数据类型stringhash-list-set-zset">支持的数据类型：string,hash, list, set, zset</h4>
+<pre><code>redis-cli  -h  -p  -a 
+
+redis-cli shutdown nosave |save
+</code></pre>
+<p>redis 慢日志</p>
+<p>redis4.0 模块系统：http://www.redismodules.com</p>
+<p>keys * 命令会遍历所有键，所以它的时间复杂度是O(n)，当redis保存了大量键值时，线上禁止使用
+dbsize  键总数量</p>
+<p>exists
+del  key
+expire  key  seconds</p>
+<p>ttl  key</p>
+<p>type  key</p>
+<p>单线程架构
+Redis使用了单线程架构和I/O多路复用模型来实现高性能的内存数据库服务</p>
+<p>为什么这么快？
+1，纯内存访问，内存响应时长大约10纳秒；
+2，非阻塞I/O，redis使用epoll作为I/O多路复用技术的实现，再加上redis自身的事件处理模型将epoll中的连接、读写、关闭都转换为事件，不在网络上浪费过多的时间；
+3，单线程避免了线程切换和竞态产生的消耗；</p>
+<p>学会使用批量操作，提高业务处理效率。</p>
+<p>incr key
+strlen  key</p>
+<p>getset key  value
+setrange key offset value
+getrange key start end</p>
+<p>典型使用场景 web--redis--mysql
+推荐键命名方式: &quot; 业务名:对象名:id:[属性]&quot;</p>
+<p>lpush + lpop = Stack(栈)
+lpush + rpop = Queue(队列)
+lpush + ltrim = Capped Collection (有限集合)
+lpush + brpop = Message Queue (消息队列)</p>
+<h4 id="集合">集合</h4>
+<pre><code>sadd key element
+srem key element
+scard key
+
+1，给用户添加标签
+sadd user:1:tags tag1 tag2 tag3
+sadd user:2:tags tag2 tag4 tag3
+...
+2，给标签添加用户
+sadd tag1:users user:1 user3
+sadd tag2:users user:2 user:3 user:4
+...
+用户和标签的关系维护应该在一个事务内执行，防止数据不一致
+</code></pre>
+<h4 id="有序集合">有序集合</h4>
+<pre><code>zadd key  score member [score member ...]
+
+zcard key
+zsore key member
+zrank key member
+zrevrank key member
+zrem key member
+
+zincrby key incrment member
+zrange key start end [withscroes]
+
+redis-cli  --bigkeys 找到内存占用比较大的键值，可能是系统瓶颈
+</code></pre>
+<h4 id="慢查询">慢查询</h4>
+<pre><code>slowlog-log-slower-than
+slowlog-max-len
+</code></pre>
+<h4 id="hyperloglog">HyperLogLog</h4>
+<pre><code>pfadd key element 
+pfcount key 
+</code></pre>
+<h4 id="发布和订阅">发布和订阅</h4>
+<pre><code>publish  channel  message
+subscribe channel [channel2 ...]
+</code></pre>
+<h4 id="geo地理信息定位">GEO（地理信息定位）</h4>
+<pre><code>geoadd key longitude latitude member [longitude latitude member ...]
+</code></pre>
+<h4 id="redis的噩梦-阻塞">redis的噩梦--阻塞</h4>
+<pre><code>redis-cli --bigkeys
+redis-cli --stat
+
+commandstats
+
+netstat -s |grep overflowed
+</code></pre>
+<h4 id="内存管理">内存管理</h4>
+<pre><code>[root@HD-TXSH3-XKX-WEB01 dj_tx_update]# redis-cli   info memory
+# Memory
+used_memory:61891264
+used_memory_human:59.02M
+used_memory_rss:104157184
+used_memory_rss_human:99.33M
+used_memory_peak:161850848
+used_memory_peak_human:154.35M
+total_system_memory:16723759104
+total_system_memory_human:15.58G
+used_memory_lua:37888
+used_memory_lua_human:37.00K
+maxmemory:0
+maxmemory_human:0B
+maxmemory_policy:noeviction
+mem_fragmentation_ratio:1.68
+mem_allocator:jemalloc-4.0.3
+
+
+config set maxmemory 6GB
+config set maxmemory 2GB
+</code></pre>
+<h4 id=""></h4>
+
+            </div>
+            
+              <div class="tag-container">
+                
+                  <a href="https://yes5144.github.io//tag/VlQ09vwmw" class="tag">
+                    Redis
+                  </a>
+                
+              </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://yes5144.github.io//post/nginx-ya-ce-gong-ju">
+                  <h3 class="post-title">
+                    nginx压测工具
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+
+<script type="application/javascript">
+
+AOS.init();
+
+hljs.initHighlightingOnLoad()
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+
+
+  </body>
+</html>

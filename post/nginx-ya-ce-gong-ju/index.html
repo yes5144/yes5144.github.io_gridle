@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>GO语言入门 | Talk is cheap. Show me the code</title>
+<title>nginx压测工具 | Talk is cheap. Show me the code</title>
 <meta name="description" content="唯手熟尔">
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
@@ -92,89 +92,25 @@
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
           <div class="post-detail">
-            <h2 class="post-title">GO语言入门</h2>
-            <div class="post-date">2019-06-12</div>
+            <h2 class="post-title">nginx压测工具</h2>
+            <div class="post-date">2019-06-01</div>
             
             <div class="post-content">
-              <h3 id="go安装">go安装</h3>
-<pre><code>1，二进制安装
-2，GVM第三方工具安装
+              <h4 id="web-压力测试-httperf">Web 压力测试 - Httperf</h4>
+<blockquote>
+<p>Httperf 比 ab 更强大，能测试出 web 服务能承载的最大服务量及发现潜在问题；比如：内存使用、稳定性。最大优势：可以指定规律进行压力测试，模拟真实环境。</p>
+</blockquote>
+<p>下载：https://github.com/httperf/httperf</p>
+<pre><code> 
 </code></pre>
-<h3 id="gopath设置">GOPATH设置</h3>
-<pre><code>export GOPATH=/home/apple/mygo
-</code></pre>
-<h3 id="获取远程包">获取远程包</h3>
-<pre><code>go get github.com/astaxie/beedb
-
-go build
-
-go clean 移除当前源码包里面编译生成的文件。
-
-go fmt 
-
-go get 
-这个命令在内部实际上分为两步操作，1、下载；2、go install
-
-go install 这个命令在内部实际上分成两步操作：第一步是生成结果文件（可执行文件或者.a包），第二步会把编译好的结果移到$GOPATH、pkg或者$GOPATH/bin
-</code></pre>
-<h4 id="go-doc">go doc</h4>
-<pre><code>如果是buildin包，那么执行 go doc buildin;
-如果是http包，那么执行 go doc net/http;
-查看某一个包里面的函数，则执行godoc fmt Printf;
-查看相应的代码，执行godoc -src fmt Printf
-
-</code></pre>
-<h4 id="其他命令">其他命令</h4>
-<pre><code>go fix 
-go version
-go run
-go env 
-go  list
-go help get
-</code></pre>
-<h3 id="22-go语言基础">2.2 Go语言基础</h3>
-<pre><code>## 定义变量
-var  varName type
-var  vName1,  vName2, vName3 type
-var  vName type = value
-var  vName1, vName2 type =v1, v2
-
-var vName1, vName2 = v1, v2
-vName1, vName2 := v1, v2 ## 简短说明，只能在函数内部使用
-
-## 常量
-const  constantName = value
-const Pi float32 = 3.141592
-const i =10000
-const MaxThread =90
-const prefix = &quot;channel&quot;
-
-## 内置数据类型
-### Boolean
-### 数值类型
-### 字符串
-### 错误类型
-err := errors.New(&quot;emit macho dwarf: elf header corrupted&quot;)
-if err != nil {
-    fmt.Print(err)
-}
-
-</code></pre>
-<h3 id="array-slice-map">array  slice  map</h3>
-<pre><code>var  arr [n]type
-
-var arr [10]int
-</code></pre>
-<h3 id="if-for-switch">if  for  switch</h3>
-<pre><code>
-</code></pre>
+<p>马哥教育公众号</p>
 
             </div>
             
               <div class="tag-container">
                 
-                  <a href="https://yes5144.github.io//tag/og9FawtfV" class="tag">
-                    Go
+                  <a href="https://yes5144.github.io//tag/ntL9ZxPyh" class="tag">
+                    Nginx
                   </a>
                 
               </div>
@@ -182,9 +118,9 @@ var arr [10]int
             
               <div class="next-post">
                 <div class="next">下一篇</div>
-                <a href="https://yes5144.github.io//post/pip-chang-yong">
+                <a href="https://yes5144.github.io//post/python-duo-jin-cheng-multiprocessinggong-xiang-bian-liang">
                   <h3 class="post-title">
-                    pip常用命令组合
+                    python多进程（multiprocessing）共享变量
                   </h3>
                 </a>
               </div>
