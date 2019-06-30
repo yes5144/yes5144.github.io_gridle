@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>Python美观打印 | Talk is cheap. Show me the code</title>
+<title>Percona-toolkit安装 | Talk is cheap. Show me the code</title>
 <meta name="description" content="唯手熟尔">
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
@@ -92,49 +92,24 @@
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
           <div class="post-detail">
-            <h2 class="post-title">Python美观打印</h2>
-            <div class="post-date">2019-06-29</div>
+            <h2 class="post-title">Percona-toolkit安装</h2>
+            <div class="post-date">2019-06-30</div>
             
             <div class="post-content">
-              <p>参考链接：https://www.cnblogs.com/fingerling/p/8405955.html</p>
-<h4 id="5美观打印">5.美观打印</h4>
-<p>当打印一些调试信息的时候，美观的打印输出有的时候能让人很直观的看出关键信息，提高调试的效率。</p>
-<p>最朴素的打印：</p>
-<pre><code>&gt;&gt;&gt; mapping = {'a': 23, 'b': 42, 'c': 0xc0ffee}
-&gt;&gt;&gt; str(mapping)
-&quot;{'c': 12648430, 'a': 23, 'b': 42}&quot;
+              <p><a href="https://www.percona.com">Percona官网</a>
+最新工具介绍：https://www.percona.com/doc/percona-toolkit/LATEST/installation.html</p>
+<h4 id="for-rhel-or-centos">For RHEL or CentOS:</h4>
+<pre><code>yum install https://repo.percona.com/yum/percona-release-latest.noarch.rpm
+sudo yum install percona-toolkit
 </code></pre>
-<p>借助内置模块json可以实现更加直观的表现形式：</p>
-<pre><code>复制代码
-&gt;&gt;&gt; import json
-&gt;&gt;&gt; json.dumps(mapping, indent=4, sort_keys=True)
-{
-    &quot;a&quot;: 23,
-    &quot;b&quot;: 42,
-    &quot;c&quot;: 12648430
-}
-</code></pre>
-<p>复制代码
-但是这种方法有一定的限制：</p>
-<pre><code>&gt;&gt;&gt; mapping['d'] = {1, 2, 3}
-&gt;&gt;&gt; json.dumps(mapping)
-TypeError: &quot;set([1, 2, 3]) is not JSON serializable&quot;
-
-&gt;&gt;&gt; json.dumps({all: 'yup'})
-TypeError: &quot;keys must be a string&quot;
-</code></pre>
-<p>所以，还可以使用下面的方式：</p>
-<pre><code>&gt;&gt;&gt; import pprint
-&gt;&gt;&gt; pprint.pprint(mapping)
-{'a': 23, 'b': 42, 'c': 12648430, 'd': set([1, 2, 3])}
-</code></pre>
+<p><a href="https://www.percona.com/downloads/percona-toolkit/LATEST/">手动选择和下载</a></p>
 
             </div>
             
               <div class="tag-container">
                 
-                  <a href="https://yes5144.github.io//tag/t3sU7dkeO" class="tag">
-                    Python
+                  <a href="https://yes5144.github.io//tag/ntJM9tjT5" class="tag">
+                    Mysql
                   </a>
                 
               </div>
@@ -142,9 +117,9 @@ TypeError: &quot;keys must be a string&quot;
             
               <div class="next-post">
                 <div class="next">下一篇</div>
-                <a href="https://yes5144.github.io//post/saltstack-chang-yong-cao-zuo">
+                <a href="https://yes5144.github.io//post/mysql-ji-chu-hui-gu">
                   <h3 class="post-title">
-                    Saltstack常用操作
+                    MySQL 基础回顾
                   </h3>
                 </a>
               </div>

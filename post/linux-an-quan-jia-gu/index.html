@@ -9,7 +9,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://yes5144.github.io//favicon.ico?v=1561830182358">
+<link rel="shortcut icon" href="https://yes5144.github.io//favicon.ico?v=1561903292218">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
 <link rel="stylesheet" href="https://yes5144.github.io//styles/main.css">
 
@@ -30,7 +30,7 @@
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://yes5144.github.io/">
-        <img src="https://yes5144.github.io//images/avatar.png?v=1561830182358" class="site-logo">
+        <img src="https://yes5144.github.io//images/avatar.png?v=1561903292218" class="site-logo">
         <h1 class="site-title">Talk is cheap. Show me the code</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -97,8 +97,35 @@
             
             <div class="post-content">
               <h4 id="ssh配置文件">ssh配置文件</h4>
-<h4 id="防火墙">防火墙</h4>
+<pre><code>## 修改默认ssh端口
+sed  -i 's@#Port 22@Port 60022@g' /etc/ssh/sshd_config
+systemctl restart sshd
+
+</code></pre>
+<h4 id="系统最小化启动">系统最小化启动</h4>
+<h4 id="防火墙指定ip限制">防火墙指定ip限制</h4>
 <h4 id="ssh访问失败次数限制">ssh访问失败次数限制</h4>
+<pre><code>cat &gt;/bin/ssh_scan.sh &lt;&lt;EOF
+#! /bin/bash
+cat /var/log/secure|awk '/Failed/{print $(NF-3)}'|sort|uniq -c|awk '{print $2&quot;=&quot;$1;}' &gt; /tmp/black.txt
+DEFINE=&quot;10&quot;
+for i in `cat  /tmp/black.txt`
+do
+    IP=`echo $i |awk -F= '{print $1}'`
+    NUM=`echo $i|awk -F= '{print $2}'`
+    if [ $NUM -gt $DEFINE ];then
+         grep $IP /etc/hosts.deny &gt; /dev/null
+         if [ $? -gt 0 ];then
+            echo &quot;sshd:$IP&quot; &gt;&gt; /etc/hosts.deny
+         fi
+    fi
+done
+EOF
+## 加入定时任务
+echo '####SSH_Failed_Access_Scan####' &gt;&gt;/etc/crontab
+echo '*/1 * * * * root sh /bin/ssh_scan.sh' &gt;&gt; /etc/crontab
+
+</code></pre>
 <h4 id="安全扫描工具-nmap">安全扫描工具 - NMap</h4>
 <blockquote>
 <p>NMap 是 Linux 下的网络连接扫描和嗅探工具包用来扫描网上电脑开放的网络连接端。</p>

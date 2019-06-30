@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://yes5144.github.io/</id>
     <title>Talk is cheap. Show me the code</title>
-    <updated>2019-06-29T17:43:07.971Z</updated>
+    <updated>2019-06-30T14:01:38.302Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://yes5144.github.io/"/>
     <link rel="self" href="https://yes5144.github.io//atom.xml"/>
@@ -10,6 +10,141 @@
     <logo>https://yes5144.github.io//images/avatar.png</logo>
     <icon>https://yes5144.github.io//favicon.ico</icon>
     <rights>All rights reserved 2019, Talk is cheap. Show me the code</rights>
+    <entry>
+        <title type="html"><![CDATA[Percona-toolkit安装]]></title>
+        <id>https://yes5144.github.io//post/percona-toolkit-an-zhuang</id>
+        <link href="https://yes5144.github.io//post/percona-toolkit-an-zhuang">
+        </link>
+        <updated>2019-06-30T13:55:36.000Z</updated>
+        <content type="html"><![CDATA[<p><a href="https://www.percona.com">Percona官网</a>
+最新工具介绍：https://www.percona.com/doc/percona-toolkit/LATEST/installation.html</p>
+<h4 id="for-rhel-or-centos">For RHEL or CentOS:</h4>
+<pre><code>yum install https://repo.percona.com/yum/percona-release-latest.noarch.rpm
+sudo yum install percona-toolkit
+</code></pre>
+<p><a href="https://www.percona.com/downloads/percona-toolkit/LATEST/">手动选择和下载</a></p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[MySQL 基础回顾]]></title>
+        <id>https://yes5144.github.io//post/mysql-ji-chu-hui-gu</id>
+        <link href="https://yes5144.github.io//post/mysql-ji-chu-hui-gu">
+        </link>
+        <updated>2019-06-30T09:13:58.000Z</updated>
+        <content type="html"><![CDATA[<h4 id="增删改查">增删改查</h4>
+<h4 id="备份恢复">备份恢复</h4>
+<h4 id="分析工具">分析工具</h4>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Centos7 安装mysql57]]></title>
+        <id>https://yes5144.github.io//post/centos7-an-zhuang-mysql57</id>
+        <link href="https://yes5144.github.io//post/centos7-an-zhuang-mysql57">
+        </link>
+        <updated>2019-06-30T09:09:49.000Z</updated>
+        <content type="html"><![CDATA[<h4 id="mysql57-开始支持json字段类型了快来体验一把">mysql5.7 开始支持json字段类型了，快来体验一把</h4>
+<blockquote>
+<p>本文采用yum 安装</p>
+</blockquote>
+<pre><code>## 配置mysql57仓库
+
+## 开始安装，修改密码，修改默认字符类型
+
+## 
+
+</code></pre>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Centos7 安装谷歌浏览器]]></title>
+        <id>https://yes5144.github.io//post/centos7-an-zhuang-gu-ge-liu-lan-qi</id>
+        <link href="https://yes5144.github.io//post/centos7-an-zhuang-gu-ge-liu-lan-qi">
+        </link>
+        <updated>2019-06-30T09:00:19.000Z</updated>
+        <content type="html"><![CDATA[<h4 id=""></h4>
+<p>参考链接：https://blog.csdn.net/u010472499/article/details/72327963</p>
+<pre><code>[root@justdoit ~]# cat &gt; /etc/yum.repos.d/google-chrome.repo &lt;&lt;EOF
+[google-chrome]
+name=google-chrome
+baseurl=http://dl.google.com/linux/chrome/rpm/stable/x86_64
+enabled=1
+gpgcheck=1
+gpgkey=https://dl.google.com/linux/linux_signing_key.pub
+EOF
+
+yum clean all
+yum makecache
+yum install google-chrome-stable
+</code></pre>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Python 基础回顾]]></title>
+        <id>https://yes5144.github.io//post/python-ji-chu-hui-gu</id>
+        <link href="https://yes5144.github.io//post/python-ji-chu-hui-gu">
+        </link>
+        <updated>2019-06-30T07:27:49.000Z</updated>
+        <content type="html"><![CDATA[<h4 id="python">Python</h4>
+<h4 id="控制语句">控制语句</h4>
+<pre><code>## if选择结构
+if 条件1:
+    代码1
+elif 条件2:
+    代码2
+else:
+    代码n
+		
+## while循环
+while 条件:
+    代码
+
+## for循环
+for 循环变量 in 可迭代对象:
+    代码块
+
+### break, continue, pass
+</code></pre>
+<h4 id="字符串">字符串</h4>
+<pre><code>## 字符串输入
+number = int(input('input your favorite number')) # input中参数是输出提示
+print(f'Your favorite number is {number}')    # 字符串前的f表示这是一个格式串，变量不存在则报错。
+
+## 字符串运算
+alice = 'my name is '
+bob = 'Li Hua'
+
+alice +bob
+bob * 3
+'Li' in bob
+alice[0:5]
+
+### 字符串操作符： + * in  not in  []
+
+### 字符串内建方法
+count(), find(), isalpha(), isdigit(), join(), lstrip(), replace(), rstrip(), split(), startswith(), strip(), zfill()
+
+print('-'.join(['3'.'2','5','5']))
+index=33
+print('image'+ str(index).zfill(4))
+
+</code></pre>
+<h4 id=""></h4>
+<h4 id="变量和数据类型">变量和数据类型</h4>
+<pre><code>## Tuple（元组）
+(3,3,2,1)
+## Set（集合）
+{3,2,1}
+## List（列表）
+[3,3,2.1]
+## Dict（字典）
+key:value
+## 字符串
+
+</code></pre>
+<h4 id="函数">函数</h4>
+<h4 id="对象">对象</h4>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Linux 替代命令介绍]]></title>
         <id>https://yes5144.github.io//post/linux-ti-dai-ming-ling-jie-shao</id>
@@ -48,8 +183,35 @@ tldr kill
         </link>
         <updated>2019-06-29T17:08:28.000Z</updated>
         <content type="html"><![CDATA[<h4 id="ssh配置文件">ssh配置文件</h4>
-<h4 id="防火墙">防火墙</h4>
+<pre><code>## 修改默认ssh端口
+sed  -i 's@#Port 22@Port 60022@g' /etc/ssh/sshd_config
+systemctl restart sshd
+
+</code></pre>
+<h4 id="系统最小化启动">系统最小化启动</h4>
+<h4 id="防火墙指定ip限制">防火墙指定ip限制</h4>
 <h4 id="ssh访问失败次数限制">ssh访问失败次数限制</h4>
+<pre><code>cat &gt;/bin/ssh_scan.sh &lt;&lt;EOF
+#! /bin/bash
+cat /var/log/secure|awk '/Failed/{print $(NF-3)}'|sort|uniq -c|awk '{print $2&quot;=&quot;$1;}' &gt; /tmp/black.txt
+DEFINE=&quot;10&quot;
+for i in `cat  /tmp/black.txt`
+do
+    IP=`echo $i |awk -F= '{print $1}'`
+    NUM=`echo $i|awk -F= '{print $2}'`
+    if [ $NUM -gt $DEFINE ];then
+         grep $IP /etc/hosts.deny &gt; /dev/null
+         if [ $? -gt 0 ];then
+            echo &quot;sshd:$IP&quot; &gt;&gt; /etc/hosts.deny
+         fi
+    fi
+done
+EOF
+## 加入定时任务
+echo '####SSH_Failed_Access_Scan####' &gt;&gt;/etc/crontab
+echo '*/1 * * * * root sh /bin/ssh_scan.sh' &gt;&gt; /etc/crontab
+
+</code></pre>
 <h4 id="安全扫描工具-nmap">安全扫描工具 - NMap</h4>
 <blockquote>
 <p>NMap 是 Linux 下的网络连接扫描和嗅探工具包用来扫描网上电脑开放的网络连接端。</p>
@@ -180,261 +342,6 @@ mkvirtualenv zqxt：创建运行环境zqxt</p>
 <p>lssitepackages: 列出当前环境安装了的包</p>
 <p>创建的环境是独立的，互不干扰，无需sudo权限即可使用 pip 来进行包的管理</p>
 <p>source ~/.bash_profile</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[salt安装lnmp]]></title>
-        <id>https://yes5144.github.io//post/salt-an-zhuang-lnmp</id>
-        <link href="https://yes5144.github.io//post/salt-an-zhuang-lnmp">
-        </link>
-        <updated>2019-06-29T16:13:27.000Z</updated>
-        <content type="html"><![CDATA[<pre><code>lamp-install:
-  pkg.installed:
-    - pkgs:
-      - httpd
-      - php
-      - php-pdo
-      - php-mysql
-
-apache-config:
-  file.managed:
-    - name: /etc/httpd/conf/httpd.conf
-    - source: salt://web/files/httpd.conf
-    - user: root
-    - group: root
-    - mode: 644
-    - require:
-      - pkg: lamp-install
-
-apache-auth:
-  pkg.installed:
-    - name: httpd-tools
-    - require_in:
-      - cmd: apache-auth
-  cmd.run:
-    - name: htpasswd -bc /etc/httpd/conf/htpasswd_file admin admin
-    - unless: test -f /etc/httpd/conf/htpasswd_file
-
-apache-conf:
-  file.recurse:
-    - name: /etc/httpd/conf.d
-    - source: salt://web/files/apache-conf.d
-    - watch_in:
-      - service: lamp-service
-
-/etc/php.ini:
-  file.managed:
-    - source: salt://web/files/php.ini
-    - user: root
-    - group: root
-    - mode: 644
-    - watch_in:
-      - service: lamp-service
-
-lamp-service:
-  service.running:
-    - name: httpd
-    - enable: True
-    - reload: True
-    - watch:
-      - file: apache-config
-
-</code></pre>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[python美观打印]]></title>
-        <id>https://yes5144.github.io//post/python-mei-guan-da-yin</id>
-        <link href="https://yes5144.github.io//post/python-mei-guan-da-yin">
-        </link>
-        <updated>2019-06-28T18:40:14.000Z</updated>
-        <content type="html"><![CDATA[<p>参考链接：https://www.cnblogs.com/fingerling/p/8405955.html</p>
-<h4 id="5美观打印">5.美观打印</h4>
-<p>当打印一些调试信息的时候，美观的打印输出有的时候能让人很直观的看出关键信息，提高调试的效率。</p>
-<p>最朴素的打印：</p>
-<pre><code>&gt;&gt;&gt; mapping = {'a': 23, 'b': 42, 'c': 0xc0ffee}
-&gt;&gt;&gt; str(mapping)
-&quot;{'c': 12648430, 'a': 23, 'b': 42}&quot;
-</code></pre>
-<p>借助内置模块json可以实现更加直观的表现形式：</p>
-<pre><code>复制代码
-&gt;&gt;&gt; import json
-&gt;&gt;&gt; json.dumps(mapping, indent=4, sort_keys=True)
-{
-    &quot;a&quot;: 23,
-    &quot;b&quot;: 42,
-    &quot;c&quot;: 12648430
-}
-</code></pre>
-<p>复制代码
-但是这种方法有一定的限制：</p>
-<pre><code>&gt;&gt;&gt; mapping['d'] = {1, 2, 3}
-&gt;&gt;&gt; json.dumps(mapping)
-TypeError: &quot;set([1, 2, 3]) is not JSON serializable&quot;
-
-&gt;&gt;&gt; json.dumps({all: 'yup'})
-TypeError: &quot;keys must be a string&quot;
-</code></pre>
-<p>所以，还可以使用下面的方式：</p>
-<pre><code>&gt;&gt;&gt; import pprint
-&gt;&gt;&gt; pprint.pprint(mapping)
-{'a': 23, 'b': 42, 'c': 12648430, 'd': set([1, 2, 3])}
-</code></pre>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[saltstack常用操作]]></title>
-        <id>https://yes5144.github.io//post/saltstack-chang-yong-cao-zuo</id>
-        <link href="https://yes5144.github.io//post/saltstack-chang-yong-cao-zuo">
-        </link>
-        <updated>2019-06-23T04:37:32.000Z</updated>
-        <content type="html"><![CDATA[<blockquote>
-<p>saltstack采用c/s架构，角色分为master/slave，建议采用yum部署</p>
-</blockquote>
-<h4 id="配置minion">配置minion</h4>
-<pre><code>vim  /etc/salt/minion
-master: master-id
-id: hostname&lt;weiyi&gt;
-
-</code></pre>
-<h4 id="管理-salt-key">管理 salt key</h4>
-<pre><code>salt-key  -L
-salt-key  -A
-salt-key  -D
-salt-key  -a &lt;ID&gt;
-salt-key  -d &lt;ID&gt;
-salt-key  -l acc|grep -c -v 'Accepted Keys:'
-</code></pre>
-<h4 id="组织主机节点">组织主机节点</h4>
-<pre><code>vim  /etc/salt/master
-nodegroups:
-  web: 'L@192.168.204.12,192.168.204.13'
-  db: 'L@192.168.204.32,192.168.204.33'
-## 无需重启salt-master，保存即可生效
-salt -N web test.ping
-salt -N db test.ping
-</code></pre>
-<h4 id="模块的调用">模块的调用</h4>
-<pre><code>## ping模块
-salt node1 test.ping
-## cmd模块
-salt node2 cmd.run 'id'
-salt node2 cmd.run 'curl -L http://scripts.example.com/scripts/example.sh |bash'
-### 想携带参数？
-salt node2 cmd.scripts salt://scripts/example.sh &quot;arg1 arg2 'arg   3'&quot;
-salt node2 cmd.scripts http://scripts.example.com/scripts/example.sh &quot;arguments&quot;
-
-## pkg模块
-salt node2 pkg.install 'vsftpd,lftp'
-salt node2 pkg.remove 'vsftpd,lftp'
-
-## file.replace
-salt node1 file.replace /ets/ssh/sshd_config pattern='#Port 22' repl='Port 22'
-
-## manage
-</code></pre>
-<h4 id="slssalt-state">SLS(salt state)</h4>
-<h4 id="grain">Grain</h4>
-<pre><code>salt node1 grains.ls |wc -l
-salt node1 grains.item server_type
-salt node1 grains.item ip4_interfaces:eth0
-
-</code></pre>
-<h4 id="pillar">Pillar</h4>
-<blockquote>
-<p>Pillar和Grain的区别是什么？
-Grain是在Master上面创建的，但它的取值来自于Minion，而且Grain的代码是通过调用模块saltutil.sync_grains将其同步到Minion上面执行的。在执行结果没有返回之前，Grain的值时未知的，需要根据Minion的实际环境确认。
-和Grain不同的是，Pillar是在Master上定义和存储的，是为了编写sls文件时便于引用而创建的，它的变量和赋值在执行之前就已经确定好了，和Minion的状态没有关系。</p>
-</blockquote>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[python字符编码转换Unicode和str]]></title>
-        <id>https://yes5144.github.io//post/python-zi-fu-bian-ma-zhuan-huan-unicode-he-str</id>
-        <link href="https://yes5144.github.io//post/python-zi-fu-bian-ma-zhuan-huan-unicode-he-str">
-        </link>
-        <updated>2019-06-22T16:56:44.000Z</updated>
-        <content type="html"><![CDATA[<p>参考链接1：https://blog.csdn.net/VictoriaW/article/details/75314737</p>
-<p>参考链接2：https://blog.csdn.net/sheldonwong/article/details/86684761
-Unicode和str</p>
-<pre><code>## str 我们平时写的用引号括起来的字符串都是str类型的。
-&gt;&gt;&gt; x = '哈哈'
-&gt;&gt;&gt; x
-'\xb9\xfe\xb9\xfe'
-### 根据上面的打印结果，可以知道str类型的x存的其实是二进制序列，而非字符串。为什么会出现这种情况呢？我们赋给x的明明是字符串。
-其实很简单，x经过了一次隐形的编码过程encode()。应该采用的是系统默认编码方案。 
-
-## unicode 如果在引号的前面加上字符u，那么我们就得到一个unicode字符串：
-&gt;&gt;&gt; x = u'哈哈'
-&gt;&gt;&gt; x
-u'\u54c8\u54c8'
-### unicode对象保存的是字符串本身，而非二进制序列。比如程序中的unicode字符串中包含两个U+54c8字符。
-
-### 为了避免错误，在写入文件之前，应该用utf-8或者gbk编码方案对unicode字符串编码
-&gt;&gt;&gt; x = u'哈哈'
-&gt;&gt;&gt; x
-u'\u54c8\u54c8'
-&gt;&gt;&gt; f = open('test.txt', 'w');
-&gt;&gt;&gt; x = x.encode('utf-8') #unicode -&gt; str
-&gt;&gt;&gt;x
-'\xe5\x93\x88\xe5\x93\x88'
-&gt;&gt;&gt; f.write(x)
-
-</code></pre>
-<blockquote>
-<p>Unicode strings can be encoded in plain strings in a variety of ways, according to whichever encoding you choose:
-Unicode字符串可以用多种方式编码为普通字符串, 依照你所选择的编码(encoding):</p>
-</blockquote>
-<pre><code>   1 #将Unicode转换成普通的Python字符串:&quot;编码(encode)&quot;
-   2 unicodestring = u&quot;Hello world&quot;
-   3 utf8string = unicodestring.encode(&quot;utf-8&quot;)
-   4 asciistring = unicodestring.encode(&quot;ascii&quot;)
-   5 isostring = unicodestring.encode(&quot;ISO-8859-1&quot;)
-   6 utf16string = unicodestring.encode(&quot;utf-16&quot;)
-   7 
-   8 
-   9 #将普通的Python字符串转换成Unicode: &quot;解码(decode)&quot;
-  10 plainstring1 = unicode(utf8string, &quot;utf-8&quot;)
-  11 plainstring2 = unicode(asciistring, &quot;ascii&quot;)
-  12 plainstring3 = unicode(isostring, &quot;ISO-8859-1&quot;)
-  13 plainstring4 = unicode(utf16string, &quot;utf-16&quot;)
-  14 
-  15 assert plainstring1==plainstring2==plainstring3==plainstring4
-
-</code></pre>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[python日期模块datetime]]></title>
-        <id>https://yes5144.github.io//post/python-ri-qi-mo-kuai-datetime</id>
-        <link href="https://yes5144.github.io//post/python-ri-qi-mo-kuai-datetime">
-        </link>
-        <updated>2019-06-22T16:47:38.000Z</updated>
-        <content type="html"><![CDATA[<p>参考链接：https://blog.csdn.net/cmzsteven/article/details/64906245</p>
-<pre><code># coding: utf8
-import  os
-import datetime
-print(os.getcwd())
-print(os.listdir())
-
-dict_host = [
-{u'connections': 2900.0, u'update_time': u'2019-06-22 15:23:32',  u'cpu_idle': 91.0231, u'load_5': 0.16, u'swap_use': 1.6046, u'opt_free': 77.2042, u'server_db': u'74', u'host_name': u'HD-WEB106', u'mem_use': 72.5713, u'db_qps': 0.0, u'id': 8302},
-{u'connections': 2888.0, u'update_time': u'2019-06-23 00:32:12',  u'cpu_idle': 91.2088, u'load_5': 0.28, u'swap_use': 1.6081, u'opt_free': 70.3049, u'server_db': u'73', u'host_name': u'HD-WEB110', u'mem_use': 72.1353, u'db_qps': 0.0, u'id': 8319},
-{u'connections': 10260.0, u'update_time': u'2019-06-22 17:39:33',  u'cpu_idle': 84.0146, u'load_5': 0.53, u'swap_use': 0.0, u'opt_free': 91.1708, u'server_db': u'86', u'host_name': u'HD-WEB167', u'mem_use': 50.3518, u'db_qps': 0.0, u'id': 8445},
-]
-# now = datetime.datetime.now().strftime(&quot;%Y-%m-%d %H:%M:%S&quot;)
-now = datetime.datetime.now()
-last_hour = (datetime.datetime.now() + datetime.timedelta(hours = -0.4)).strftime(&quot;%Y-%m-%d %H:%M:%S&quot;)
-print (type(now),'\t',now)
-print (type(last_hour),'\t',last_hour)
-
-print(&quot;#-&quot;*10)
-for i in dict_host:
-    if i[&quot;update_time&quot;] &gt; last_hour:
-        print(type(i[&quot;update_time&quot;]),i[&quot;update_time&quot;])
-    else:
-        print (&quot;资源信息已过期&quot;)
-</code></pre>
 ]]></content>
     </entry>
 </feed>
