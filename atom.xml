@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://yes5144.github.io/</id>
     <title>Talk is cheap. Show me the code</title>
-    <updated>2019-07-01T16:28:59.673Z</updated>
+    <updated>2019-07-02T16:17:46.353Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://yes5144.github.io/"/>
     <link rel="self" href="https://yes5144.github.io//atom.xml"/>
@@ -10,6 +10,19 @@
     <logo>https://yes5144.github.io//images/avatar.png</logo>
     <icon>https://yes5144.github.io//favicon.ico</icon>
     <rights>All rights reserved 2019, Talk is cheap. Show me the code</rights>
+    <entry>
+        <title type="html"><![CDATA[Python and go 代码示例]]></title>
+        <id>https://yes5144.github.io//post/python-and-go-dai-ma-shi-li</id>
+        <link href="https://yes5144.github.io//post/python-and-go-dai-ma-shi-li">
+        </link>
+        <updated>2019-07-02T15:48:14.000Z</updated>
+        <content type="html"><![CDATA[<p>https://www.programcreek.com/python/example/534/MySQLdb.connect</p>
+<p>https://gobyexample.com/select
+https://gobyexample.xgwang.me/hello-world.html</p>
+<p>https://golangbot.com/channels/</p>
+<p>https://www.datacamp.com/home</p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Vim 简单配置]]></title>
         <id>https://yes5144.github.io//post/vim-jian-dan-pei-zhi</id>
@@ -308,33 +321,6 @@ nmap -o 10.1.3.20
 <p>Nethogs 是一个终端下的网络流量监控工具可以直观的显示每个进程占用的带宽。</p>
 </blockquote>
 <pre><code>yum install nethogs
-</code></pre>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[Linux 保持会话]]></title>
-        <id>https://yes5144.github.io//post/linux-bao-chi-hui-hua</id>
-        <link href="https://yes5144.github.io//post/linux-bao-chi-hui-hua">
-        </link>
-        <updated>2019-06-29T16:36:09.000Z</updated>
-        <content type="html"><![CDATA[<h4 id="tmux">tmux</h4>
-<p>参考链接：https://www.cnblogs.com/kevingrace/p/6496899.html</p>
-<pre><code>## 安装
-yum  install tmux  -y
-
-## 使用
-tmux
-[root@justdoit ~]# tmux
-[root@justdoit ~]# tmux ls
-0: 1 windows (created Sun Jun 30 00:32:05 2019) [164x26] (attached)
-[root@justdoit ~]# tmux rename -t 0 test_tmux
-[root@justdoit ~]# tmux ls
-test_tmux: 1 windows (created Sun Jun 30 00:32:05 2019) [164x26] (attached)
-[root@justdoit ~]#
-### 更多详细用法，请参考上面链接
-</code></pre>
-<h4 id="screen">screen</h4>
-<pre><code>
 </code></pre>
 ]]></content>
     </entry>
