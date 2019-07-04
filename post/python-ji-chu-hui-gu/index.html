@@ -9,7 +9,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://yes5144.github.io//favicon.ico?v=1562084261552">
+<link rel="shortcut icon" href="https://yes5144.github.io//favicon.ico?v=1562256764363">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
 <link rel="stylesheet" href="https://yes5144.github.io//styles/main.css">
 
@@ -30,7 +30,7 @@
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://yes5144.github.io/">
-        <img src="https://yes5144.github.io//images/avatar.png?v=1562084261552" class="site-logo">
+        <img src="https://yes5144.github.io//images/avatar.png?v=1562256764363" class="site-logo">
         <h1 class="site-title">Talk is cheap. Show me the code</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -154,7 +154,27 @@ key:value
 
 </code></pre>
 <h4 id="函数">函数</h4>
-<h4 id="对象">对象</h4>
+<ul>
+<li>不带默认值参数：def func(a):</li>
+<li>带默认值参数：def func(a, b=1):</li>
+<li>任意位置参数：def func(a, b=1, *c):</li>
+<li>任意键值参数：def func(a, b=1, *c, **d):</li>
+</ul>
+<p>这也是他们的出场顺序安排</p>
+<h4 id="类和对象">类和对象</h4>
+<pre><code>对象是类的一个实例。
+类在python中由3部分组成--类名、属性和方法。
+类的属性分两种，分别是类属性和实例属性
+
+class Vehicle:
+	 class_property =0   # 没有self，并且写在方法外，这是类属性
+	 
+	 def __init__(self):
+        temporary_var = -1    # 写在方法里，但是没有self，这是一个局部变量
+        self.instance_property = 1  # 有self，这里创建了一个实例属性
+        Vehicle.class_property +1   # 操作类属性需要写类名
+
+</code></pre>
 
             </div>
             

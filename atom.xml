@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://yes5144.github.io/</id>
     <title>Talk is cheap. Show me the code</title>
-    <updated>2019-07-02T16:17:46.353Z</updated>
+    <updated>2019-07-04T16:13:56.082Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://yes5144.github.io/"/>
     <link rel="self" href="https://yes5144.github.io//atom.xml"/>
@@ -203,7 +203,27 @@ key:value
 
 </code></pre>
 <h4 id="函数">函数</h4>
-<h4 id="对象">对象</h4>
+<ul>
+<li>不带默认值参数：def func(a):</li>
+<li>带默认值参数：def func(a, b=1):</li>
+<li>任意位置参数：def func(a, b=1, *c):</li>
+<li>任意键值参数：def func(a, b=1, *c, **d):</li>
+</ul>
+<p>这也是他们的出场顺序安排</p>
+<h4 id="类和对象">类和对象</h4>
+<pre><code>对象是类的一个实例。
+类在python中由3部分组成--类名、属性和方法。
+类的属性分两种，分别是类属性和实例属性
+
+class Vehicle:
+	 class_property =0   # 没有self，并且写在方法外，这是类属性
+	 
+	 def __init__(self):
+        temporary_var = -1    # 写在方法里，但是没有self，这是一个局部变量
+        self.instance_property = 1  # 有self，这里创建了一个实例属性
+        Vehicle.class_property +1   # 操作类属性需要写类名
+
+</code></pre>
 ]]></content>
     </entry>
     <entry>
@@ -226,7 +246,29 @@ tldr --update
 tldr kill
 </code></pre>
 <h4 id="tmux终端复用工具替代screen-nohup">tmux：终端复用工具，替代screen、nohup</h4>
-<pre><code>yum install tmux
+<h5 id="tmux-常用操作">tmux 常用操作</h5>
+<pre><code>yum install tmux 
+
+tmux  # 默认创建一个会话，以数字命名
+tmux ls
+
+tmux new -s ccc   # 新创一个会话ccc命名
+tmux ls
+
+tmux a -t aaa     # 返回一个已知aaa会话
+tmux detach       # 退出会话不是关闭
+
+tmux kill-session -t bbb  # 关闭会话
+tmux ls
+</code></pre>
+<h5 id="screen-常用操作">screen 常用操作</h5>
+<pre><code>yum install screen
+
+screen -S yourname ## 新建一个叫yourname的session
+screen -ls 			## 列出当前所有的session
+screen -r yourname ## 回到yourname这个session
+screen -d yourname ## 远程detach某个session
+screen -d -r yourname ## 结束当前session并回到yourname这个session
 </code></pre>
 <h4 id="htop-提供更美观-更方便的进程监控工具替代top命令">htop: 提供更美观、更方便的进程监控工具，替代top命令</h4>
 <h4 id="myclimysql客户端支持语法高亮和命令补全效果类似ipython可以替代mysql命令">mycli：mysql客户端，支持语法高亮和命令补全，效果类似ipython，可以替代mysql命令</h4>
