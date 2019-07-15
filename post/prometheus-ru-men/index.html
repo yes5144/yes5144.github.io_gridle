@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>Prometheus 入门 | Talk is cheap. Show me the code</title>
+<meta name="description" content="你第十年的目标是CTO，你打算如何实现？">
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://yes5144.github.io//favicon.ico?v=1563204434312">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+<link rel="stylesheet" href="https://yes5144.github.io//styles/main.css">
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+
+
+
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://yes5144.github.io/">
+        <img src="https://yes5144.github.io//images/avatar.png?v=1563204434312" class="site-logo">
+        <h1 class="site-title">Talk is cheap. Show me the code</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            归档
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      你第十年的目标是CTO，你打算如何实现？
+    </div>
+    <div class="site-footer">
+      Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | <a class="rss" href="https://yes5144.github.io//atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">Prometheus 入门</h2>
+            <div class="post-date">2019-07-13</div>
+            
+            <div class="post-content">
+              <p>prometheus</p>
+<p>promOL</p>
+<pre><code>http_requests_total[5m]
+rate(http_requests_total[5m])
+
+
+http_request_duration_microseconds_count{handler=&quot;query&quot;}
+</code></pre>
+<h4 id="这里提供一些其他常用的表示式">这里提供一些其他常用的表示式：</h4>
+<pre><code>查询主机使用率
+
+1 - avg by (agentIP) (irate(node_cpu{agentIP=~&quot;$machine&quot;, mode=&quot;idle&quot;}[5m]))
+查询主机磁盘IO
+
+irate(node_disk_io_time_ms{agentIP=~'$machine',device!~'^(md\\d+$|dm-)'}[5m])
+查询主机内存使用量
+
+(node_memory_MemTotal{agentIP=&quot;101.37.26.244&quot;} - node_memory_MemAvailable{agentIP=&quot;101.37.26.244&quot;}) / node_memory_MemTotal{agentIP=&quot;101.37.26.244&quot;}
+除了本文中示例的表达式功能以外，Prometheus还提供了其它丰富的查询，操作符以及表达式。包括：运算符，聚合,函数等等。
+
+http://ylzheng.com/2018/01/17/prometheus-sd-and-relabel/
+
+
+通过指标io_namespace_http_requests_total我们可以：
+
+查询应用的请求总量
+# PromQL
+sum(io_namespace_http_requests_total)
+
+
+查询每秒Http请求量
+# PromQL
+sum(rate(io_wise2c_gateway_requests_total[5m]))
+
+
+查询当前应用请求量Top N的URI
+# PromQL
+topk(10, sum(io_namespace_http_requests_total) by (path))
+
+事件发生总的次数
+# 含义：当前http请求发生总次数为12次
+io_namespace_http_requests_latency_seconds_summary_count{path=&quot;/&quot;,method=&quot;GET&quot;,code=&quot;200&quot;,} 12.0
+事件产生的值的总和
+# 含义：这12次http请求的总响应时间为 51.029495508s
+io_namespace_http_requests_latency_seconds_summary_sum{path=&quot;/&quot;,method=&quot;GET&quot;,code=&quot;200&quot;,} 51.029495508
+事件产生的值的分布情况
+# 含义：这12次http请求响应时间的中位数是3.052404983s
+io_namespace_http_requests_latency_seconds_summary{path=&quot;/&quot;,method=&quot;GET&quot;,code=&quot;200&quot;,quantile=&quot;0.5&quot;,} 3.052404983
+# 含义：这12次http请求响应时间的9分位数是8.003261666s
+io_namespace_http_requests_latency_seconds_summary{path=&quot;/&quot;,method=&quot;GET&quot;,code=&quot;200&quot;,quantile=&quot;0.9&quot;,} 8.003261666
+使用Collector暴露业务指标
+
+http://ylzheng.com/2018/03/12/prometheus-alertmanager-ha/
+
+https://learnku.com/articles/22193#098370
+
+https://songjiayang.gitbooks.io/prometheus/content/
+
+https://tizeen.github.io/2018/04/21/prometheus+node_exporter+alertmanager%E7%9B%91%E6%8E%A7%E4%B8%BB%E6%9C%BA%E5%AE%9E%E8%B7%B5/
+
+https://www.cnblogs.com/fairjm/p/start_prometheus.html
+
+https://www.ctolib.com/docs/sfile/prometheus-book/sd/service-discovery-with-consul.html
+https://blog.csdn.net/polo2044/article/details/83963211
+
+http://docs.flycloud.me/docs/ELKStack/elasticsearch/other/grafana.html
+
+https://blog.52itstyle.vip/archives/2049/
+
+https://juejin.im/entry/5bc411245188255c5721663a
+</code></pre>
+<h4 id="grafana-命令行操作">grafana 命令行操作</h4>
+<pre><code>列出可用的插件
+#grafana-cli plugins list-remote
+ 
+安装最新版本的插件
+#grafana-cli plugins install &lt;plugin-id&gt;
+ 
+安装特定版本的插件
+#grafana-cli plugins install &lt;plugin-id&gt; &lt;version&gt;
+ 
+列出安装的插件
+#grafana-cli plugins ls
+ 
+更新所有安装的插件
+#grafana-cli plugins update-all
+ 
+更新一个插件
+#grafana-cli plugins update &lt;plugin-id&gt;
+ 
+删除一个插件
+#grafana-cli plugins remove &lt;plugin-id&gt;
+
+https://yunlzheng.gitbook.io/prometheus-book/parti-prometheus-ji-chu/quickstart/prometheus-quick-start/use-node-exporter
+
+</code></pre>
+
+            </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://yes5144.github.io//post/pycharm-chang-yong-she-zhi">
+                  <h3 class="post-title">
+                    Pycharm 常用设置
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+
+<script type="application/javascript">
+
+AOS.init();
+
+hljs.initHighlightingOnLoad()
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+
+
+  </body>
+</html>

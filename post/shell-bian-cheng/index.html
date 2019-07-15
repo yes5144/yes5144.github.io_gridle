@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>Go语言入门 | Talk is cheap. Show me the code</title>
+<title>Shell 编程 | Talk is cheap. Show me the code</title>
 <meta name="description" content="你第十年的目标是CTO，你打算如何实现？">
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
@@ -92,101 +92,114 @@
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
           <div class="post-detail">
-            <h2 class="post-title">Go语言入门</h2>
-            <div class="post-date">2019-06-12</div>
+            <h2 class="post-title">Shell 编程</h2>
+            <div class="post-date">2019-07-13</div>
             
             <div class="post-content">
-              <h3 id="go安装">go安装</h3>
-<pre><code>1，二进制安装
-2，GVM第三方工具安装
+              <p>没有必要再去争论什么语言的优劣，一门语言只要存活下来，就一定有它的优势所在。
+世界上只有烂代码，没有烂语言。还是那句话，语言没有三六九等之分，只有合适与否之别。什么是合适？合适就是性价比最好、综合得分最高的那个。</p>
+<h4 id="1-shift位移">1. shift位移</h4>
+<pre><code>cat  shift.sh
+
+#!/bin/bash
+loop=`expr $(echo $#) / 2`
+for i in $(seq 1 $loop)
+do 
+  echo $1 $2
+	shift 2
+done
+## 如果传递的参数不是偶数，最后一位将被丢弃
 </code></pre>
-<h3 id="gopath设置">GOPATH设置</h3>
-<pre><code>export GOPATH=/home/apple/mygo
+<h4 id="文本三剑客">文本三剑客</h4>
+<pre><code>## grep
+grep  -c  processor  /proc/cpuinfo
+grep  -c  ^root  /etc/passwd*
+
+grep  -i ^port  /etc/ssh/sshd_config
+
+grep  -C1 ^Port  /etc/ssh/sshd_config
+grep  -B1 ^Port  /etc/ssh/sshd_config
+grep  -A1 ^Port  /etc/ssh/sshd_config
+
+grep  -l ^root /etc/*  ## 显示文件
+
+## 包含于排除
+--include=GLOB;
+--exclude=GLOB;
+--exclude-from=FILE;
+--exclude-dir=DIR;
+
+grep  -l  ^root  --exclude=*-  /etc/*
 </code></pre>
-<h3 id="获取远程包">获取远程包</h3>
-<pre><code>go get github.com/astaxie/beedb
+<pre><code>## sed
+sed  -i.bak  EDIT-COMMAND  INPUT-FILE
 
-go build
+[Address]s/Pattern/Replacement/FLAGs
 
-go clean 移除当前源码包里面编译生成的文件。
+sed  &quot;3s/bird/cat/2&quot;  text
+sed  &quot;1,3s/bird/cat/g&quot;  text
+sed  &quot;/work/s/bird/cat/&quot;  text
+sed  &quot;/work/,/push/s/bird/cat/g&quot;  text
 
-go fmt 
+sed  &quot;3i\cat&quot;  text
+sed  &quot;3a\cat&quot;  text
+sed  &quot;3c\cat&quot;  text
+sed  &quot;3d&quot;  text
+sed  &quot;3r /root/text2&quot;  text  ## 在第三行下方将另一个文件text2的内容追加进去
 
-go get 
-这个命令在内部实际上分为两步操作，1、下载；2、go install
-
-go install 这个命令在内部实际上分成两步操作：第一步是生成结果文件（可执行文件或者.a包），第二步会把编译好的结果移到$GOPATH、pkg或者$GOPATH/bin
+sed  &quot;3s/.*/cat &amp;/&quot;  text
+sed  &quot;3s/.*/&amp; cat/&quot;  text
 </code></pre>
-<h4 id="go-doc">go doc</h4>
-<pre><code>如果是buildin包，那么执行 go doc buildin;
-如果是http包，那么执行 go doc net/http;
-查看某一个包里面的函数，则执行godoc fmt Printf;
-查看相应的代码，执行godoc -src fmt Printf
+<pre><code>## awk
+## 统计
+awk  /git/  /etc/shadow
 
-</code></pre>
-<h4 id="其他命令">其他命令</h4>
-<pre><code>go fix 
-go version
-go run
-go env 
-go  list
-go help get
-</code></pre>
-<h3 id="22-go语言基础">2.2 Go语言基础</h3>
-<pre><code>## 定义变量
-var  varName type
-var  vName1,  vName2, vName3 type
-var  vName type = value
-var  vName1, vName2 type =v1, v2
+awk  '/git/{n++} END {print n}'  /etc/shadow
 
-var vName1, vName2 = v1, v2
-vName1, vName2 := v1, v2 ## 简短说明，只能在函数内部使用
+## 获取某一列
+ps -C  qemu-kvm
+ps -C  qemu-kvm |awk '{if (NR==6) print $0}'
 
-## 常量
-const  constantName = value
-const Pi float32 = 3.141592
-const i =10000
-const MaxThread =90
-const prefix = &quot;channel&quot;
+## 比较
+awk  'BEGIN{a=2;b=10;print (a&gt;b)?1:0}'
+awk  'BEGIN{a=&quot;2&quot;;b=&quot;10&quot;;print (a&gt;b)?1:0}'
+awk  'BEGIN{a=&quot;2&quot;;b=&quot;1&quot;;print (a&gt;b)?1:0}'
 
-## 内置数据类型
-### Boolean
-### 数值类型
-### 字符串
-### 错误类型
-err := errors.New(&quot;emit macho dwarf: elf header corrupted&quot;)
-if err != nil {
-    fmt.Print(err)
-}
+## 求和
+ls -l |awk '!/total/ {sum+=$5;line+=1} END {printf &quot;Sum = %d\nLines = %d\nAverage = %d\n&quot;, sum, line,sum/line}'
+
+## 求最值
+ls -l |awk '!/total/ {if(min==&quot;&quot;) min=$5; if ($5&lt;min) min=$5} END {print min}'
+
+ls -l |awk '!/total/ {if(max==&quot;&quot;) max=$5; if ($5&gt;max) max=$5} END {print max}'
+
+## 替换
+df -Ph  ## 选项-P表示输出结果遵守POSIX标准，一行一个条目
+
+df -Ph |awk '!/Filesystem/ {sub(&quot;%&quot;,&quot;&quot;,$5); if ($5&gt;10) print}'
+## sub替换函数看上去不太优雅，百分号被删除了。但是我们还可以使用+0方式做些改进
+df -Ph |awk '!/Filesystem/  {if ($5+0&gt;10) print}'
 
 </code></pre>
-<h3 id="array-slice-map">array  slice  map</h3>
-<pre><code>var  arr [n]type
-
-var arr [10]int
+<h4 id="ip地址排序">ip地址排序</h4>
+<pre><code>cat  ip |sort -n -t. -k1,1 -k2,2 -k3,3 -k4,4
 </code></pre>
-<h3 id="if-for-switch">if  for  switch</h3>
-<pre><code>
-</code></pre>
-<h3 id="一起实验楼实战一下">一起实验楼实战一下？？？</h3>
-<p>https://www.shiyanlou.com/courses/485</p>
+<p>做事有四种态度
+做牛马--把工作当负担，糊弄着做。
+做任务--把工作当差事，尽职做。
+做产品--把工作当做市场价值，用心去做。
+做品牌--把工作当做文化传承，注魂去做。</p>
+<p>不得罪人的SE，不是一个好的SE。--坚守红线
+只有优秀的SE，没有合格的SE。--精益求精</p>
 
             </div>
-            
-              <div class="tag-container">
-                
-                  <a href="https://yes5144.github.io//tag/og9FawtfV" class="tag">
-                    Go
-                  </a>
-                
-              </div>
             
             
               <div class="next-post">
                 <div class="next">下一篇</div>
-                <a href="https://yes5144.github.io//post/pip-chang-yong">
+                <a href="https://yes5144.github.io//post/windows-an-zhuang-zip-ming-ling">
                   <h3 class="post-title">
-                    Pip常用命令组合
+                    windows安装zip命令
                   </h3>
                 </a>
               </div>

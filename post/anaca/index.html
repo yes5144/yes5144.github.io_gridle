@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>我的运维笔记 | Talk is cheap. Show me the code</title>
+<title>Anaconda 使用入门 | Talk is cheap. Show me the code</title>
 <meta name="description" content="你第十年的目标是CTO，你打算如何实现？">
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
@@ -92,21 +92,45 @@
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
           <div class="post-detail">
-            <h2 class="post-title">我的运维笔记</h2>
-            <div class="post-date">2019-06-01</div>
+            <h2 class="post-title">Anaconda 使用入门</h2>
+            <div class="post-date">2019-07-13</div>
             
             <div class="post-content">
-              <p>挖坑填坑；
-keep coding；</p>
+              <h2 id="anacona3">Anacona3</h2>
+<p><a href="https://www.anaconda.com/download/">Anaconda官网</a></p>
+<h3 id="创建一个新的-environment">创建一个新的 environment</h3>
+<p>conda create --name python34 python=3.4</p>
+<h3 id="查看已经存在的environment">查看已经存在的environment</h3>
+<p>conda info -e</p>
+<h3 id="激活一个-environment">激活一个 environment</h3>
+<p>activate python34  # for windows
+source activate python34  # for linux &amp; mac</p>
+<h3 id="退出一个-environment">退出一个 environment</h3>
+<p>deactivate python34 # for windows
+source deactivate python34  # for linux</p>
+<h3 id="删除一个-environment">删除一个 environment</h3>
+<p>conda remove --name python34 --all</p>
+<h3 id="conda-的包管理有点类似pip">conda 的包管理有点类似pip</h3>
+<p>conda install numpy</p>
+<h3 id="查看已经安装的python包">查看已经安装的Python包</h3>
+<p>conda list
+conda list -n python34  # 查看指定环境安装的Python包</p>
+<h3 id="删除一个-python包">删除一个 Python包</h3>
+<p>conda remove -n python34 numpy</p>
+<h2 id="anaconda换源">anaconda换源：</h2>
+<h4 id="指定清华的源">指定清华的源：</h4>
+<p>conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free/</p>
+<h4 id="有资源显示源地址">有资源显示源地址：</h4>
+<p>conda config --set show_channel_urls yes</p>
 
             </div>
             
             
               <div class="next-post">
                 <div class="next">下一篇</div>
-                <a href="https://yes5144.github.io//post/hello-gridea">
+                <a href="https://yes5144.github.io//post/shell-bian-cheng">
                   <h3 class="post-title">
-                    Hello Gridea
+                    Shell 编程
                   </h3>
                 </a>
               </div>
