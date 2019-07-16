@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>Linux 保持会话 | Talk is cheap. Show me the code</title>
+<title>MySQL 请空表 | Talk is cheap. Show me the code</title>
 <meta name="description" content="你第十年的目标是CTO，你打算如何实现？">
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
@@ -92,46 +92,23 @@
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
           <div class="post-detail">
-            <h2 class="post-title">Linux 保持会话</h2>
-            <div class="post-date">2019-06-30</div>
+            <h2 class="post-title">MySQL 请空表</h2>
+            <div class="post-date">2019-07-15</div>
             
             <div class="post-content">
-              <h4 id="tmux">tmux</h4>
-<p>参考链接：https://www.cnblogs.com/kevingrace/p/6496899.html</p>
-<pre><code>## 安装
-yum  install tmux  -y
-
-## 使用
-tmux
-[root@justdoit ~]# tmux
-[root@justdoit ~]# tmux ls
-0: 1 windows (created Sun Jun 30 00:32:05 2019) [164x26] (attached)
-[root@justdoit ~]# tmux rename -t 0 test_tmux
-[root@justdoit ~]# tmux ls
-test_tmux: 1 windows (created Sun Jun 30 00:32:05 2019) [164x26] (attached)
-[root@justdoit ~]#
-### 更多详细用法，请参考上面链接
-</code></pre>
-<h4 id="screen">screen</h4>
-<pre><code>
-</code></pre>
+              <p>SET FOREIGN_KEY_CHECKS = 0;
+TRUNCATE <code>events</code>;
+TRUNCATE <code>problem</code>;</p>
+<p>set FOREIGN_key_checks =1;</p>
 
             </div>
-            
-              <div class="tag-container">
-                
-                  <a href="https://yes5144.github.io//tag/m7A29lASg" class="tag">
-                    Linux小工具
-                  </a>
-                
-              </div>
             
             
               <div class="next-post">
                 <div class="next">下一篇</div>
-                <a href="https://yes5144.github.io//post/django-ru-men">
+                <a href="https://yes5144.github.io//post/prometheus-ru-men">
                   <h3 class="post-title">
-                    Django入门
+                    Prometheus 入门
                   </h3>
                 </a>
               </div>
