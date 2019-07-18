@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>Salt安装lnmp | Talk is cheap. Show me the code</title>
+<title>Git和Svn 差异化打包 | Talk is cheap. Show me the code</title>
 <meta name="description" content="你第十年的目标是CTO，你打算如何实现？">
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
@@ -92,79 +92,46 @@
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
           <div class="post-detail">
-            <h2 class="post-title">Salt安装lnmp</h2>
-            <div class="post-date">2019-06-30</div>
+            <h2 class="post-title">Git和Svn 差异化打包</h2>
+            <div class="post-date">2019-07-18</div>
             
             <div class="post-content">
-              <pre><code>lamp-install:
-  pkg.installed:
-    - pkgs:
-      - httpd
-      - php
-      - php-pdo
-      - php-mysql
+              <h3 id="git">Git</h3>
+<pre><code>git diff这个命令能比较两个提交之间的差异，使用–name-only参数可以只显示文件名。例如：
 
-apache-config:
-  file.managed:
-    - name: /etc/httpd/conf/httpd.conf
-    - source: salt://web/files/httpd.conf
-    - user: root
-    - group: root
-    - mode: 644
-    - require:
-      - pkg: lamp-install
+git diff 608e120 4abe32e --name-only
 
-apache-auth:
-  pkg.installed:
-    - name: httpd-tools
-    - require_in:
-      - cmd: apache-auth
-  cmd.run:
-    - name: htpasswd -bc /etc/httpd/conf/htpasswd_file admin admin
-    - unless: test -f /etc/httpd/conf/htpasswd_file
+打包差异文件
+git diff 608e120 4abe32e --name-only | xargs zip update.zip
 
-apache-conf:
-  file.recurse:
-    - name: /etc/httpd/conf.d
-    - source: salt://web/files/apache-conf.d
-    - watch_in:
-      - service: lamp-service
+备注：608e120和4abe32e为前后两个提交的commit id
 
-/etc/php.ini:
-  file.managed:
-    - source: salt://web/files/php.ini
-    - user: root
-    - group: root
-    - mode: 644
-    - watch_in:
-      - service: lamp-service
+原文：https://blog.csdn.net/liuxinfa/article/details/82878640 
+</code></pre>
+<h3 id="svn">Svn</h3>
+<pre><code>最近接手一个PHP项目，修复GUG和优化功能，由于是已经在用的项目，并且诸如附件上传都是保存到WEB目录下的，
 
-lamp-service:
-  service.running:
-    - name: httpd
-    - enable: True
-    - reload: True
-    - watch:
-      - file: apache-config
+所以不宜采用全量部署的方式来更新软件，最好用增量部署来更新服务器的WEB目录。
+
+程序代码采用SVN管理，在主干上开发，每次部署都建一个tag，这样通过比较tag和主干的差别就可以知道有哪些文件发生了变动。具体的命令格式是： 
+
+svn diff --summarize http://rep_url/tags/proj1_090214 http://rep_url/trunk/proj1 &gt;diff.txt
+
+这个命令比较了 proj1_090214 和 proj1 的差异，并将差异信息输出到文件 diff.txt
+summarize  选项的含义是只显示结果的概要，不显示文件的具体差异。
+
+有了diff.txt，就可以知道需要部署哪些文件了，感觉很方便
 
 </code></pre>
 
             </div>
             
-              <div class="tag-container">
-                
-                  <a href="https://yes5144.github.io//tag/GLOVoicTa" class="tag">
-                    Saltstack
-                  </a>
-                
-              </div>
-            
             
               <div class="next-post">
                 <div class="next">下一篇</div>
-                <a href="https://yes5144.github.io//post/python-mei-guan-da-yin">
+                <a href="https://yes5144.github.io//post/chen-mi-xue-xi">
                   <h3 class="post-title">
-                    Python美观打印
+                    沉迷学习
                   </h3>
                 </a>
               </div>

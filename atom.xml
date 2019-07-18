@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://yes5144.github.io/</id>
     <title>Talk is cheap. Show me the code</title>
-    <updated>2019-07-16T15:17:06.640Z</updated>
+    <updated>2019-07-18T15:49:38.781Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://yes5144.github.io/"/>
     <link rel="self" href="https://yes5144.github.io//atom.xml"/>
@@ -10,6 +10,59 @@
     <logo>https://yes5144.github.io//images/avatar.png</logo>
     <icon>https://yes5144.github.io//favicon.ico</icon>
     <rights>All rights reserved 2019, Talk is cheap. Show me the code</rights>
+    <entry>
+        <title type="html"><![CDATA[Git和Svn 差异化打包]]></title>
+        <id>https://yes5144.github.io//post/git-he-svn-chai-yi-hua-da-bao</id>
+        <link href="https://yes5144.github.io//post/git-he-svn-chai-yi-hua-da-bao">
+        </link>
+        <updated>2019-07-18T15:40:26.000Z</updated>
+        <content type="html"><![CDATA[<h3 id="git">Git</h3>
+<pre><code>git diff这个命令能比较两个提交之间的差异，使用–name-only参数可以只显示文件名。例如：
+
+git diff 608e120 4abe32e --name-only
+
+打包差异文件
+git diff 608e120 4abe32e --name-only | xargs zip update.zip
+
+备注：608e120和4abe32e为前后两个提交的commit id
+
+原文：https://blog.csdn.net/liuxinfa/article/details/82878640 
+</code></pre>
+<h3 id="svn">Svn</h3>
+<pre><code>最近接手一个PHP项目，修复GUG和优化功能，由于是已经在用的项目，并且诸如附件上传都是保存到WEB目录下的，
+
+所以不宜采用全量部署的方式来更新软件，最好用增量部署来更新服务器的WEB目录。
+
+程序代码采用SVN管理，在主干上开发，每次部署都建一个tag，这样通过比较tag和主干的差别就可以知道有哪些文件发生了变动。具体的命令格式是： 
+
+svn diff --summarize http://rep_url/tags/proj1_090214 http://rep_url/trunk/proj1 &gt;diff.txt
+
+这个命令比较了 proj1_090214 和 proj1 的差异，并将差异信息输出到文件 diff.txt
+summarize  选项的含义是只显示结果的概要，不显示文件的具体差异。
+
+有了diff.txt，就可以知道需要部署哪些文件了，感觉很方便
+
+</code></pre>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[沉迷学习]]></title>
+        <id>https://yes5144.github.io//post/chen-mi-xue-xi</id>
+        <link href="https://yes5144.github.io//post/chen-mi-xue-xi">
+        </link>
+        <updated>2019-07-18T01:00:32.000Z</updated>
+        <content type="html"><![CDATA[<ul>
+<li>Python</li>
+<li>Django</li>
+<li>Golang</li>
+<li>Beego</li>
+<li>Docker</li>
+<li>K8s</li>
+<li>Linux架构师</li>
+<li>chinaielts</li>
+</ul>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Go 开发环境部署]]></title>
         <id>https://yes5144.github.io//post/go-kai-fa-huan-jing-bu-shu</id>
@@ -47,10 +100,12 @@ go get -u github.com/spf13/cobra/cobra
         <link href="https://yes5144.github.io//post/mysql-qing-kong-biao">
         </link>
         <updated>2019-07-15T15:31:53.000Z</updated>
-        <content type="html"><![CDATA[<p>SET FOREIGN_KEY_CHECKS = 0;
-TRUNCATE <code>events</code>;
-TRUNCATE <code>problem</code>;</p>
-<p>set FOREIGN_key_checks =1;</p>
+        <content type="html"><![CDATA[<pre><code>SET FOREIGN_KEY_CHECKS = 0;
+TRUNCATE `events`;
+TRUNCATE `problem`;
+
+set FOREIGN_key_checks =1;
+</code></pre>
 ]]></content>
     </entry>
     <entry>
@@ -654,146 +709,6 @@ yum clean all
 yum makecache
 yum install google-chrome-stable
 </code></pre>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[Python 基础回顾]]></title>
-        <id>https://yes5144.github.io//post/python-ji-chu-hui-gu</id>
-        <link href="https://yes5144.github.io//post/python-ji-chu-hui-gu">
-        </link>
-        <updated>2019-06-30T07:27:49.000Z</updated>
-        <content type="html"><![CDATA[<h4 id="python">Python</h4>
-<h4 id="控制语句">控制语句</h4>
-<pre><code>## if选择结构
-if 条件1:
-    代码1
-elif 条件2:
-    代码2
-else:
-    代码n
-		
-## while循环
-while 条件:
-    代码
-
-## for循环
-for 循环变量 in 可迭代对象:
-    代码块
-
-### break, continue, pass
-</code></pre>
-<h4 id="字符串">字符串</h4>
-<pre><code>## 字符串输入
-number = int(input('input your favorite number')) # input中参数是输出提示
-print(f'Your favorite number is {number}')    # 字符串前的f表示这是一个格式串，变量不存在则报错。
-
-## 字符串运算
-alice = 'my name is '
-bob = 'Li Hua'
-
-alice +bob
-bob * 3
-'Li' in bob
-alice[0:5]
-
-### 字符串操作符： + * in  not in  []
-
-### 字符串内建方法
-count(), find(), isalpha(), isdigit(), join(), lstrip(), replace(), rstrip(), split(), startswith(), strip(), zfill()
-
-print('-'.join(['3'.'2','5','5']))
-index=33
-print('image'+ str(index).zfill(4))
-
-</code></pre>
-<h4 id=""></h4>
-<h4 id="变量和数据类型">变量和数据类型</h4>
-<pre><code>## Tuple（元组）
-(3,3,2,1)
-## Set（集合）
-{3,2,1}
-## List（列表）
-[3,3,2.1]
-## Dict（字典）
-key:value
-## 字符串
-
-</code></pre>
-<h4 id="函数">函数</h4>
-<ul>
-<li>不带默认值参数：def func(a):</li>
-<li>带默认值参数：def func(a, b=1):</li>
-<li>任意位置参数：def func(a, b=1, *c):</li>
-<li>任意键值参数：def func(a, b=1, *c, **d):</li>
-</ul>
-<p>这也是他们的出场顺序安排</p>
-<h4 id="类和对象">类和对象</h4>
-<pre><code>对象是类的一个实例。
-类在python中由3部分组成--类名、属性和方法。
-类的属性分两种，分别是类属性和实例属性
-
-class Vehicle:
-	 class_property =0   # 没有self，并且写在方法外，这是类属性
-	 
-	 def __init__(self):
-        temporary_var = -1    # 写在方法里，但是没有self，这是一个局部变量
-        self.instance_property = 1  # 有self，这里创建了一个实例属性
-        Vehicle.class_property +1   # 操作类属性需要写类名
-
-</code></pre>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[Linux 替代命令介绍]]></title>
-        <id>https://yes5144.github.io//post/linux-ti-dai-ming-ling-jie-shao</id>
-        <link href="https://yes5144.github.io//post/linux-ti-dai-ming-ling-jie-shao">
-        </link>
-        <updated>2019-06-29T17:27:50.000Z</updated>
-        <content type="html"><![CDATA[<h4 id="tldrlinux-手册页的简化替代品">tldr：Linux 手册页的简化替代品</h4>
-<blockquote>
-<p>tldr: 如果你经常不想详读man文档，那么你应该试试这个小工具
-参考链接：https://www.hi-linux.com/posts/16098.html
-参考链接：https://zhuanlan.zhihu.com/p/52637238</p>
-</blockquote>
-<pre><code>yum install nodejs
-yum install npm
-npm install -g tldr
-tldr --update
-## 使用实例
-tldr kill
-</code></pre>
-<h4 id="tmux终端复用工具替代screen-nohup">tmux：终端复用工具，替代screen、nohup</h4>
-<h5 id="tmux-常用操作">tmux 常用操作</h5>
-<pre><code>yum install tmux 
-
-tmux  # 默认创建一个会话，以数字命名
-tmux ls
-
-tmux new -s ccc   # 新创一个会话ccc命名
-tmux ls
-
-tmux a -t aaa     # 返回一个已知aaa会话
-tmux detach       # 退出会话不是关闭
-
-tmux kill-session -t bbb  # 关闭会话
-tmux ls
-</code></pre>
-<h5 id="screen-常用操作">screen 常用操作</h5>
-<pre><code>yum install screen
-
-screen -S yourname ## 新建一个叫yourname的session
-screen -ls 			## 列出当前所有的session
-screen -r yourname ## 回到yourname这个session
-screen -d yourname ## 远程detach某个session
-screen -d -r yourname ## 结束当前session并回到yourname这个session
-</code></pre>
-<h4 id="htop-提供更美观-更方便的进程监控工具替代top命令">htop: 提供更美观、更方便的进程监控工具，替代top命令</h4>
-<h4 id="myclimysql客户端支持语法高亮和命令补全效果类似ipython可以替代mysql命令">mycli：mysql客户端，支持语法高亮和命令补全，效果类似ipython，可以替代mysql命令</h4>
-<h4 id="yapfgoogle开发的python代码格式规范化工具支持pep8以及google代码风格">yapf：Google开发的python代码格式规范化工具，支持pep8以及Google代码风格</h4>
-<h4 id="shellcheckshell脚本静态检查工具能够识别语法错误以及不规范的写法">shellcheck：shell脚本静态检查工具，能够识别语法错误以及不规范的写法</h4>
-<h4 id="jq-json文件处理以及格式化显示支持高亮可以替换python-m-jsontool">jq: json文件处理以及格式化显示，支持高亮，可以替换python -m json.tool</h4>
-<h4 id="axel多线程下载工具下载文件时可以替代curl-wget">axel：多线程下载工具，下载文件时可以替代curl、wget</h4>
-<h4 id="mosh基于udp的终端连接可以替代ssh连接更稳定即使ip变了也能自动重连">mosh：基于UDP的终端连接，可以替代ssh，连接更稳定，即使IP变了，也能自动重连</h4>
 ]]></content>
     </entry>
 </feed>

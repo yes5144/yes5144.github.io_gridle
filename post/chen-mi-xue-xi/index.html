@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>Salt安装lnmp | Talk is cheap. Show me the code</title>
+<title>沉迷学习 | Talk is cheap. Show me the code</title>
 <meta name="description" content="你第十年的目标是CTO，你打算如何实现？">
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
@@ -92,79 +92,29 @@
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
           <div class="post-detail">
-            <h2 class="post-title">Salt安装lnmp</h2>
-            <div class="post-date">2019-06-30</div>
+            <h2 class="post-title">沉迷学习</h2>
+            <div class="post-date">2019-07-18</div>
             
             <div class="post-content">
-              <pre><code>lamp-install:
-  pkg.installed:
-    - pkgs:
-      - httpd
-      - php
-      - php-pdo
-      - php-mysql
-
-apache-config:
-  file.managed:
-    - name: /etc/httpd/conf/httpd.conf
-    - source: salt://web/files/httpd.conf
-    - user: root
-    - group: root
-    - mode: 644
-    - require:
-      - pkg: lamp-install
-
-apache-auth:
-  pkg.installed:
-    - name: httpd-tools
-    - require_in:
-      - cmd: apache-auth
-  cmd.run:
-    - name: htpasswd -bc /etc/httpd/conf/htpasswd_file admin admin
-    - unless: test -f /etc/httpd/conf/htpasswd_file
-
-apache-conf:
-  file.recurse:
-    - name: /etc/httpd/conf.d
-    - source: salt://web/files/apache-conf.d
-    - watch_in:
-      - service: lamp-service
-
-/etc/php.ini:
-  file.managed:
-    - source: salt://web/files/php.ini
-    - user: root
-    - group: root
-    - mode: 644
-    - watch_in:
-      - service: lamp-service
-
-lamp-service:
-  service.running:
-    - name: httpd
-    - enable: True
-    - reload: True
-    - watch:
-      - file: apache-config
-
-</code></pre>
+              <ul>
+<li>Python</li>
+<li>Django</li>
+<li>Golang</li>
+<li>Beego</li>
+<li>Docker</li>
+<li>K8s</li>
+<li>Linux架构师</li>
+<li>chinaielts</li>
+</ul>
 
             </div>
-            
-              <div class="tag-container">
-                
-                  <a href="https://yes5144.github.io//tag/GLOVoicTa" class="tag">
-                    Saltstack
-                  </a>
-                
-              </div>
             
             
               <div class="next-post">
                 <div class="next">下一篇</div>
-                <a href="https://yes5144.github.io//post/python-mei-guan-da-yin">
+                <a href="https://yes5144.github.io//post/go-kai-fa-huan-jing-bu-shu">
                   <h3 class="post-title">
-                    Python美观打印
+                    Go 开发环境部署
                   </h3>
                 </a>
               </div>
