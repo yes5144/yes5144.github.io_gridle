@@ -9,7 +9,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://yes5144.github.io//favicon.ico?v=1563464932716">
+<link rel="shortcut icon" href="https://yes5144.github.io//favicon.ico?v=1563723623486">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
 <link rel="stylesheet" href="https://yes5144.github.io//styles/main.css">
 
@@ -30,7 +30,7 @@
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://yes5144.github.io/">
-        <img src="https://yes5144.github.io//images/avatar.png?v=1563464932716" class="site-logo">
+        <img src="https://yes5144.github.io//images/avatar.png?v=1563723623486" class="site-logo">
         <h1 class="site-title">Talk is cheap. Show me the code</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -166,7 +166,53 @@ if err != nil {
 var arr [10]int
 </code></pre>
 <h3 id="if-for-switch">if  for  switch</h3>
-<pre><code>
+<pre><code>## if
+var x int64
+x = 11
+
+if x&gt;10 {
+	fmt.Println(&quot;x is greater than 10&quot;)
+} else{
+	fmt.Println(&quot;x is less than 10&quot;)
+}
+
+if x:=computedValue(); x&gt;10{
+	fmt.Println(&quot;x is greater than 10&quot;)
+} else {
+	fmt.Println(&quot;x is less than 10&quot;)
+}
+
+if integer ==3{
+	fmt.Println(&quot;The integer is equal to 3&quot;)
+}else if integer&lt;3	{
+	fmt.Println(&quot;The integer is less than 3&quot;)
+}else{
+	fmt.Println(&quot;The integer is greater than 3&quot;)
+}
+
+</code></pre>
+<pre><code>## for
+	sum :=0
+	for index:=0; index&lt;10; index ++{
+		sum +=index
+	}
+	fmt.Println(&quot;sum is equel to &quot;, sum)
+
+	sum :=1
+	for sum &lt;1000 {
+		sum+=sum
+	}
+
+	// for 配合range可以读取slice和map的数据
+	for k,v :=range map{
+		fmt.Println(&quot;map's key: &quot;,k)
+		fmt.Println(&quot;map's value: &quot;,v)
+	}
+
+	for _,v :=range map{
+		fmt.Println(&quot;map's val: &quot;,v)
+	}
+
 </code></pre>
 <h3 id="一起实验楼实战一下">一起实验楼实战一下？？？</h3>
 <p>https://www.shiyanlou.com/courses/485</p>
