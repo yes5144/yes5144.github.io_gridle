@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>Python美观打印 | Talk is cheap. Show me the code</title>
+<title>Promql 查询语法 | Talk is cheap. Show me the code</title>
 <meta name="description" content="你第十年的目标是CTO，你打算如何实现？">
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
@@ -92,59 +92,47 @@
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
           <div class="post-detail">
-            <h2 class="post-title">Python美观打印</h2>
-            <div class="post-date">2019-06-29</div>
+            <h2 class="post-title">Promql 查询语法</h2>
+            <div class="post-date">2019-07-28</div>
             
             <div class="post-content">
-              <p>参考链接：https://www.cnblogs.com/fingerling/p/8405955.html</p>
-<h4 id="5美观打印">5.美观打印</h4>
-<p>当打印一些调试信息的时候，美观的打印输出有的时候能让人很直观的看出关键信息，提高调试的效率。</p>
-<p>最朴素的打印：</p>
-<pre><code>&gt;&gt;&gt; mapping = {'a': 23, 'b': 42, 'c': 0xc0ffee}
-&gt;&gt;&gt; str(mapping)
-&quot;{'c': 12648430, 'a': 23, 'b': 42}&quot;
-</code></pre>
-<p>借助内置模块json可以实现更加直观的表现形式：</p>
-<pre><code>复制代码
-&gt;&gt;&gt; import json
-&gt;&gt;&gt; json.dumps(mapping, indent=4, sort_keys=True)
-{
-    &quot;a&quot;: 23,
-    &quot;b&quot;: 42,
-    &quot;c&quot;: 12648430
-}
-</code></pre>
-<p>复制代码
-但是这种方法有一定的限制：</p>
-<pre><code>&gt;&gt;&gt; mapping['d'] = {1, 2, 3}
-&gt;&gt;&gt; json.dumps(mapping)
-TypeError: &quot;set([1, 2, 3]) is not JSON serializable&quot;
+              <h3 id="首先部署一套prometheus访问9090端口">首先部署一套prometheus，访问9090端口</h3>
+<pre><code>https://yunlzheng.gitbook.io/prometheus-book/parti-prometheus-ji-chu/promql/prometheus-query-language
+## 简单使用
+http_requests_total{code=&quot;200&quot;,handler=&quot;alerts&quot;,instance=&quot;localhost:9090&quot;,job=&quot;prometheus&quot;,method=&quot;get&quot;}=(20889@1518096812.326)
+http_requests_total{code=&quot;200&quot;,handler=&quot;graph&quot;,instance=&quot;localhost:9090&quot;,job=&quot;prometheus&quot;,method=&quot;get&quot;}=(21287@1518096812.326)
 
-&gt;&gt;&gt; json.dumps({all: 'yup'})
-TypeError: &quot;keys must be a string&quot;
-</code></pre>
-<p>所以，还可以使用下面的方式：</p>
-<pre><code>&gt;&gt;&gt; import pprint
-&gt;&gt;&gt; pprint.pprint(mapping)
-{'a': 23, 'b': 42, 'c': 12648430, 'd': set([1, 2, 3])}
+## 支持正则表达式
+http_requests_total{environment=~&quot;staging|testing|development&quot;,method!=&quot;GET&quot;}
+
+## 查询范围
+http_request_total{}[5m]
+http_request_total{} # 瞬时向量表达式，选择当前最新的数据
+http_request_total{}[5m] # 区间向量表达式，选择以当前时间为基准，5分钟内的数据
+
+## 聚合操作
+# 查询系统所有http请求的总量
+sum(http_request_total)
+
+# 按照mode计算主机CPU的平均使用时间
+avg(node_cpu) by (mode)
+
+# 按照主机查询各个主机的CPU使用率
+sum(sum(irate(node_cpu{mode!='idle'}[5m]))  / sum(irate(node_cpu[5m]))) by (instance)
+
+# top 5
+topk(5, http_requests_total)
+
 </code></pre>
 
             </div>
             
-              <div class="tag-container">
-                
-                  <a href="https://yes5144.github.io//tag/t3sU7dkeO" class="tag">
-                    Python
-                  </a>
-                
-              </div>
-            
             
               <div class="next-post">
                 <div class="next">下一篇</div>
-                <a href="https://yes5144.github.io//post/saltstack-chang-yong-cao-zuo">
+                <a href="https://yes5144.github.io//post/grafana-zabbix-da-zao-jian-kong-da-ping">
                   <h3 class="post-title">
-                    Saltstack常用操作
+                    Grafana + zabbix 打造监控大屏
                   </h3>
                 </a>
               </div>

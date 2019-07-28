@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>Python美观打印 | Talk is cheap. Show me the code</title>
+<title>Grafana + zabbix 打造监控大屏 | Talk is cheap. Show me the code</title>
 <meta name="description" content="你第十年的目标是CTO，你打算如何实现？">
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
@@ -92,59 +92,57 @@
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
           <div class="post-detail">
-            <h2 class="post-title">Python美观打印</h2>
-            <div class="post-date">2019-06-29</div>
+            <h2 class="post-title">Grafana + zabbix 打造监控大屏</h2>
+            <div class="post-date">2019-07-28</div>
             
             <div class="post-content">
-              <p>参考链接：https://www.cnblogs.com/fingerling/p/8405955.html</p>
-<h4 id="5美观打印">5.美观打印</h4>
-<p>当打印一些调试信息的时候，美观的打印输出有的时候能让人很直观的看出关键信息，提高调试的效率。</p>
-<p>最朴素的打印：</p>
-<pre><code>&gt;&gt;&gt; mapping = {'a': 23, 'b': 42, 'c': 0xc0ffee}
-&gt;&gt;&gt; str(mapping)
-&quot;{'c': 12648430, 'a': 23, 'b': 42}&quot;
+              <h3 id="每天看着zabbix展示界面是不是有点腻歪了要不要换个高大上提升一下逼格">每天看着zabbix展示界面是不是有点腻歪了，要不要换个高大上提升一下逼格？？？</h3>
+<p>参考链接：</p>
+<pre><code>## 分布式监控系统Zabbix--使用Grafana进行图形展示
+https://www.cnblogs.com/kevingrace/p/7108060.html
+## 10分钟打造炫酷的监控大屏
+http://www.ywjt.org/index.php/archives/1802
+## 官方地址：http://docs.grafana-zabbix.org
+## 项目Demo：http://play.grafana.org/
+## 项目github：https://github.com/grafana/grafana
 </code></pre>
-<p>借助内置模块json可以实现更加直观的表现形式：</p>
-<pre><code>复制代码
-&gt;&gt;&gt; import json
-&gt;&gt;&gt; json.dumps(mapping, indent=4, sort_keys=True)
-{
-    &quot;a&quot;: 23,
-    &quot;b&quot;: 42,
-    &quot;c&quot;: 12648430
-}
-</code></pre>
-<p>复制代码
-但是这种方法有一定的限制：</p>
-<pre><code>&gt;&gt;&gt; mapping['d'] = {1, 2, 3}
-&gt;&gt;&gt; json.dumps(mapping)
-TypeError: &quot;set([1, 2, 3]) is not JSON serializable&quot;
+<h3 id="当你耐心看完如上链接相信已经差不多ok了下面只是我的坑友情提示一下">当你耐心看完如上链接，相信已经差不多OK了，下面只是我的坑友情提示一下：</h3>
+<h4 id="1由于本人采用的是tar包解压的方式启动所以plugins在安装目录的dataplugins你可以修改配置文件重新指向varlibgrafanaplugins">1，由于本人采用的是tar包解压的方式启动，所以plugins在安装目录的data/plugins/，你可以修改配置文件重新指向/var/lib/grafana/plugins/</h4>
+<pre><code>## 获取可用插件列表
+grafana-cli plugins list-remote
+ 
+## 安装zabbix插件
+grafana-cli plugins install alexanderzobnin-zabbix-app
+ 
+## 安装插件完成之后重启garfana服务
+service grafana-server restart
 
-&gt;&gt;&gt; json.dumps({all: 'yup'})
-TypeError: &quot;keys must be a string&quot;
+## 安装其他图形插件
+# 饼图展示
+grafana-cli plugins install grafana-piechart-panel
+#钟表形展示
+grafana-cli plugins install grafana-clock-panel
+grafana-cli plugins install briangann-gauge-panel
+#字符型展示
+grafana-cli plugins install natel-discrete-panel
+#服务器状态
+grafana-cli plugins install vonage-status-panel
 </code></pre>
-<p>所以，还可以使用下面的方式：</p>
-<pre><code>&gt;&gt;&gt; import pprint
-&gt;&gt;&gt; pprint.pprint(mapping)
-{'a': 23, 'b': 42, 'c': 12648430, 'd': set([1, 2, 3])}
+<h4 id="2在grafana官网找一个zabbix插件稍稍修改应用">2，在grafana官网找一个zabbix插件，稍稍修改应用</h4>
+<pre><code>https://grafana.com/grafana/dashboards/6098
+
 </code></pre>
+<h4 id="有兴趣开发一个grafana插件">有兴趣开发一个grafana插件</h4>
+<p>https://juejin.im/post/5addbcbd5188256715474452</p>
 
             </div>
-            
-              <div class="tag-container">
-                
-                  <a href="https://yes5144.github.io//tag/t3sU7dkeO" class="tag">
-                    Python
-                  </a>
-                
-              </div>
             
             
               <div class="next-post">
                 <div class="next">下一篇</div>
-                <a href="https://yes5144.github.io//post/saltstack-chang-yong-cao-zuo">
+                <a href="https://yes5144.github.io//post/git-he-svn-chai-yi-hua-da-bao">
                   <h3 class="post-title">
-                    Saltstack常用操作
+                    Git和Svn 差异化打包
                   </h3>
                 </a>
               </div>
