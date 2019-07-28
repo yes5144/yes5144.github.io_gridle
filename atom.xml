@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://yes5144.github.io/</id>
     <title>Talk is cheap. Show me the code</title>
-    <updated>2019-07-28T15:22:32.126Z</updated>
+    <updated>2019-07-28T15:25:42.787Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://yes5144.github.io/"/>
     <link rel="self" href="https://yes5144.github.io//atom.xml"/>
@@ -58,6 +58,8 @@ topk(5, http_requests_total)
 https://www.cnblogs.com/kevingrace/p/7108060.html
 ## 10分钟打造炫酷的监控大屏
 http://www.ywjt.org/index.php/archives/1802
+## 徒手教你制作运维监控大屏
+https://www.cnblogs.com/zhangs1986/p/11180694.html
 ## 官方地址：http://docs.grafana-zabbix.org
 ## 项目Demo：http://play.grafana.org/
 ## 项目github：https://github.com/grafana/grafana
