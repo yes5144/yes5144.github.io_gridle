@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>Go语言入门 | Talk is cheap. Show me the code</title>
+<title>Mysql-主从复制 | Talk is cheap. Show me the code</title>
 <meta name="description" content="你第十年的目标是CTO，你打算如何实现？">
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
@@ -92,137 +92,48 @@
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
           <div class="post-detail">
-            <h2 class="post-title">Go语言入门</h2>
-            <div class="post-date">2019-06-12</div>
+            <h2 class="post-title">Mysql-主从复制</h2>
+            <div class="post-date">2019-08-11</div>
             
             <div class="post-content">
-              <h3 id="go安装">go安装</h3>
-<pre><code>1，二进制安装
-2，GVM第三方工具安装
-</code></pre>
-<h3 id="gopath设置">GOPATH设置</h3>
-<pre><code>export GOPATH=/home/apple/mygo
-</code></pre>
-<h3 id="获取远程包">获取远程包</h3>
-<pre><code>go get github.com/astaxie/beedb
+              <h3 id="mariadbmysql的主从复制部署docker">MariaDB/Mysql的主从复制部署(Docker)</h3>
+<pre><code>### 原文链接：https://blog.csdn.net/clearlxj/article/details/88313033
 
-go build
+### 注意文中有一个笔误： /home/lxj/hedisql  /home/lxj/heidisql/
 
-go clean 移除当前源码包里面编译生成的文件。
+## 修改master_my.cnf，在 [mysqld] 节点下添加
 
-go fmt 
+[mysqld]
+server-id=1
+log_bin=master-bin
+binlog-ignore-db=mysql
+binlog-ignore-db=information_schema
+binlog-ignore-db=performance_schema
+binlog-ignore-db=test
+innodb_flush_log_at_trx_commit=1
+binlog_format=mixed
 
-go get 
-这个命令在内部实际上分为两步操作，1、下载；2、go install
 
-go install 这个命令在内部实际上分成两步操作：第一步是生成结果文件（可执行文件或者.a包），第二步会把编译好的结果移到$GOPATH、pkg或者$GOPATH/bin
-</code></pre>
-<h4 id="go-doc">go doc</h4>
-<pre><code>如果是buildin包，那么执行 go doc buildin;
-如果是http包，那么执行 go doc net/http;
-查看某一个包里面的函数，则执行godoc fmt Printf;
-查看相应的代码，执行godoc -src fmt Printf
+## 修改slave1_my.cnf，在 [mysqld] 节点下添加
 
-</code></pre>
-<h4 id="其他命令">其他命令</h4>
-<pre><code>go fix 
-go version
-go run
-go env 
-go  list
-go help get
-</code></pre>
-<h3 id="22-go语言基础">2.2 Go语言基础</h3>
-<pre><code>## 定义变量
-var  varName type
-var  vName1,  vName2, vName3 type
-var  vName type = value
-var  vName1, vName2 type =v1, v2
-
-var vName1, vName2 = v1, v2
-vName1, vName2 := v1, v2 ## 简短说明，只能在函数内部使用
-
-## 常量
-const  constantName = value
-const Pi float32 = 3.141592
-const i =10000
-const MaxThread =90
-const prefix = &quot;channel&quot;
-
-## 内置数据类型
-### Boolean
-### 数值类型
-### 字符串
-### 错误类型
-err := errors.New(&quot;emit macho dwarf: elf header corrupted&quot;)
-if err != nil {
-    fmt.Print(err)
-}
+[mysqld]
+server-id=2
+relay-log-index=slave-relay-bin.index
+relay-log=slave-relay-bin
+relay_log_recovery=1
 
 </code></pre>
-<h3 id="array-slice-map">array  slice  map</h3>
-<pre><code>var  arr [n]type
-
-var arr [10]int
-</code></pre>
-<h3 id="if-for-switch">if  for  switch</h3>
-<pre><code>## if
-var x int64
-x = 11
-
-if x&gt;10 {
-	fmt.Println(&quot;x is greater than 10&quot;)
-} else{
-	fmt.Println(&quot;x is less than 10&quot;)
-}
-
-if x:=computedValue(); x&gt;10{
-	fmt.Println(&quot;x is greater than 10&quot;)
-} else {
-	fmt.Println(&quot;x is less than 10&quot;)
-}
-
-if integer ==3{
-	fmt.Println(&quot;The integer is equal to 3&quot;)
-}else if integer&lt;3	{
-	fmt.Println(&quot;The integer is less than 3&quot;)
-}else{
-	fmt.Println(&quot;The integer is greater than 3&quot;)
-}
-
-</code></pre>
-<pre><code>## for
-	sum :=0
-	for index:=0; index&lt;10; index ++{
-		sum +=index
-	}
-	fmt.Println(&quot;sum is equel to &quot;, sum)
-
-	sum :=1
-	for sum &lt;1000 {
-		sum+=sum
-	}
-
-	// for 配合range可以读取slice和map的数据
-	for k,v :=range map{
-		fmt.Println(&quot;map's key: &quot;,k)
-		fmt.Println(&quot;map's value: &quot;,v)
-	}
-
-	for _,v :=range map{
-		fmt.Println(&quot;map's val: &quot;,v)
-	}
-
-</code></pre>
-<h3 id="一起实验楼实战一下">一起实验楼实战一下？？？</h3>
-<p>https://www.shiyanlou.com/courses/485</p>
 
             </div>
             
               <div class="tag-container">
                 
-                  <a href="https://yes5144.github.io//tag/og9FawtfV" class="tag">
-                    Go
+                  <a href="https://yes5144.github.io//tag/XIrmwDvie" class="tag">
+                    Docker
+                  </a>
+                
+                  <a href="https://yes5144.github.io//tag/ntJM9tjT5" class="tag">
+                    Mysql
                   </a>
                 
               </div>
@@ -230,9 +141,9 @@ if integer ==3{
             
               <div class="next-post">
                 <div class="next">下一篇</div>
-                <a href="https://yes5144.github.io//post/pip-chang-yong">
+                <a href="https://yes5144.github.io//post/mysql-mha">
                   <h3 class="post-title">
-                    Pip常用命令组合
+                    Mysql-Docker部署mha
                   </h3>
                 </a>
               </div>

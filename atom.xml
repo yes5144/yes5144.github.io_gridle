@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://yes5144.github.io/</id>
     <title>Talk is cheap. Show me the code</title>
-    <updated>2019-08-11T03:22:19.324Z</updated>
+    <updated>2019-08-11T16:34:51.366Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://yes5144.github.io/"/>
     <link rel="self" href="https://yes5144.github.io//atom.xml"/>
@@ -10,6 +10,58 @@
     <logo>https://yes5144.github.io//images/avatar.png</logo>
     <icon>https://yes5144.github.io//favicon.ico</icon>
     <rights>All rights reserved 2019, Talk is cheap. Show me the code</rights>
+    <entry>
+        <title type="html"><![CDATA[Mysql-主从复制]]></title>
+        <id>https://yes5144.github.io//post/mysql-zhu-cong</id>
+        <link href="https://yes5144.github.io//post/mysql-zhu-cong">
+        </link>
+        <updated>2019-08-11T03:39:01.000Z</updated>
+        <content type="html"><![CDATA[<h3 id="mariadbmysql的主从复制部署docker">MariaDB/Mysql的主从复制部署(Docker)</h3>
+<pre><code>### 原文链接：https://blog.csdn.net/clearlxj/article/details/88313033
+
+### 注意文中有一个笔误： /home/lxj/hedisql  /home/lxj/heidisql/
+
+## 修改master_my.cnf，在 [mysqld] 节点下添加
+
+[mysqld]
+server-id=1
+log_bin=master-bin
+binlog-ignore-db=mysql
+binlog-ignore-db=information_schema
+binlog-ignore-db=performance_schema
+binlog-ignore-db=test
+innodb_flush_log_at_trx_commit=1
+binlog_format=mixed
+
+
+## 修改slave1_my.cnf，在 [mysqld] 节点下添加
+
+[mysqld]
+server-id=2
+relay-log-index=slave-relay-bin.index
+relay-log=slave-relay-bin
+relay_log_recovery=1
+
+</code></pre>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Mysql-Docker部署mha]]></title>
+        <id>https://yes5144.github.io//post/mysql-mha</id>
+        <link href="https://yes5144.github.io//post/mysql-mha">
+        </link>
+        <updated>2019-08-11T03:23:04.000Z</updated>
+        <content type="html"><![CDATA[<h3 id="docker搭建mariadbmysql-mha高可用集群">Docker搭建MariaDB/Mysql MHA高可用集群</h3>
+<pre><code>原文链接：https://blog.csdn.net/clearlxj/article/details/88422206
+
+## Checking if super_read_only is defined and turned on..DBD::mysql::st execute failed: Unknown system variable 'super_read_only' at /usr/share/perl5/vendor_perl/MHA/SlaveUtil.pm line 245.
+报错原因：mha4mysql版本问题，
+解决办法：最后将MHA的版本换成mha4mysql-0.56。
+
+### mysql--docker化实践：https://blog.csdn.net/weixin_34290390/article/details/89123731
+</code></pre>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Mysql-GTID主从复制]]></title>
         <id>https://yes5144.github.io//post/mysql-gtid-zhu-cong</id>
@@ -35,8 +87,7 @@ binlog-rows-query-log-events：启用之可用于在二进制日志记录事件�
 log-bin：启用二进制日志，这是保证复制功能的基本前提；
 server-id：同一个复制拓扑中的所有服务器的id号必须惟一；
 
-
-GTID：
+GTID的概念：
 1）全局事务标识：global transaction identifiers。
 2）GTID是一个事务一一对应，并且全局唯一ID。
 3）一个GTID在一个服务器上只执行一次，避免重复执行导致数据混乱或者主从不一致。
@@ -44,18 +95,22 @@ GTID：
 5）MySQL-5.6.5开始支持的，MySQL-5.6.10后开始完善。
 6）在传统的slave端，binlog是不用开启的，但是在GTID中slave端的binlog是必须开启的，目的是记录执行过的GTID（强制）。
 
-组成：
-1）GTID = source_id：transaction_id
-2）source_id：用于鉴别原服务器，即mysql服务器唯一的的server_uuid，由于GTID会传递到slave，所以也可以理解为源ID。
-3）transaction_id：为当前服务器上已提交事务的一个序列号，通常从1开始自增长的序列，一个数值对应一个事务。
+GTID组成：
+GTID = source_id:transaction_id
+source_id，用于鉴别原服务器，即mysql服务器唯一的的server_uuid，由于GTID会传递到slave，所以也可以理解为源ID。
+transaction_id，为当前服务器上已提交事务的一个序列号，通常从1开始自增长的序列，一个数值对应一个事务。        
+示例：          
+3E11FA47-71CA-11E1-9E33-C80AA9429562:23
+前面的一串为服务器的server_uuid，即3E11FA47-71CA-11E1-9E33-C80AA9429562，后面的23为transaction_id
 
-原理：
-1）master更新数据时，会在事务前产生GTID，一同记录到binlog日志中。
-2）slave端的i/o 线程将变更的binlog，写入到本地的relay log中。
-3）sql线程从relay log中获取GTID，然后对比slave端的binlog是否有记录。
-4）如果有记录，说明该GTID的事务已经执行，slave会忽略。
-5）如果没有记录，slave就会从relay log中执行该GTID的事务，并记录到binlog。
-6）在解析过程中会判断是否有主键，如果没有就用二级索引，如果没有就用全部扫描。
+GTID原理：
+1、当一个事务在主库端执行并提交时，产生GTID，一同记录到binlog日志中。
+2、binlog传输到slave,并存储到slave的relaylog后，读取这个GTID的这个值设置gtid_next变量，即告诉Slave，下一个要执行的GTID值。
+3、sql线程从relay log中获取GTID，然后对比slave端的binlog是否有该GTID。
+4、如果有记录，说明该GTID的事务已经执行，slave会忽略。
+5、如果没有记录，slave就会执行该GTID事务，并记录该GTID到自身的binlog，
+   在读取执行事务前会先检查其他session持有该GTID，确保不被重复执行。
+6、在解析过程中会判断是否有主键，如果没有就用二级索引，如果没有就用全部扫描。
 
 一、简单主从模式配置步骤
 1、配置主从节点的服务配置文件
@@ -934,32 +989,6 @@ df -Ph |awk '!/Filesystem/  {if ($5+0&gt;10) print}'
 做品牌--把工作当做文化传承，注魂去做。</p>
 <p>不得罪人的SE，不是一个好的SE。--坚守红线
 只有优秀的SE，没有合格的SE。--精益求精</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[windows安装zip命令]]></title>
-        <id>https://yes5144.github.io//post/windows-an-zhuang-zip-ming-ling</id>
-        <link href="https://yes5144.github.io//post/windows-an-zhuang-zip-ming-ling">
-        </link>
-        <updated>2019-07-07T07:37:30.000Z</updated>
-        <content type="html"><![CDATA[<h3 id="win-安装zip命令">win 安装zip命令</h3>
-<p>http://gnuwin32.sourceforge.net/packages/zip.htm</p>
-<h3 id="mingw-w64安装教程著名cc编译器gcc的windows版本">MinGW-w64安装教程——著名C/C++编译器GCC的Windows版本</h3>
-<p>http://mingw-w64.org/doku.php
-https://www.cnblogs.com/ggg-327931457/p/9694516.html</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[Python and go 代码示例]]></title>
-        <id>https://yes5144.github.io//post/python-and-go-dai-ma-shi-li</id>
-        <link href="https://yes5144.github.io//post/python-and-go-dai-ma-shi-li">
-        </link>
-        <updated>2019-07-02T15:48:14.000Z</updated>
-        <content type="html"><![CDATA[<p>https://www.programcreek.com/python/example/534/MySQLdb.connect</p>
-<p>https://gobyexample.com/select
-https://gobyexample.xgwang.me/hello-world.html</p>
-<p>https://golangbot.com/channels/</p>
-<p>https://www.datacamp.com/home</p>
 ]]></content>
     </entry>
 </feed>
