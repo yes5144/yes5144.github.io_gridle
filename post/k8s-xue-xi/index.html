@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>标签列表 | Talk is cheap. Show me the code</title>
+<title>k8s 学习 | Talk is cheap. Show me the code</title>
 <meta name="description" content="你第十年的目标是CTO，你打算如何实现？">
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
@@ -91,30 +91,56 @@
 
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
-          <h2 class="tag-list-title">标签列表</h2>
-          <div class="tags-container">
+          <div class="post-detail">
+            <h2 class="post-title">k8s 学习</h2>
+            <div class="post-date">2019-08-09</div>
             
-              <a class="tag" href="https://yes5144.github.io//tag/StQcw3UO8">Git</a>
+            <div class="post-content">
+              <h3 id="1docker的安装">1，docker的安装</h3>
+<pre><code>## 使用阿里云镜像加速安装下载docker-ce
+## 参考链接：https://yq.aliyun.com/articles/110806
+
+# step 1: 安装必要的一些系统工具
+sudo yum install -y yum-utils device-mapper-persistent-data lvm2
+# Step 2: 添加软件源信息
+sudo yum-config-manager --add-repo http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
+# Step 3: 更新并安装 Docker-CE
+sudo yum makecache fast
+sudo yum -y install docker-ce
+# Step 4: 开启Docker服务
+sudo service docker start
+
+</code></pre>
+<h3 id="2配置-docker-加速器">2，配置 docker 加速器</h3>
+<pre><code>## 参考链接https://www.daocloud.io/mirror
+## 该脚本可以将 --registry-mirror 加入到你的 Docker 配置文件 /etc/docker/daemon.json 中。适用于 Ubuntu14.04、Debian、CentOS6 、CentOS7、Fedora、Arch Linux、openSUSE Leap 42.1，其他版本可能有细微不同。更多详情请访问文档。
+curl -sSL https://get.daocloud.io/daotools/set_mirror.sh | sh -s http://f1361db2.m.daocloud.io
+
+
+
+</code></pre>
+<h3 id="5k8s基础">5，k8s基础</h3>
+<pre><code>## https://kubernetes.io/docs/tutorials/
+
+</code></pre>
+
+            </div>
             
-              <a class="tag" href="https://yes5144.github.io//tag/og9FawtfV">Go</a>
             
-              <a class="tag" href="https://yes5144.github.io//tag/t3sU7dkeO">Python</a>
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://yes5144.github.io//post/linux-jie-ya-suo-ming-ling">
+                  <h3 class="post-title">
+                    Linux 解压缩命令
+                  </h3>
+                </a>
+              </div>
             
-              <a class="tag" href="https://yes5144.github.io//tag/ntJM9tjT5">Mysql</a>
+
             
-              <a class="tag" href="https://yes5144.github.io//tag/m7A29lASg">Linux小工具</a>
-            
-              <a class="tag" href="https://yes5144.github.io//tag/M3az_Xsq9">Django</a>
-            
-              <a class="tag" href="https://yes5144.github.io//tag/GLOVoicTa">Saltstack</a>
-            
-              <a class="tag" href="https://yes5144.github.io//tag/VlQ09vwmw">Redis</a>
-            
-              <a class="tag" href="https://yes5144.github.io//tag/ntL9ZxPyh">Nginx</a>
-            
-              <a class="tag" href="https://yes5144.github.io//tag/gridea">Gridea</a>
-            
+
           </div>
+
         </div>
       </div>
     </div>

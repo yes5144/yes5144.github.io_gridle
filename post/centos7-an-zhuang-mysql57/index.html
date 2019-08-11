@@ -9,7 +9,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://yes5144.github.io//favicon.ico?v=1564327541530">
+<link rel="shortcut icon" href="https://yes5144.github.io//favicon.ico?v=1565493736271">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
 <link rel="stylesheet" href="https://yes5144.github.io//styles/main.css">
 
@@ -30,7 +30,7 @@
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://yes5144.github.io/">
-        <img src="https://yes5144.github.io//images/avatar.png?v=1564327541530" class="site-logo">
+        <img src="https://yes5144.github.io//images/avatar.png?v=1565493736271" class="site-logo">
         <h1 class="site-title">Talk is cheap. Show me the code</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -101,7 +101,7 @@
 <p>本文采用yum 安装</p>
 </blockquote>
 <pre><code>## 配置mysql57仓库
-cat &gt;/etc/yum.repos.dmysql-community.repo &lt;&lt;EOF
+cat &gt;/etc/yum.repos.d/mysql-community.repo &lt;&lt;EOF
 [mysql-connectors-community]
 name=MySQL Connectors Community
 baseurl=http://repo.mysql.com/yum/mysql-connectors-community/el/7/$basearch/
@@ -140,6 +140,7 @@ gpgcheck=1
 gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-mysql
 EOF
 ## 开始安装，修改密码，修改默认字符类型
+
 
 ## 
 

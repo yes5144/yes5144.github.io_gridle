@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://yes5144.github.io/</id>
     <title>Talk is cheap. Show me the code</title>
-    <updated>2019-07-28T15:25:42.787Z</updated>
+    <updated>2019-08-11T03:22:19.324Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://yes5144.github.io/"/>
     <link rel="self" href="https://yes5144.github.io//atom.xml"/>
@@ -10,6 +10,280 @@
     <logo>https://yes5144.github.io//images/avatar.png</logo>
     <icon>https://yes5144.github.io//favicon.ico</icon>
     <rights>All rights reserved 2019, Talk is cheap. Show me the code</rights>
+    <entry>
+        <title type="html"><![CDATA[Mysql-GTID主从复制]]></title>
+        <id>https://yes5144.github.io//post/mysql-gtid-zhu-cong</id>
+        <link href="https://yes5144.github.io//post/mysql-gtid-zhu-cong">
+        </link>
+        <updated>2019-08-10T15:15:46.000Z</updated>
+        <content type="html"><![CDATA[<h3 id="基于gtid-主从复制">基于gtid 主从复制</h3>
+<pre><code>参考链接：https://blog.csdn.net/weixin_43407305/article/details/87911235
+参考链接：https://blog.csdn.net/martingpf/article/details/81115187
+参考链接：https://blog.csdn.net/leshami/article/details/50630691
+参考链接：https://blog.csdn.net/qq_43094192/article/details/83994952
+
+MySQL 5.6引入的GTID(Global Transaction IDs)使得其复制功能的配置、监控及管理变得更加易于实现，且更加健壮.
+
+MySQL 5.6中使用复制功能，其服务配置段[mysqld]中于少应该定义如下选项：
+binlog-format：二进制日志的格式，有row、statement和mixed几种类型；需要注意的是：当设置隔离级别为READ-COMMITED必 须设置二进制日志格式为ROW，现在MySQL官方认为STATEMENT这个已经不再适合继续使用,但mixed类型在默认的事务隔离级别下，可能会导致主从数据不一致；
+log-slave-updates、gtid-mode、enforce-gtid-consistency、report-port和report-host：用于启动GTID及满足附属的其它需求；
+master-info-repository和relay-log-info-repository：启用此两项，可用于实现在崩溃时保证二进制及从服务器安全的功能；
+sync-master-info：启用之可确保无信息丢失；
+slave-paralles-workers：设定从服务器的SQL线程数；0表示关闭多线程复制功能；
+binlog-checksum、master-verify-checksum和slave-sql-verify-checksum：启用复制有关的所有校验功能；
+binlog-rows-query-log-events：启用之可用于在二进制日志记录事件相关的信息，可降低故障排除的复杂度；
+log-bin：启用二进制日志，这是保证复制功能的基本前提；
+server-id：同一个复制拓扑中的所有服务器的id号必须惟一；
+
+
+GTID：
+1）全局事务标识：global transaction identifiers。
+2）GTID是一个事务一一对应，并且全局唯一ID。
+3）一个GTID在一个服务器上只执行一次，避免重复执行导致数据混乱或者主从不一致。
+4）GTID用来代替传统复制方法，不再使用MASTER_LOG_FILE+MASTER_LOG_POS开启复制。而是使用MASTER_AUTO_POSTION=1的方式开始复制。
+5）MySQL-5.6.5开始支持的，MySQL-5.6.10后开始完善。
+6）在传统的slave端，binlog是不用开启的，但是在GTID中slave端的binlog是必须开启的，目的是记录执行过的GTID（强制）。
+
+组成：
+1）GTID = source_id：transaction_id
+2）source_id：用于鉴别原服务器，即mysql服务器唯一的的server_uuid，由于GTID会传递到slave，所以也可以理解为源ID。
+3）transaction_id：为当前服务器上已提交事务的一个序列号，通常从1开始自增长的序列，一个数值对应一个事务。
+
+原理：
+1）master更新数据时，会在事务前产生GTID，一同记录到binlog日志中。
+2）slave端的i/o 线程将变更的binlog，写入到本地的relay log中。
+3）sql线程从relay log中获取GTID，然后对比slave端的binlog是否有记录。
+4）如果有记录，说明该GTID的事务已经执行，slave会忽略。
+5）如果没有记录，slave就会从relay log中执行该GTID的事务，并记录到binlog。
+6）在解析过程中会判断是否有主键，如果没有就用二级索引，如果没有就用全部扫描。
+
+一、简单主从模式配置步骤
+1、配置主从节点的服务配置文件
+1.1、配置master节点：
+[mysqld]
+binlog-format=ROW
+log-bin=master-bin
+log-slave-updates=true  ###从服务器更新同步二进制日志信息，适用于高可用中，从服务器升级主服务器用
+gtid-mode=on 
+enforce-gtid-consistency=true
+master-info-repository=TABLE
+relay-log-info-repository=TABLE
+sync-master-info=1
+slave-parallel-workers=2
+binlog-checksum=CRC32
+master-verify-checksum=1
+slave-sql-verify-checksum=1
+binlog-rows-query-log_events=1
+server-id=1
+report-port=3306
+port=3306
+datadir=/mydata/
+socket=/tmp/mysql.sock
+report-host=edong1
+
+1.2、配置slave节点：
+[mysqld]
+binlog-format=ROW
+log-slave-updates=true
+gtid-mode=on 
+enforce-gtid-consistency=true
+master-info-repository=TABLE
+relay-log-info-repository=TABLE
+sync-master-info=1
+slave-parallel-workers=2
+binlog-checksum=CRC32
+master-verify-checksum=1
+slave-sql-verify-checksum=1
+binlog-rows-query-log_events=1
+server-id=11
+report-port=3306
+port=3306
+log-bin=mysql-bin.log
+datadir=/mydata/
+socket=/tmp/mysql.sock
+report-host=edong2
+slave节点配置和master节点配置一样的目的：主服务器挂了，从服务器可以快速升级为主服务器
+2、创建复制用户
+mysql&gt;grant replication slave on *.* to 'repluser'@'192.168.0.%' identified by 'replpassword';
+3、为备节点提供初始数据集
+锁定主表，备份主节点上的数据，将其还原至从节点；如果没有启用GTID，在备份时需要在master上使用show master status命令查看二进制日志文件名称及事件位置，以便后面启动slave节点时使用。
+4、启动从节点的复制线程
+如果启用了GTID功能，则使用如下命令：
+mysql&gt;change master to master_host='192.168.0.202',master_user='repluser',master_password='replpassword',master_auto_position=1;
+
+半同步复制
+
+1、分别在主从节点上安装相关的插件
+master&gt; INSTALL PLUGIN rpl_semi_sync_master SONAME 'semisync_master.so';
+slave&gt; INSTALL PLUGIN rpl_semi_sync_slave SONAME 'semisync_slave.so';
+
+2、启用半同步复制
+在master上的配置文件中，添加
+rpl_semi_sync_master_enabled=ON
+在至少一个slave节点的配置文件中添加
+rpl_semi_sync_slave_enabled=ON
+而后重新启动mysql服务即可生效。
+
+或者，也可以mysql服务上动态启动其相关功能：
+master&gt; SET GLOBAL rpl_semi_sync_master_enabled = ON;
+slave&gt; SET GLOBAL rpl_semi_sync_slave_enabled = ON;
+slave&gt; STOP SLAVE IO_THREAD; START SLAVE IO_THREAD;
+
+3、确认半同步功能已经启用
+master&gt; CREATE DATABASE magedudb;
+master&gt; SHOW STATUS LIKE 'Rpl_semi_sync_master_yes_tx';
+
+slave&gt; SHOW DATABASES;
+
+</code></pre>
+<h3 id="主从复制">主从复制</h3>
+<pre><code>主从复制过程存在三个线程，Master端的I/O线程，Slave的I/O线程与SQL线程。Master端需要开启binlog日志，Slave端需要开启relaylog。
+1、Slave端的I/O读取master.info文件，获取binlog文件名和位置点，然后向Master端的I/O线程请求，该binlog文件名和位置点的binlog信息。
+（master.info文件在配置主从复制时使用change master命令来指定生成）
+2、Master端的I/O线程会根据Slave端的I/O线程请求的信息来读取Master的binlog日志信息与及读取到最新的binlog文件名和位置点一同返回给Slave的I/O线程。
+3、Slave端的I/O线程会把获取到的binlog日志写入relaylog（中继日志）文件中，并且更新master.info文件信息。（把读取到Master最新的binlog日志文件名和位置点更新到master.info文件中，下一次当前位置去读取Master的binlog日志）
+4、Slave端的SQL线程会定期读取relaylog，把二进制的日志解析成SQL语句，并执行这些SQL语句，同步数据到从库中
+
+原文链接：https://blog.csdn.net/weixin_43407305/article/details/87911235
+</code></pre>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[k8s 学习]]></title>
+        <id>https://yes5144.github.io//post/k8s-xue-xi</id>
+        <link href="https://yes5144.github.io//post/k8s-xue-xi">
+        </link>
+        <updated>2019-08-08T16:12:07.000Z</updated>
+        <content type="html"><![CDATA[<h3 id="1docker的安装">1，docker的安装</h3>
+<pre><code>## 使用阿里云镜像加速安装下载docker-ce
+## 参考链接：https://yq.aliyun.com/articles/110806
+
+# step 1: 安装必要的一些系统工具
+sudo yum install -y yum-utils device-mapper-persistent-data lvm2
+# Step 2: 添加软件源信息
+sudo yum-config-manager --add-repo http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
+# Step 3: 更新并安装 Docker-CE
+sudo yum makecache fast
+sudo yum -y install docker-ce
+# Step 4: 开启Docker服务
+sudo service docker start
+
+</code></pre>
+<h3 id="2配置-docker-加速器">2，配置 docker 加速器</h3>
+<pre><code>## 参考链接https://www.daocloud.io/mirror
+## 该脚本可以将 --registry-mirror 加入到你的 Docker 配置文件 /etc/docker/daemon.json 中。适用于 Ubuntu14.04、Debian、CentOS6 、CentOS7、Fedora、Arch Linux、openSUSE Leap 42.1，其他版本可能有细微不同。更多详情请访问文档。
+curl -sSL https://get.daocloud.io/daotools/set_mirror.sh | sh -s http://f1361db2.m.daocloud.io
+
+
+
+</code></pre>
+<h3 id="5k8s基础">5，k8s基础</h3>
+<pre><code>## https://kubernetes.io/docs/tutorials/
+
+</code></pre>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Linux 解压缩命令]]></title>
+        <id>https://yes5144.github.io//post/linux-jie-ya-suo-ming-ling</id>
+        <link href="https://yes5144.github.io//post/linux-jie-ya-suo-ming-ling">
+        </link>
+        <updated>2019-08-07T23:23:04.000Z</updated>
+        <content type="html"><![CDATA[<h3 id="不解压缩查看压缩包内文件列表">不解压缩，查看压缩包内文件列表</h3>
+<pre><code>tar -ztvf file.tar.gz
+
+tar.gz
+tar tzvf xxx.tar.gz
+
+tar.bz2
+tar tjvf xxx.tar.bz2
+
+zip
+unzip -l xxx.zip  (简略模式)
+unzip -v xxx.zip (详细模式)
+
+rar
+unrar l xxx.rar(简略模式)
+unrar v xxx.rar(详细模式)
+
+ 
+
+linux压缩和解压缩命令大全
+
+tar命令
+
+　　解包：tar zxvf FileName.tar
+
+　　打包：tar czvf FileName.tar DirName
+
+gz命令
+
+　　解压1：gunzip FileName.gz
+
+　　解压2：gzip -d FileName.gz
+
+　　压缩：gzip FileName
+
+　　.tar.gz 和 .tgz
+
+　　解压：tar zxvf FileName.tar.gz
+
+　　压缩：tar zcvf FileName.tar.gz DirName
+
+   压缩多个文件：tar zcvf FileName.tar.gz DirName1 DirName2 DirName3 ...
+
+bz2命令
+
+　　解压1：bzip2 -d FileName.bz2
+
+　　解压2：bunzip2 FileName.bz2
+
+　　压缩： bzip2 -z FileName
+
+　　.tar.bz2
+
+　　解压：tar jxvf FileName.tar.bz2
+
+　　压缩：tar jcvf FileName.tar.bz2 DirName
+
+bz命令
+
+　　解压1：bzip2 -d FileName.bz
+
+　　解压2：bunzip2 FileName.bz
+
+　　压缩：未知
+
+　　.tar.bz
+
+　　解压：tar jxvf FileName.tar.bz
+
+Z命令
+
+　　解压：uncompress FileName.Z
+
+　　压缩：compress FileName
+
+　　.tar.Z
+
+　　解压：tar Zxvf FileName.tar.Z
+
+　　压缩：tar Zcvf FileName.tar.Z DirName
+
+zip命令
+
+　　解压：unzip FileName.zip
+
+　　压缩：zip FileName.zip DirName
+
+rar命令
+
+　　解压：rar a FileName.rar
+
+　　压缩：r ar e FileName.rar
+</code></pre>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Promql 查询语法]]></title>
         <id>https://yes5144.github.io//post/promql-cha-xun-yu-fa</id>
@@ -686,43 +960,6 @@ https://www.cnblogs.com/ggg-327931457/p/9694516.html</p>
 https://gobyexample.xgwang.me/hello-world.html</p>
 <p>https://golangbot.com/channels/</p>
 <p>https://www.datacamp.com/home</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[Vim 简单配置]]></title>
-        <id>https://yes5144.github.io//post/vim-jian-dan-pei-zhi</id>
-        <link href="https://yes5144.github.io//post/vim-jian-dan-pei-zhi">
-        </link>
-        <updated>2019-07-01T16:24:11.000Z</updated>
-        <content type="html"><![CDATA[<h4 id="vimrc来自实验楼的-环境配置">.vimrc来自实验楼的 环境配置</h4>
-<p>https://www.shiyanlou.com/courses/485
-https://github.com/wklken/vim-for-server</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[Percona-toolkit安装]]></title>
-        <id>https://yes5144.github.io//post/percona-toolkit-an-zhuang</id>
-        <link href="https://yes5144.github.io//post/percona-toolkit-an-zhuang">
-        </link>
-        <updated>2019-06-30T13:55:36.000Z</updated>
-        <content type="html"><![CDATA[<p><a href="https://www.percona.com">Percona官网</a>
-最新工具介绍：https://www.percona.com/doc/percona-toolkit/LATEST/installation.html</p>
-<h4 id="for-rhel-or-centos">For RHEL or CentOS:</h4>
-<pre><code>yum install https://repo.percona.com/yum/percona-release-latest.noarch.rpm
-sudo yum install percona-toolkit
-</code></pre>
-<p><a href="https://www.percona.com/downloads/percona-toolkit/LATEST/">手动选择和下载</a></p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[MySQL 基础回顾]]></title>
-        <id>https://yes5144.github.io//post/mysql-ji-chu-hui-gu</id>
-        <link href="https://yes5144.github.io//post/mysql-ji-chu-hui-gu">
-        </link>
-        <updated>2019-06-30T09:13:58.000Z</updated>
-        <content type="html"><![CDATA[<h4 id="增删改查">增删改查</h4>
-<h4 id="备份恢复">备份恢复</h4>
-<h4 id="分析工具">分析工具</h4>
 ]]></content>
     </entry>
 </feed>
