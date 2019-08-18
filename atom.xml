@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://yes5144.github.io/</id>
     <title>Talk is cheap. Show me the code</title>
-    <updated>2019-08-12T00:55:01.809Z</updated>
+    <updated>2019-08-18T09:36:23.435Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://yes5144.github.io/"/>
     <link rel="self" href="https://yes5144.github.io//atom.xml"/>
@@ -10,6 +10,233 @@
     <logo>https://yes5144.github.io//images/avatar.png</logo>
     <icon>https://yes5144.github.io//favicon.ico</icon>
     <rights>All rights reserved 2019, Talk is cheap. Show me the code</rights>
+    <entry>
+        <title type="html"><![CDATA[Yum部署k8s]]></title>
+        <id>https://yes5144.github.io//post/k8s-bu-shu</id>
+        <link href="https://yes5144.github.io//post/k8s-bu-shu">
+        </link>
+        <updated>2019-08-18T07:47:13.000Z</updated>
+        <content type="html"><![CDATA[<h2 id="k8s安装入门">k8s安装入门</h2>
+<pre><code>### 参考链接：https://www.cnblogs.com/sxdcgaq8080/p/10621437.html
+
+## 准备工作
+192.168.204.133  k8s-master01
+192.168.204.134  k8s-node01
+192.168.204.135  k8s-node02
+
+### 分别设置主机名
+hostnamectl --static set-hostname  k8s-master01
+hostnamectl --static set-hostname  k8s-node01
+hostnamectl --static set-hostname  k8s-node02
+
+
+### 修改/etc/hosts
+
+cat &gt;&gt;/etc/hosts &lt;&lt;EOF
+192.168.204.133    k8s-master01
+192.168.204.133    etcd
+192.168.204.133    registry
+192.168.204.134    k8s-node01
+192.168.204.135    k8s-node02
+EOF
+
+### 关闭防火墙，SELinux
+systemctl stop firewalld.service
+systemctl disable firewalld.service
+
+### 再使用查看命令查看，如果是如下效果，说明成功
+firewall-cmd --state
+
+### ntpdate
+echo '*/10 * * * * root ntpdate  ntp2.aliyun.com' &gt;&gt; /etc/crontab
+</code></pre>
+<h3 id="一-主节点master01">一、主节点master01</h3>
+<pre><code>主节点需要安装
+
+etcd 存储数据中心
+
+flannel k8s的一种网络方案
+
+kubernetes 【包含：kube-api-server  controllerManager   Scheduler 】
+
+## 1,etcd的安装
+### 1.1 命令安装
+yum install -y etcd
+### 1.2 配置文件
+cd  /etc/etcd
+cp  etcd.conf  etcd.conf.default
+cat etcd.conf
+ETCD_DATA_DIR=&quot;/var/lib/etcd/default.etcd&quot;
+ETCD_LISTEN_CLIENT_URLS=&quot;http://0.0.0.0:2379,http://0.0.0.0:4001&quot;
+ETCD_NAME=&quot;master&quot;
+ETCD_ADVERTISE_CLIENT_URLS=&quot;http://etcd:2379,http://etcd:4001&quot;
+
+
+### 1.3 启动etcd服务并验证
+systemctl start etcd
+systemctl enable etcd
+systemctl status etcd
+
+#### 检查健康状况
+etcdctl -C http://etcd:2379 cluster-health
+etcdctl -C http://etcd:4001 cluster-health
+
+## 2,flannel的安装
+### 2.1 安装命令
+
+
+### 2.2 配置文件 /etc/sysconfig/flanneld
+FLANNEL_ETCD_ENDPOINTS=&quot;http://etcd:2379&quot;
+FLANNEL_ETCD_PREFIX=&quot;/atomic.io/network&quot;
+
+### 2.3 配置etcd中关于flannel的key
+etcdctl mk /atomic.io/network/config '{ &quot;Network&quot;: &quot;10.0.0.0/16&quot; }'
+
+### 2.4 启动flannel服务，并设置开机自启
+systemctl start flanneld.service
+systemctl status flanneld.service
+systemctl enable flanneld.service
+
+## 3,安装kubernetes
+### 3.1 安装命令
+yum install kubernetes
+
+### 3.2安装后，需要修改配置
+### 配置修改是为了下面这些需要运行的组件
+kube-api-server
+kuber-scheduler
+kube-controller-manager
+
+vim /etc/kubernetes/apiserver
+
+vim /etc/kubernetes/config
+
+
+### 3.3 分别启动三个组件服务，并且设置为自启动
+systemctl start kube-apiserver.service
+systemctl start kube-controller-manager.service
+systemctl start kube-scheduler.service
+
+
+systemctl enable kube-apiserver.service
+systemctl enable kube-controller-manager.service
+systemctl enable kube-scheduler.service
+
+
+## 4,安装docker
+### 4.1 安装docker命令：
+yum install  -y docker 
+### 4.2 启动docker服务命令：
+service docker start
+### 4.3 docker加入自启动服务命令：
+chkconfig docker on
+
+</code></pre>
+<h3 id="二-子节点安装">二、子节点安装</h3>
+<pre><code>
+
+## 1, 安装etcd
+
+
+## 2, 安装flannel
+
+
+## 3, 安装kubernetes
+
+
+## 4, 安装docker
+
+
+</code></pre>
+<h3 id="三验证集群状态">三.验证集群状态</h3>
+<pre><code>1.master节点执行命令，查看端点信息
+kubectl get endpoints
+
+2.master节点执行命令，查看集群信息
+kubectl cluster-info
+
+3.master节点执行命令，获取节点信息
+kubectl get nodes
+
+
+## 部署app
+kubectl run kubernetes-bootcamp --image=gcr.io/google-samples/kubernetes-bootcamp:v1 --port=8080
+kubectl run redis --image=docker.io/redis --port=6379
+
+export POD_NAME=$(kubectl get pods -o go-template --template '{{range .items}}{{.metadata.name}}{{&quot;\n&quot;}}{{end}}')
+echo Name of the Pod: $POD_NAME
+
+curl http://localhost:8001/api/v1/namespaces/default/pods/$POD_NAME/proxy/
+
+
+kubectl describe pods
+
+kubectl  logs $POD_NAME
+
+kubectl exec $POD_NAME env
+
+kubectl exec -it $POD_NAME bash
+
+kubectl get deployments
+
+kubectl scale deployments/kubernetes-bootcamp --replicas=4
+
+kubectl get pods -o wide
+
+kubectl describe deployments/kubernetes-bootcamp
+
+</code></pre>
+<h3 id="其他">其他</h3>
+<pre><code>######################
+## 配置k8s repo
+cat &lt;&lt;EOF &gt; /etc/yum.repos.d/kubernetes.repo
+[kubernetes]
+name=Kubernetes
+baseurl=https://mirrors.aliyun.com/kubernetes/yum/repos/kubernetes-el7-x86_64/
+enabled=1
+gpgcheck=1
+repo_gpgcheck=1
+gpgkey=https://mirrors.aliyun.com/kubernetes/yum/doc/yum-key.gpg https://mirrors.aliyun.com/kubernetes/yum/doc/rpm-package-key.gpg
+EOF
+setenforce 0
+
+
+yum install -y kubelet kubeadm kubectl
+systemctl enable kubelet &amp;&amp; systemctl start kubelet
+
+## 配置docker-ce repo
+## 
+# step 1: 安装必要的一些系统工具
+sudo yum install -y yum-utils device-mapper-persistent-data lvm2
+# Step 2: 添加软件源信息
+sudo yum-config-manager --add-repo http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
+# Step 3: 更新并安装 Docker-CE
+sudo yum makecache fast
+sudo yum -y install docker-ce
+# Step 4: 开启Docker服务
+sudo service docker start
+
+注意：其他注意事项在下面的注释中
+# 官方软件源默认启用了最新的软件，您可以通过编辑软件源的方式获取各个版本的软件包。例如官方并没有将测试版本的软件源置为可用，你可以通过以下方式开启。同理可以开启各种测试版本等。
+# vim /etc/yum.repos.d/docker-ce.repo
+#   将 [docker-ce-test] 下方的 enabled=0 修改为 enabled=1
+</code></pre>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[kubeadm部署k8s]]></title>
+        <id>https://yes5144.github.io//post/kubeadm-bu-shu-k8s</id>
+        <link href="https://yes5144.github.io//post/kubeadm-bu-shu-k8s">
+        </link>
+        <updated>2019-08-18T00:49:21.000Z</updated>
+        <content type="html"><![CDATA[<h3 id=""></h3>
+<pre><code>## https://www.bookstack.cn/read/kubernetes-handbook/SUMMARY.md
+## https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/
+
+
+</code></pre>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Mysql-主从复制]]></title>
         <id>https://yes5144.github.io//post/mysql-zhu-cong</id>
@@ -232,8 +459,60 @@ curl -sSL https://get.daocloud.io/daotools/set_mirror.sh | sh -s http://f1361db2
 
 
 </code></pre>
-<h3 id="5k8s基础">5，k8s基础</h3>
+<h3 id="5k8s基础命令">5，k8s基础命令</h3>
 <pre><code>## https://kubernetes.io/docs/tutorials/
+
+## 
+kubectl  get  nodes
+kubectl  cluster-info
+## deployment
+kubectl  run kubernetes-bootcamp  --image=docker.io/jocatalin/kubernetes-bootcamp:v1  --port=8080
+kubectl  get  nodes
+## 
+kubectl  expose  deployment/kubernets-bootcamp  --type=&quot;NodePort&quot;  --port=8080
+kubectl  get  services
+
+kubectl delete service -l run=kubernetes-bootcamp
+kubectl get services
+
+## scale
+kubectl  get  deployments
+kubectl  scale  deployments/kubernetes-bootcamp  --replicas=3
+kubectl  get  deployments
+kubectl  get  nodes
+
+kubectl  scale  deployments/kubernetes-bootcamp  --replicas=2
+kubectl  get  deployments
+kubectl  get  nodes
+
+## 
+kubectl  set  image  deployments/kubernetes-bootcamp  kubernetes-bootcamp=jocatalin/kubernetes-bootcamp:v2
+
+kubectl  rollout  undo  deployments/kubernetes-bootcamp
+kubectl  get  nodes
+
+kubectl  get  namespace
+
+</code></pre>
+<h3 id="kubectl-管理应用程序生命周期">kubectl 管理应用程序生命周期</h3>
+<pre><code>1、创建
+kubectl run nginx --replicas=3 --image=nginx:1.14 --port=80
+kubectl get deploy,pods
+
+2、发布
+kubectl expose deployment nginx --port=80  --type=NodePort  --target-port=80  --name=nginx-service
+kubectl  get service
+
+3、更新
+kubectl  set image deployment/nginx  nginx=nginx:1.15
+
+4、回滚
+kubectl rollout history deployment/nginx
+kubectl rollout undo deployment/nginx
+
+5、删除
+kubectl  delete deploy/nginx
+kubectl  delete svc/nginx-service
 
 </code></pre>
 ]]></content>
@@ -852,143 +1131,6 @@ file -&gt; Setting -&gt; Keymap -&gt; Keymaps -&gt; vuisual studio -&gt; Apply
 
 6. 在setting中搜索theme可以改变主题，所有配色统一改变
 </code></pre>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[Anaconda 使用入门]]></title>
-        <id>https://yes5144.github.io//post/anaca</id>
-        <link href="https://yes5144.github.io//post/anaca">
-        </link>
-        <updated>2019-07-13T11:27:50.000Z</updated>
-        <content type="html"><![CDATA[<h2 id="anacona3">Anacona3</h2>
-<p><a href="https://www.anaconda.com/download/">Anaconda官网</a></p>
-<h3 id="创建一个新的-environment">创建一个新的 environment</h3>
-<p>conda create --name python34 python=3.4</p>
-<h3 id="查看已经存在的environment">查看已经存在的environment</h3>
-<p>conda info -e</p>
-<h3 id="激活一个-environment">激活一个 environment</h3>
-<p>activate python34  # for windows
-source activate python34  # for linux &amp; mac</p>
-<h3 id="退出一个-environment">退出一个 environment</h3>
-<p>deactivate python34 # for windows
-source deactivate python34  # for linux</p>
-<h3 id="删除一个-environment">删除一个 environment</h3>
-<p>conda remove --name python34 --all</p>
-<h3 id="conda-的包管理有点类似pip">conda 的包管理有点类似pip</h3>
-<p>conda install numpy</p>
-<h3 id="查看已经安装的python包">查看已经安装的Python包</h3>
-<p>conda list
-conda list -n python34  # 查看指定环境安装的Python包</p>
-<h3 id="删除一个-python包">删除一个 Python包</h3>
-<p>conda remove -n python34 numpy</p>
-<h2 id="anaconda换源">anaconda换源：</h2>
-<h4 id="指定清华的源">指定清华的源：</h4>
-<p>conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free/</p>
-<h4 id="有资源显示源地址">有资源显示源地址：</h4>
-<p>conda config --set show_channel_urls yes</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[Shell 编程]]></title>
-        <id>https://yes5144.github.io//post/shell-bian-cheng</id>
-        <link href="https://yes5144.github.io//post/shell-bian-cheng">
-        </link>
-        <updated>2019-07-13T03:14:47.000Z</updated>
-        <content type="html"><![CDATA[<p>没有必要再去争论什么语言的优劣，一门语言只要存活下来，就一定有它的优势所在。
-世界上只有烂代码，没有烂语言。还是那句话，语言没有三六九等之分，只有合适与否之别。什么是合适？合适就是性价比最好、综合得分最高的那个。</p>
-<h4 id="1-shift位移">1. shift位移</h4>
-<pre><code>cat  shift.sh
-
-#!/bin/bash
-loop=`expr $(echo $#) / 2`
-for i in $(seq 1 $loop)
-do 
-  echo $1 $2
-	shift 2
-done
-## 如果传递的参数不是偶数，最后一位将被丢弃
-</code></pre>
-<h4 id="文本三剑客">文本三剑客</h4>
-<pre><code>## grep
-grep  -c  processor  /proc/cpuinfo
-grep  -c  ^root  /etc/passwd*
-
-grep  -i ^port  /etc/ssh/sshd_config
-
-grep  -C1 ^Port  /etc/ssh/sshd_config
-grep  -B1 ^Port  /etc/ssh/sshd_config
-grep  -A1 ^Port  /etc/ssh/sshd_config
-
-grep  -l ^root /etc/*  ## 显示文件
-
-## 包含于排除
---include=GLOB;
---exclude=GLOB;
---exclude-from=FILE;
---exclude-dir=DIR;
-
-grep  -l  ^root  --exclude=*-  /etc/*
-</code></pre>
-<pre><code>## sed
-sed  -i.bak  EDIT-COMMAND  INPUT-FILE
-
-[Address]s/Pattern/Replacement/FLAGs
-
-sed  &quot;3s/bird/cat/2&quot;  text
-sed  &quot;1,3s/bird/cat/g&quot;  text
-sed  &quot;/work/s/bird/cat/&quot;  text
-sed  &quot;/work/,/push/s/bird/cat/g&quot;  text
-
-sed  &quot;3i\cat&quot;  text
-sed  &quot;3a\cat&quot;  text
-sed  &quot;3c\cat&quot;  text
-sed  &quot;3d&quot;  text
-sed  &quot;3r /root/text2&quot;  text  ## 在第三行下方将另一个文件text2的内容追加进去
-
-sed  &quot;3s/.*/cat &amp;/&quot;  text
-sed  &quot;3s/.*/&amp; cat/&quot;  text
-</code></pre>
-<pre><code>## awk
-## 统计
-awk  /git/  /etc/shadow
-
-awk  '/git/{n++} END {print n}'  /etc/shadow
-
-## 获取某一列
-ps -C  qemu-kvm
-ps -C  qemu-kvm |awk '{if (NR==6) print $0}'
-
-## 比较
-awk  'BEGIN{a=2;b=10;print (a&gt;b)?1:0}'
-awk  'BEGIN{a=&quot;2&quot;;b=&quot;10&quot;;print (a&gt;b)?1:0}'
-awk  'BEGIN{a=&quot;2&quot;;b=&quot;1&quot;;print (a&gt;b)?1:0}'
-
-## 求和
-ls -l |awk '!/total/ {sum+=$5;line+=1} END {printf &quot;Sum = %d\nLines = %d\nAverage = %d\n&quot;, sum, line,sum/line}'
-
-## 求最值
-ls -l |awk '!/total/ {if(min==&quot;&quot;) min=$5; if ($5&lt;min) min=$5} END {print min}'
-
-ls -l |awk '!/total/ {if(max==&quot;&quot;) max=$5; if ($5&gt;max) max=$5} END {print max}'
-
-## 替换
-df -Ph  ## 选项-P表示输出结果遵守POSIX标准，一行一个条目
-
-df -Ph |awk '!/Filesystem/ {sub(&quot;%&quot;,&quot;&quot;,$5); if ($5&gt;10) print}'
-## sub替换函数看上去不太优雅，百分号被删除了。但是我们还可以使用+0方式做些改进
-df -Ph |awk '!/Filesystem/  {if ($5+0&gt;10) print}'
-
-</code></pre>
-<h4 id="ip地址排序">ip地址排序</h4>
-<pre><code>cat  ip |sort -n -t. -k1,1 -k2,2 -k3,3 -k4,4
-</code></pre>
-<p>做事有四种态度
-做牛马--把工作当负担，糊弄着做。
-做任务--把工作当差事，尽职做。
-做产品--把工作当做市场价值，用心去做。
-做品牌--把工作当做文化传承，注魂去做。</p>
-<p>不得罪人的SE，不是一个好的SE。--坚守红线
-只有优秀的SE，没有合格的SE。--精益求精</p>
 ]]></content>
     </entry>
 </feed>

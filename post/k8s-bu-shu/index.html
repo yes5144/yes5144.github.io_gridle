@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>Yum部署k8s | Talk is cheap. Show me the code</title>
+<meta name="description" content="你第十年的目标是CTO，你打算如何实现？">
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://yes5144.github.io//favicon.ico?v=1566120962607">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+<link rel="stylesheet" href="https://yes5144.github.io//styles/main.css">
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+
+
+
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://yes5144.github.io/">
+        <img src="https://yes5144.github.io//images/avatar.png?v=1566120962607" class="site-logo">
+        <h1 class="site-title">Talk is cheap. Show me the code</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            归档
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      你第十年的目标是CTO，你打算如何实现？
+    </div>
+    <div class="site-footer">
+      Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | <a class="rss" href="https://yes5144.github.io//atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">Yum部署k8s</h2>
+            <div class="post-date">2019-08-18</div>
+            
+            <div class="post-content">
+              <h2 id="k8s安装入门">k8s安装入门</h2>
+<pre><code>### 参考链接：https://www.cnblogs.com/sxdcgaq8080/p/10621437.html
+
+## 准备工作
+192.168.204.133  k8s-master01
+192.168.204.134  k8s-node01
+192.168.204.135  k8s-node02
+
+### 分别设置主机名
+hostnamectl --static set-hostname  k8s-master01
+hostnamectl --static set-hostname  k8s-node01
+hostnamectl --static set-hostname  k8s-node02
+
+
+### 修改/etc/hosts
+
+cat &gt;&gt;/etc/hosts &lt;&lt;EOF
+192.168.204.133    k8s-master01
+192.168.204.133    etcd
+192.168.204.133    registry
+192.168.204.134    k8s-node01
+192.168.204.135    k8s-node02
+EOF
+
+### 关闭防火墙，SELinux
+systemctl stop firewalld.service
+systemctl disable firewalld.service
+
+### 再使用查看命令查看，如果是如下效果，说明成功
+firewall-cmd --state
+
+### ntpdate
+echo '*/10 * * * * root ntpdate  ntp2.aliyun.com' &gt;&gt; /etc/crontab
+</code></pre>
+<h3 id="一-主节点master01">一、主节点master01</h3>
+<pre><code>主节点需要安装
+
+etcd 存储数据中心
+
+flannel k8s的一种网络方案
+
+kubernetes 【包含：kube-api-server  controllerManager   Scheduler 】
+
+## 1,etcd的安装
+### 1.1 命令安装
+yum install -y etcd
+### 1.2 配置文件
+cd  /etc/etcd
+cp  etcd.conf  etcd.conf.default
+cat etcd.conf
+ETCD_DATA_DIR=&quot;/var/lib/etcd/default.etcd&quot;
+ETCD_LISTEN_CLIENT_URLS=&quot;http://0.0.0.0:2379,http://0.0.0.0:4001&quot;
+ETCD_NAME=&quot;master&quot;
+ETCD_ADVERTISE_CLIENT_URLS=&quot;http://etcd:2379,http://etcd:4001&quot;
+
+
+### 1.3 启动etcd服务并验证
+systemctl start etcd
+systemctl enable etcd
+systemctl status etcd
+
+#### 检查健康状况
+etcdctl -C http://etcd:2379 cluster-health
+etcdctl -C http://etcd:4001 cluster-health
+
+## 2,flannel的安装
+### 2.1 安装命令
+
+
+### 2.2 配置文件 /etc/sysconfig/flanneld
+FLANNEL_ETCD_ENDPOINTS=&quot;http://etcd:2379&quot;
+FLANNEL_ETCD_PREFIX=&quot;/atomic.io/network&quot;
+
+### 2.3 配置etcd中关于flannel的key
+etcdctl mk /atomic.io/network/config '{ &quot;Network&quot;: &quot;10.0.0.0/16&quot; }'
+
+### 2.4 启动flannel服务，并设置开机自启
+systemctl start flanneld.service
+systemctl status flanneld.service
+systemctl enable flanneld.service
+
+## 3,安装kubernetes
+### 3.1 安装命令
+yum install kubernetes
+
+### 3.2安装后，需要修改配置
+### 配置修改是为了下面这些需要运行的组件
+kube-api-server
+kuber-scheduler
+kube-controller-manager
+
+vim /etc/kubernetes/apiserver
+
+vim /etc/kubernetes/config
+
+
+### 3.3 分别启动三个组件服务，并且设置为自启动
+systemctl start kube-apiserver.service
+systemctl start kube-controller-manager.service
+systemctl start kube-scheduler.service
+
+
+systemctl enable kube-apiserver.service
+systemctl enable kube-controller-manager.service
+systemctl enable kube-scheduler.service
+
+
+## 4,安装docker
+### 4.1 安装docker命令：
+yum install  -y docker 
+### 4.2 启动docker服务命令：
+service docker start
+### 4.3 docker加入自启动服务命令：
+chkconfig docker on
+
+</code></pre>
+<h3 id="二-子节点安装">二、子节点安装</h3>
+<pre><code>
+
+## 1, 安装etcd
+
+
+## 2, 安装flannel
+
+
+## 3, 安装kubernetes
+
+
+## 4, 安装docker
+
+
+</code></pre>
+<h3 id="三验证集群状态">三.验证集群状态</h3>
+<pre><code>1.master节点执行命令，查看端点信息
+kubectl get endpoints
+
+2.master节点执行命令，查看集群信息
+kubectl cluster-info
+
+3.master节点执行命令，获取节点信息
+kubectl get nodes
+
+
+## 部署app
+kubectl run kubernetes-bootcamp --image=gcr.io/google-samples/kubernetes-bootcamp:v1 --port=8080
+kubectl run redis --image=docker.io/redis --port=6379
+
+export POD_NAME=$(kubectl get pods -o go-template --template '{{range .items}}{{.metadata.name}}{{&quot;\n&quot;}}{{end}}')
+echo Name of the Pod: $POD_NAME
+
+curl http://localhost:8001/api/v1/namespaces/default/pods/$POD_NAME/proxy/
+
+
+kubectl describe pods
+
+kubectl  logs $POD_NAME
+
+kubectl exec $POD_NAME env
+
+kubectl exec -it $POD_NAME bash
+
+kubectl get deployments
+
+kubectl scale deployments/kubernetes-bootcamp --replicas=4
+
+kubectl get pods -o wide
+
+kubectl describe deployments/kubernetes-bootcamp
+
+</code></pre>
+<h3 id="其他">其他</h3>
+<pre><code>######################
+## 配置k8s repo
+cat &lt;&lt;EOF &gt; /etc/yum.repos.d/kubernetes.repo
+[kubernetes]
+name=Kubernetes
+baseurl=https://mirrors.aliyun.com/kubernetes/yum/repos/kubernetes-el7-x86_64/
+enabled=1
+gpgcheck=1
+repo_gpgcheck=1
+gpgkey=https://mirrors.aliyun.com/kubernetes/yum/doc/yum-key.gpg https://mirrors.aliyun.com/kubernetes/yum/doc/rpm-package-key.gpg
+EOF
+setenforce 0
+
+
+yum install -y kubelet kubeadm kubectl
+systemctl enable kubelet &amp;&amp; systemctl start kubelet
+
+## 配置docker-ce repo
+## 
+# step 1: 安装必要的一些系统工具
+sudo yum install -y yum-utils device-mapper-persistent-data lvm2
+# Step 2: 添加软件源信息
+sudo yum-config-manager --add-repo http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
+# Step 3: 更新并安装 Docker-CE
+sudo yum makecache fast
+sudo yum -y install docker-ce
+# Step 4: 开启Docker服务
+sudo service docker start
+
+注意：其他注意事项在下面的注释中
+# 官方软件源默认启用了最新的软件，您可以通过编辑软件源的方式获取各个版本的软件包。例如官方并没有将测试版本的软件源置为可用，你可以通过以下方式开启。同理可以开启各种测试版本等。
+# vim /etc/yum.repos.d/docker-ce.repo
+#   将 [docker-ce-test] 下方的 enabled=0 修改为 enabled=1
+</code></pre>
+
+            </div>
+            
+              <div class="tag-container">
+                
+                  <a href="https://yes5144.github.io//tag/Q_WwBrXv4" class="tag">
+                    K8s
+                  </a>
+                
+              </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://yes5144.github.io//post/kubeadm-bu-shu-k8s">
+                  <h3 class="post-title">
+                    kubeadm部署k8s
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+
+<script type="application/javascript">
+
+AOS.init();
+
+hljs.initHighlightingOnLoad()
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+
+
+  </body>
+</html>
