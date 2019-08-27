@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>二进制部署k8s | Talk is cheap. Show me the code</title>
+<meta name="description" content="你第十年的目标是CTO，你打算如何实现？">
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://yes5144.github.io//favicon.ico?v=1566867165749">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+<link rel="stylesheet" href="https://yes5144.github.io//styles/main.css">
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+
+
+
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://yes5144.github.io/">
+        <img src="https://yes5144.github.io//images/avatar.png?v=1566867165749" class="site-logo">
+        <h1 class="site-title">Talk is cheap. Show me the code</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            归档
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      你第十年的目标是CTO，你打算如何实现？
+    </div>
+    <div class="site-footer">
+      Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | <a class="rss" href="https://yes5144.github.io//atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">二进制部署k8s</h2>
+            <div class="post-date">2019-08-18</div>
+            
+            <div class="post-content">
+              <h3 id=""></h3>
+<h3 id="部署etcd">部署etcd</h3>
+<pre><code>
+## 生成自签证书
+curl -L https://pkg.cfssl.org/R1.2/cfssl_linux-amd64 -o /usr/local/bin/cfssl
+curl -L https://pkg.cfssl.org/R1.2/cfssljson_linux-amd64 -o /usr/local/bin/cfssljson
+curl -L https://pkg.cfssl.org/R1.2/cfssl-certinfo_linux-amd64 -o /usr/local/bin/cfssl-certinfo
+chmod +x /usr/local/bin/cfssl /usr/local/bin/cfssljson /usr/local/bin/cfssl-certinfo
+
+## 创建两个证书存放目录
+mkdir -p  /root/k8s/{etcd-cert,k8s-cert}
+## 生成认证机构
+cd  /root/k8s/etcd-cert
+cat &gt; ca-config.json &lt;&lt;EOF
+{
+  &quot;signing&quot;: {
+    &quot;default&quot;: {
+      &quot;expiry&quot;: &quot;87600h&quot;
+    },
+    &quot;profiles&quot;: {
+      &quot;www&quot;: {
+         &quot;expiry&quot;: &quot;87600h&quot;,
+         &quot;usages&quot;: [
+            &quot;signing&quot;,
+            &quot;key encipherment&quot;,
+            &quot;server auth&quot;,
+            &quot;client auth&quot;
+        ]
+      }
+    }
+  }
+}
+EOF
+
+cat &gt; ca-csr.json &lt;&lt;EOF
+{
+    &quot;CN&quot;: &quot;etcd CA&quot;,
+    &quot;key&quot;: {
+        &quot;algo&quot;: &quot;rsa&quot;,
+        &quot;size&quot;: 2048
+    },
+    &quot;names&quot;: [
+        {
+            &quot;C&quot;: &quot;CN&quot;,
+            &quot;L&quot;: &quot;Beijing&quot;,
+            &quot;ST&quot;: &quot;Beijing&quot;
+        }
+    ]
+}
+EOF
+
+cfssl gencert -initca ca-csr.json | cfssljson -bare ca
+
+## 为etcd生成证书
+cat &gt; server-csr.json &lt;&lt;EOF
+{
+    &quot;CN&quot;: &quot;etcd&quot;,
+    &quot;hosts&quot;: [
+    &quot;192.168.204.133&quot;,
+    &quot;192.168.204.134&quot;,
+    &quot;192.168.204.135&quot;
+    ],
+    &quot;key&quot;: {
+        &quot;algo&quot;: &quot;rsa&quot;,
+        &quot;size&quot;: 2048
+    },
+    &quot;names&quot;: [
+        {
+            &quot;C&quot;: &quot;CN&quot;,
+            &quot;L&quot;: &quot;BeiJing&quot;,
+            &quot;ST&quot;: &quot;BeiJing&quot;
+        }
+    ]
+}
+EOF
+
+cfssl gencert -ca=ca.pem -ca-key=ca-key.pem -config=ca-config.json -profile=www server-csr.json | cfssljson -bare server
+
+## 下载etcd二进制包开始部署
+mkdir -p  /opt/etcd/{bin,cfg,ssl}
+cp  /root/k8s/etcd-cert/{ca,server,server-key}.pem  /opt/etcd/ssl/
+mkdir  /opt/src &amp;&amp; cd /opt/src
+wget https://github.com/coreos/etcd/releases/download/v3.3.13/etcd-v3.3.13-linux-amd64.tar.gz
+tar -xvf etcd-v3.3.13-linux-amd64.tar.gz
+cp  etcd-v3.3.13-linux-amd64/etcd*  /opt/etcd/bin/
+
+## etcd启动配置文件
+ETCD_NAME=&quot;etcd01&quot;
+ETCD_IP=&quot;192.168.204.133&quot;
+ETCD_CLUSTER=&quot;etcd02=https://192.168.204.134:2380,etcd03=https://192.168.204.135:2380&quot;
+
+cat &lt;&lt;EOF &gt;/opt/etcd/cfg/etcd
+#[Member]
+ETCD_NAME=&quot;${ETCD_NAME}&quot;
+ETCD_DATA_DIR=&quot;/var/lib/etcd/default.etcd&quot;
+ETCD_LISTEN_PEER_URLS=&quot;https://${ETCD_IP}:2380&quot;
+ETCD_LISTEN_CLIENT_URLS=&quot;https://${ETCD_IP}:2379&quot;
+
+#[Clustering]
+ETCD_INITIAL_ADVERTISE_PEER_URLS=&quot;https://${ETCD_IP}:2380&quot;
+ETCD_ADVERTISE_CLIENT_URLS=&quot;https://${ETCD_IP}:2379&quot;
+ETCD_INITIAL_CLUSTER=&quot;etcd01=https://${ETCD_IP}:2380,${ETCD_CLUSTER}&quot;
+ETCD_INITIAL_CLUSTER_TOKEN=&quot;etcd-cluster&quot;
+ETCD_INITIAL_CLUSTER_STATE=&quot;new&quot;
+EOF
+
+## 生成systemd启动文件
+cat &lt;&lt;EOF &gt;/usr/lib/systemd/system/etcd.service
+[Unit]
+Description=Etcd Server
+After=network.target
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=notify
+EnvironmentFile=${WORK_DIR}/cfg/etcd
+ExecStart=${WORK_DIR}/bin/etcd \
+--name=\${ETCD_NAME} \
+--data-dir=\${ETCD_DATA_DIR} \
+--listen-peer-urls=\${ETCD_LISTEN_PEER_URLS} \
+--listen-client-urls=\${ETCD_LISTEN_CLIENT_URLS},http://127.0.0.1:2379 \
+--advertise-client-urls=\${ETCD_ADVERTISE_CLIENT_URLS} \
+--initial-advertise-peer-urls=\${ETCD_INITIAL_ADVERTISE_PEER_URLS} \
+--initial-cluster=\${ETCD_INITIAL_CLUSTER} \
+--initial-cluster-token=\${ETCD_INITIAL_CLUSTER_TOKEN} \
+--initial-cluster-state=new \
+--cert-file=${WORK_DIR}/ssl/server.pem \
+--key-file=${WORK_DIR}/ssl/server-key.pem \
+--peer-cert-file=${WORK_DIR}/ssl/server.pem \
+--peer-key-file=${WORK_DIR}/ssl/server-key.pem \
+--trusted-ca-file=${WORK_DIR}/ssl/ca.pem \
+--peer-trusted-ca-file=${WORK_DIR}/ssl/ca.pem
+Restart=on-failure
+LimitNOFILE=65536
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+## 启动
+systemctl daemon-reload
+systemctl enable etcd
+systemctl restart etcd
+</code></pre>
+<h3 id="node节点部署flannel">node节点部署flannel</h3>
+<pre><code>
+
+</code></pre>
+
+            </div>
+            
+              <div class="tag-container">
+                
+                  <a href="https://yes5144.github.io//tag/Q_WwBrXv4" class="tag">
+                    K8s
+                  </a>
+                
+              </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://yes5144.github.io//post/k8s-bu-shu">
+                  <h3 class="post-title">
+                    Yum部署k8s
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+
+<script type="application/javascript">
+
+AOS.init();
+
+hljs.initHighlightingOnLoad()
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+
+
+  </body>
+</html>

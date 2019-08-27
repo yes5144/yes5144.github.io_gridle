@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://yes5144.github.io/</id>
     <title>Talk is cheap. Show me the code</title>
-    <updated>2019-08-18T09:36:23.435Z</updated>
+    <updated>2019-08-27T00:53:54.615Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://yes5144.github.io/"/>
     <link rel="self" href="https://yes5144.github.io//atom.xml"/>
@@ -10,6 +10,252 @@
     <logo>https://yes5144.github.io//images/avatar.png</logo>
     <icon>https://yes5144.github.io//favicon.ico</icon>
     <rights>All rights reserved 2019, Talk is cheap. Show me the code</rights>
+    <entry>
+        <title type="html"><![CDATA[Docker入门命令]]></title>
+        <id>https://yes5144.github.io//post/docker-ru-men-ming-ling</id>
+        <link href="https://yes5144.github.io//post/docker-ru-men-ming-ling">
+        </link>
+        <updated>2019-08-26T15:22:52.000Z</updated>
+        <content type="html"><![CDATA[<h3 id="docker-基础命令">Docker 基础命令</h3>
+<pre><code>docker pull
+docker search 
+docker push
+docker images
+docker ps
+docker create -it ubuntu:latest
+docker start|stop|restart
+
+docker run ubuntu /bin/echo 'Hello world'
+
+docker run -it ubuntu:14.04  /bin/bash
+docker ps
+docker logs ID_or_name
+## 列出所有容器的ID
+docker ps -qa
+
+docker exec -it id_or_name /bin/bash
+
+docker rm id_or_name
+
+## 导入容器
+docker  export  -o test_name.tar   id_or_name
+ls
+docker  export id_or_name &gt; test_name.tar22
+ls
+## 导出容器
+docker  import  test_name_tar  -  test/ubuntu:v1.0
+</code></pre>
+<h3 id="docker-数据管理">Docker 数据管理</h3>
+<blockquote>
+<p>数据卷：容器内数据直接映射到本地主机环境
+数据库容器：使用特定容器维护数据卷</p>
+</blockquote>
+<pre><code>## 在容器内创建一个数据卷
+docker run -d -P  --name web  -v /webapp  training/webapp  python app.py
+
+docker run  -d -P --name web  -v /src/webapp:/opt/webapp  training/webapp  python  app.py
+
+## 数据卷容器
+docker run -it -v /dbdata  --name dbdata ubuntu
+docker run -it --volumes-from  dbdata  --name db1 ubuntu
+docker run -it --volumes-from  dbdata  --name db2 ubuntu
+## 也可以从已经挂载了容器卷的容器来挂载数据卷
+docker run -d --volumes-from  db1  --name db1 training/postgres
+
+## 数据卷容器的备份
+docker run --volumes-from dbdata -v ${pwd}:/backup  --name worker ubuntu  tar cvf /backup/backup.tar /dbdata
+
+## 数据卷容器恢复
+### 首先创建一个带有数据卷的容器dbdata2
+docker  run -v  /dbdata  --name dbdata2 ubuntu  /bin/bash
+docker  run --volumes-from dbdata2 -v ${pwd}:/backup busybox tar xvf /backup/backup.tar
+</code></pre>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Django+Jenkins]]></title>
+        <id>https://yes5144.github.io//post/djangojenkins</id>
+        <link href="https://yes5144.github.io//post/djangojenkins">
+        </link>
+        <updated>2019-08-21T15:43:13.000Z</updated>
+        <content type="html"><![CDATA[<h3 id=""></h3>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Django+k8s]]></title>
+        <id>https://yes5144.github.io//post/djangok8s</id>
+        <link href="https://yes5144.github.io//post/djangok8s">
+        </link>
+        <updated>2019-08-21T15:42:48.000Z</updated>
+        <content type="html"><![CDATA[<h3 id=""></h3>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Ansible常用命令]]></title>
+        <id>https://yes5144.github.io//post/ansible-chang-yong-ming-ling</id>
+        <link href="https://yes5144.github.io//post/ansible-chang-yong-ming-ling">
+        </link>
+        <updated>2019-08-21T15:29:48.000Z</updated>
+        <content type="html"><![CDATA[<h3 id="ansible">ansible</h3>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[二进制部署k8s]]></title>
+        <id>https://yes5144.github.io//post/er-jin-zhi-bu-shu-k8s</id>
+        <link href="https://yes5144.github.io//post/er-jin-zhi-bu-shu-k8s">
+        </link>
+        <updated>2019-08-18T09:35:17.000Z</updated>
+        <content type="html"><![CDATA[<h3 id=""></h3>
+<h3 id="部署etcd">部署etcd</h3>
+<pre><code>
+## 生成自签证书
+curl -L https://pkg.cfssl.org/R1.2/cfssl_linux-amd64 -o /usr/local/bin/cfssl
+curl -L https://pkg.cfssl.org/R1.2/cfssljson_linux-amd64 -o /usr/local/bin/cfssljson
+curl -L https://pkg.cfssl.org/R1.2/cfssl-certinfo_linux-amd64 -o /usr/local/bin/cfssl-certinfo
+chmod +x /usr/local/bin/cfssl /usr/local/bin/cfssljson /usr/local/bin/cfssl-certinfo
+
+## 创建两个证书存放目录
+mkdir -p  /root/k8s/{etcd-cert,k8s-cert}
+## 生成认证机构
+cd  /root/k8s/etcd-cert
+cat &gt; ca-config.json &lt;&lt;EOF
+{
+  &quot;signing&quot;: {
+    &quot;default&quot;: {
+      &quot;expiry&quot;: &quot;87600h&quot;
+    },
+    &quot;profiles&quot;: {
+      &quot;www&quot;: {
+         &quot;expiry&quot;: &quot;87600h&quot;,
+         &quot;usages&quot;: [
+            &quot;signing&quot;,
+            &quot;key encipherment&quot;,
+            &quot;server auth&quot;,
+            &quot;client auth&quot;
+        ]
+      }
+    }
+  }
+}
+EOF
+
+cat &gt; ca-csr.json &lt;&lt;EOF
+{
+    &quot;CN&quot;: &quot;etcd CA&quot;,
+    &quot;key&quot;: {
+        &quot;algo&quot;: &quot;rsa&quot;,
+        &quot;size&quot;: 2048
+    },
+    &quot;names&quot;: [
+        {
+            &quot;C&quot;: &quot;CN&quot;,
+            &quot;L&quot;: &quot;Beijing&quot;,
+            &quot;ST&quot;: &quot;Beijing&quot;
+        }
+    ]
+}
+EOF
+
+cfssl gencert -initca ca-csr.json | cfssljson -bare ca
+
+## 为etcd生成证书
+cat &gt; server-csr.json &lt;&lt;EOF
+{
+    &quot;CN&quot;: &quot;etcd&quot;,
+    &quot;hosts&quot;: [
+    &quot;192.168.204.133&quot;,
+    &quot;192.168.204.134&quot;,
+    &quot;192.168.204.135&quot;
+    ],
+    &quot;key&quot;: {
+        &quot;algo&quot;: &quot;rsa&quot;,
+        &quot;size&quot;: 2048
+    },
+    &quot;names&quot;: [
+        {
+            &quot;C&quot;: &quot;CN&quot;,
+            &quot;L&quot;: &quot;BeiJing&quot;,
+            &quot;ST&quot;: &quot;BeiJing&quot;
+        }
+    ]
+}
+EOF
+
+cfssl gencert -ca=ca.pem -ca-key=ca-key.pem -config=ca-config.json -profile=www server-csr.json | cfssljson -bare server
+
+## 下载etcd二进制包开始部署
+mkdir -p  /opt/etcd/{bin,cfg,ssl}
+cp  /root/k8s/etcd-cert/{ca,server,server-key}.pem  /opt/etcd/ssl/
+mkdir  /opt/src &amp;&amp; cd /opt/src
+wget https://github.com/coreos/etcd/releases/download/v3.3.13/etcd-v3.3.13-linux-amd64.tar.gz
+tar -xvf etcd-v3.3.13-linux-amd64.tar.gz
+cp  etcd-v3.3.13-linux-amd64/etcd*  /opt/etcd/bin/
+
+## etcd启动配置文件
+ETCD_NAME=&quot;etcd01&quot;
+ETCD_IP=&quot;192.168.204.133&quot;
+ETCD_CLUSTER=&quot;etcd02=https://192.168.204.134:2380,etcd03=https://192.168.204.135:2380&quot;
+
+cat &lt;&lt;EOF &gt;/opt/etcd/cfg/etcd
+#[Member]
+ETCD_NAME=&quot;${ETCD_NAME}&quot;
+ETCD_DATA_DIR=&quot;/var/lib/etcd/default.etcd&quot;
+ETCD_LISTEN_PEER_URLS=&quot;https://${ETCD_IP}:2380&quot;
+ETCD_LISTEN_CLIENT_URLS=&quot;https://${ETCD_IP}:2379&quot;
+
+#[Clustering]
+ETCD_INITIAL_ADVERTISE_PEER_URLS=&quot;https://${ETCD_IP}:2380&quot;
+ETCD_ADVERTISE_CLIENT_URLS=&quot;https://${ETCD_IP}:2379&quot;
+ETCD_INITIAL_CLUSTER=&quot;etcd01=https://${ETCD_IP}:2380,${ETCD_CLUSTER}&quot;
+ETCD_INITIAL_CLUSTER_TOKEN=&quot;etcd-cluster&quot;
+ETCD_INITIAL_CLUSTER_STATE=&quot;new&quot;
+EOF
+
+## 生成systemd启动文件
+cat &lt;&lt;EOF &gt;/usr/lib/systemd/system/etcd.service
+[Unit]
+Description=Etcd Server
+After=network.target
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=notify
+EnvironmentFile=${WORK_DIR}/cfg/etcd
+ExecStart=${WORK_DIR}/bin/etcd \
+--name=\${ETCD_NAME} \
+--data-dir=\${ETCD_DATA_DIR} \
+--listen-peer-urls=\${ETCD_LISTEN_PEER_URLS} \
+--listen-client-urls=\${ETCD_LISTEN_CLIENT_URLS},http://127.0.0.1:2379 \
+--advertise-client-urls=\${ETCD_ADVERTISE_CLIENT_URLS} \
+--initial-advertise-peer-urls=\${ETCD_INITIAL_ADVERTISE_PEER_URLS} \
+--initial-cluster=\${ETCD_INITIAL_CLUSTER} \
+--initial-cluster-token=\${ETCD_INITIAL_CLUSTER_TOKEN} \
+--initial-cluster-state=new \
+--cert-file=${WORK_DIR}/ssl/server.pem \
+--key-file=${WORK_DIR}/ssl/server-key.pem \
+--peer-cert-file=${WORK_DIR}/ssl/server.pem \
+--peer-key-file=${WORK_DIR}/ssl/server-key.pem \
+--trusted-ca-file=${WORK_DIR}/ssl/ca.pem \
+--peer-trusted-ca-file=${WORK_DIR}/ssl/ca.pem
+Restart=on-failure
+LimitNOFILE=65536
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+## 启动
+systemctl daemon-reload
+systemctl enable etcd
+systemctl restart etcd
+</code></pre>
+<h3 id="node节点部署flannel">node节点部署flannel</h3>
+<pre><code>
+
+</code></pre>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Yum部署k8s]]></title>
         <id>https://yes5144.github.io//post/k8s-bu-shu</id>
@@ -734,402 +980,6 @@ summarize  选项的含义是只显示结果的概要，不显示文件的具体
 
 有了diff.txt，就可以知道需要部署哪些文件了，感觉很方便
 
-</code></pre>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[沉迷学习]]></title>
-        <id>https://yes5144.github.io//post/chen-mi-xue-xi</id>
-        <link href="https://yes5144.github.io//post/chen-mi-xue-xi">
-        </link>
-        <updated>2019-07-18T01:00:32.000Z</updated>
-        <content type="html"><![CDATA[<ul>
-<li>Python</li>
-<li>Django</li>
-<li>Golang</li>
-<li>Beego</li>
-<li>Docker</li>
-<li>K8s</li>
-<li>Linux架构师</li>
-<li>chinaielts</li>
-</ul>
-<pre><code>## python
-https://github.com/jackfrued/Python-100-Days
-
-## k8s
-https://github.com/opsnull/follow-me-install-kubernetes-cluster
-
-## beego
-https://www.jianshu.com/nb/27703855
-</code></pre>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[Go 开发环境部署]]></title>
-        <id>https://yes5144.github.io//post/go-kai-fa-huan-jing-bu-shu</id>
-        <link href="https://yes5144.github.io//post/go-kai-fa-huan-jing-bu-shu">
-        </link>
-        <updated>2019-07-16T15:14:03.000Z</updated>
-        <content type="html"><![CDATA[<h4 id="依赖包在golangorg">依赖包在golang.org ???</h4>
-<pre><code>git clone https://github.com/golang/net.git $GOPATH/src/github.com/golang/net
-git clone https://github.com/golang/sys.git $GOPATH/src/github.com/golang/sys
-git clone https://github.com/golang/tools.git $GOPATH/src/github.com/golang/tools
-git clone https://github.com/golang/sync.git $GOPATH/src/github.com/golang/sync
-git clone https://github.com/golang/lint.git $GOPATH/src/github.com/golang/lint
-git clone https://github.com/golang/text.git $GOPATH/src/github.com/golang/text
-
-mkdir -p  $GOPATH/src/golang.org/x
-cp -a $GOPATH/src/github.com/golang/  $GOPATH/src/golang.org/x
-
-go get -v github.com/rogpeppe/godef
-go get -v github.com/mdempsky/gocode
-go get -v github.com/stamblerre/gocode
-go get -v golang.org/x/tools/cmd/goimports
-go get -v github.com/ramya-rao-a/go-outline
-go get -v golang.org/x/tools/cmd/gopls
-go get -u github.com/spf13/cobra/cobra
-
-</code></pre>
-<h4 id="vscode-go代码补全">vscode go代码补全</h4>
-<pre><code>https://maiyang.me/post/2018-09-14-tips-vscode/
-</code></pre>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[MySQL 请空表]]></title>
-        <id>https://yes5144.github.io//post/mysql-qing-kong-biao</id>
-        <link href="https://yes5144.github.io//post/mysql-qing-kong-biao">
-        </link>
-        <updated>2019-07-15T15:31:53.000Z</updated>
-        <content type="html"><![CDATA[<pre><code>SET FOREIGN_KEY_CHECKS = 0;
-TRUNCATE `events`;
-TRUNCATE `problem`;
-
-set FOREIGN_key_checks =1;
-</code></pre>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[Prometheus 入门]]></title>
-        <id>https://yes5144.github.io//post/prometheus-ru-men</id>
-        <link href="https://yes5144.github.io//post/prometheus-ru-men">
-        </link>
-        <updated>2019-07-13T11:32:15.000Z</updated>
-        <content type="html"><![CDATA[<p>prometheus</p>
-<p>promOL</p>
-<pre><code>http_requests_total[5m]
-rate(http_requests_total[5m])
-
-
-http_request_duration_microseconds_count{handler=&quot;query&quot;}
-</code></pre>
-<h4 id="这里提供一些其他常用的表示式">这里提供一些其他常用的表示式：</h4>
-<pre><code>查询主机使用率
-
-1 - avg by (agentIP) (irate(node_cpu{agentIP=~&quot;$machine&quot;, mode=&quot;idle&quot;}[5m]))
-查询主机磁盘IO
-
-irate(node_disk_io_time_ms{agentIP=~'$machine',device!~'^(md\\d+$|dm-)'}[5m])
-查询主机内存使用量
-
-(node_memory_MemTotal{agentIP=&quot;101.37.26.244&quot;} - node_memory_MemAvailable{agentIP=&quot;101.37.26.244&quot;}) / node_memory_MemTotal{agentIP=&quot;101.37.26.244&quot;}
-除了本文中示例的表达式功能以外，Prometheus还提供了其它丰富的查询，操作符以及表达式。包括：运算符，聚合,函数等等。
-
-http://ylzheng.com/2018/01/17/prometheus-sd-and-relabel/
-
-
-通过指标io_namespace_http_requests_total我们可以：
-
-查询应用的请求总量
-# PromQL
-sum(io_namespace_http_requests_total)
-
-
-查询每秒Http请求量
-# PromQL
-sum(rate(io_wise2c_gateway_requests_total[5m]))
-
-
-查询当前应用请求量Top N的URI
-# PromQL
-topk(10, sum(io_namespace_http_requests_total) by (path))
-
-事件发生总的次数
-# 含义：当前http请求发生总次数为12次
-io_namespace_http_requests_latency_seconds_summary_count{path=&quot;/&quot;,method=&quot;GET&quot;,code=&quot;200&quot;,} 12.0
-事件产生的值的总和
-# 含义：这12次http请求的总响应时间为 51.029495508s
-io_namespace_http_requests_latency_seconds_summary_sum{path=&quot;/&quot;,method=&quot;GET&quot;,code=&quot;200&quot;,} 51.029495508
-事件产生的值的分布情况
-# 含义：这12次http请求响应时间的中位数是3.052404983s
-io_namespace_http_requests_latency_seconds_summary{path=&quot;/&quot;,method=&quot;GET&quot;,code=&quot;200&quot;,quantile=&quot;0.5&quot;,} 3.052404983
-# 含义：这12次http请求响应时间的9分位数是8.003261666s
-io_namespace_http_requests_latency_seconds_summary{path=&quot;/&quot;,method=&quot;GET&quot;,code=&quot;200&quot;,quantile=&quot;0.9&quot;,} 8.003261666
-使用Collector暴露业务指标
-
-http://ylzheng.com/2018/03/12/prometheus-alertmanager-ha/
-
-https://learnku.com/articles/22193#098370
-
-https://songjiayang.gitbooks.io/prometheus/content/
-
-https://tizeen.github.io/2018/04/21/prometheus+node_exporter+alertmanager%E7%9B%91%E6%8E%A7%E4%B8%BB%E6%9C%BA%E5%AE%9E%E8%B7%B5/
-
-https://www.cnblogs.com/fairjm/p/start_prometheus.html
-
-https://www.ctolib.com/docs/sfile/prometheus-book/sd/service-discovery-with-consul.html
-https://blog.csdn.net/polo2044/article/details/83963211
-
-http://docs.flycloud.me/docs/ELKStack/elasticsearch/other/grafana.html
-
-https://blog.52itstyle.vip/archives/2049/
-
-https://juejin.im/entry/5bc411245188255c5721663a
-</code></pre>
-<h4 id="grafana-命令行操作">grafana 命令行操作</h4>
-<pre><code>列出可用的插件
-#grafana-cli plugins list-remote
- 
-安装最新版本的插件
-#grafana-cli plugins install &lt;plugin-id&gt;
- 
-安装特定版本的插件
-#grafana-cli plugins install &lt;plugin-id&gt; &lt;version&gt;
- 
-列出安装的插件
-#grafana-cli plugins ls
- 
-更新所有安装的插件
-#grafana-cli plugins update-all
- 
-更新一个插件
-#grafana-cli plugins update &lt;plugin-id&gt;
- 
-删除一个插件
-#grafana-cli plugins remove &lt;plugin-id&gt;
-
-https://yunlzheng.gitbook.io/prometheus-book/parti-prometheus-ji-chu/quickstart/prometheus-quick-start/use-node-exporter
-
-</code></pre>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[Pycharm 常用设置]]></title>
-        <id>https://yes5144.github.io//post/pycharm-chang-yong-she-zhi</id>
-        <link href="https://yes5144.github.io//post/pycharm-chang-yong-she-zhi">
-        </link>
-        <updated>2019-07-13T11:30:47.000Z</updated>
-        <content type="html"><![CDATA[<h4 id="pycharm使用文档">pycharm使用文档</h4>
-<pre><code>1 为项目配置Python解释器
-	File &gt; Settings &gt; Project:项目名称 &gt; Project Interpreter 这里可以选择各种解释器
-	
-2 创建Python文件
-	- 创建Python file
-	- 创建package 这说明是可以当做Python模块导出的？
-	
-3 安装第三方模块
-	Project:项目名称 &gt; Project Interpreter &gt; 绿色+号，搜索你想要安装的模块 &gt; Install Package
-	
-4 常用设置（外观、界面）
-	- 菜单字体及大小
-		File &gt; Settings &gt; Appearance &amp; Behavior &gt; Overrode default fonts
-	- Console 和Terminal字体大小
-		Editor &gt; Colors &amp; Font &gt; Console Font
-	- 设置文件编码
-		Editor &gt; File Encodings
-	- 修改背景颜色
-		Editor &gt; Colors &amp; Font &gt; General
-	- tab=4个空格
-		Editor &gt; Code Style &gt; Python
-	- 字体颜色
-		Editor &gt; Colors &amp; Font &gt; Python
-	- 关闭自动更新
-	    Appearance &amp; Behavior &gt; System Settings &gt; Updates
-	- 脚本头设置
-		Editor &gt; File and Code Templates &gt; Python Script
-		自动日期：Date: ${DATE}
-		光标位置：#[[$END$]]# 并且勾选Enable Live Templates
-	- 显示行号
-		Editor &gt; General &gt; Appearance &gt; 勾选Show line numbers
-	- 导入导出pycharm自定义的配置
-		File &gt; Export Settings(导出)/ Import Settings(导入)
-		
-5 常用快捷键、如复制当前行、删除当前行、批量注释、缩进、查找和替换
-	- 快捷键的查询和配置：Keymap
-		快速换行： Ctrl + Enter
-		快速查找： Ctrl + F
-        替换： Ctrl + H
-        折叠代码块：Ctrl + -
-        删除当前行：Ctrl + E	
-	- 滚轮放大缩小代码
-	    Settings &gt; 搜索font &gt; Decrease Font Size / Increase Font Size
-
-6 pycharm 安装插件
-	Settings &gt; Plugins &gt; Browse repositories(中间那个) &gt; 搜索插件 &gt; install
-	常用插件：
-		- Markdown support
-		- .ignore
-		- BashSuport
-		- IdeaVim
-		- CodeGlance
-
-7 Git配置
-	- 安装好git
-	- Settings &gt; Version Control &gt; Git
-	
-	
-	pycharm快捷键及一些常用设置
-
-1、编辑（Editing）
-
-Ctrl + Space 基本的代码完成（类、方法、属性）
-Ctrl + Alt + Space 快速导入任意类
-Ctrl + Shift + Enter 语句完成
-Ctrl + P 参数信息（在方法中调用参数）
-Ctrl + Q 快速查看文档
-Shift + F1 外部文档
-Ctrl + 鼠标 简介
-Ctrl + F1 显示错误描述或警告信息
-Alt + Insert 自动生成代码
-Ctrl + O 重新方法
-Ctrl + Alt + T 选中
-Ctrl + / 行注释
-Ctrl + Shift + / 块注释
-Ctrl + W 选中增加的代码块
-Ctrl + Shift + W 回到之前状态
-Ctrl + Shift + ]/[ 选定代码块结束、开始
-Alt + Enter 快速修正
-Ctrl + Alt + L 代码格式化
-Ctrl + Alt + O 优化导入
-Ctrl + Alt + I 自动缩进
-Tab / Shift + Tab 缩进、不缩进当前行
-Ctrl+X/Shift+Delete 剪切当前行或选定的代码块到剪贴板
-Ctrl+C/Ctrl+Insert 复制当前行或选定的代码块到剪贴板
-Ctrl+V/Shift+Insert 从剪贴板粘贴
-Ctrl + Shift + V 从最近的缓冲区粘贴
-Ctrl + D 复制选定的区域或行
-Ctrl + Y 删除选定的行
-Ctrl + Shift + J 添加智能线
-Ctrl + Enter 智能线切割
-Shift + Enter 另起一行
-Ctrl + Shift + U 在选定的区域或代码块间切换
-Ctrl + Delete 删除到字符结束
-Ctrl + Backspace 删除到字符开始
-Ctrl + Numpad+/- 展开折叠代码块
-Ctrl + Numpad+ 全部展开
-Ctrl + Numpad- 全部折叠
-Ctrl + F4 关闭运行的选项卡
-
-2、查找/替换(Search/Replace)
-F3 下一个
-Shift + F3 前一个
-Ctrl + R 替换
-Ctrl + Shift + F 全局查找
-Ctrl + Shift + R 全局替换
-
-3、运行(Running)
-Alt + Shift + F10 运行模式配置
-Alt + Shift + F9 调试模式配置
-Shift + F10 运行
-Shift + F9 调试
-Ctrl + Shift + F10 运行编辑器配置
-Ctrl + Alt + R 运行manage.py任务
-
-4、调试(Debugging)
-F8 跳过
-F7 进入
-Shift + F8 退出
-Alt + F9 运行游标
-Alt + F8 验证表达式
-Ctrl + Alt + F8 快速验证表达式
-F9 恢复程序
-Ctrl + F8 断点开关
-Ctrl + Shift + F8 查看断点
-
-5、导航(Navigation)
-Ctrl + N 跳转到类
-Ctrl + Shift + N 跳转到符号
-Alt + Right/Left 跳转到下一个、前一个编辑的选项卡
-F12 回到先前的工具窗口
-Esc 从工具窗口回到编辑窗口
-Shift + Esc 隐藏运行的、最近运行的窗口
-Ctrl + Shift + F4 关闭主动运行的选项卡
-Ctrl + G 查看当前行号、字符号
-Ctrl + E 当前文件弹出
-Ctrl+Alt+Left/Right 后退、前进
-Ctrl+Shift+Backspace 导航到最近编辑区域
-Alt + F1 查找当前文件或标识
-Ctrl+B / Ctrl+Click 跳转到声明
-Ctrl + Alt + B 跳转到实现
-Ctrl + Shift + I查看快速定义
-Ctrl + Shift + B跳转到类型声明
-Ctrl + U跳转到父方法、父类
-Alt + Up/Down跳转到上一个、下一个方法
-Ctrl + ]/[跳转到代码块结束、开始
-Ctrl + F12弹出文件结构
-Ctrl + H类型层次结构
-Ctrl + Shift + H方法层次结构
-Ctrl + Alt + H调用层次结构
-F2 / Shift + F2下一条、前一条高亮的错误
-F4 / Ctrl + Enter编辑资源、查看资源
-Alt + Home显示导航条F11书签开关
-Ctrl + Shift + F11书签助记开关
-Ctrl + #[0-9]跳转到标识的书签
-Shift + F11显示书签
-
-6、搜索相关(Usage Search)
-Alt + F7/Ctrl + F7文件中查询用法
-Ctrl + Shift + F7文件中用法高亮显示
-Ctrl + Alt + F7显示用法
-
-7、重构(Refactoring)
-F5复制F6剪切
-Alt + Delete安全删除
-Shift + F6重命名
-Ctrl + F6更改签名
-Ctrl + Alt + N内联
-Ctrl + Alt + M提取方法
-Ctrl + Alt + V提取属性
-Ctrl + Alt + F提取字段
-Ctrl + Alt + C提取常量
-Ctrl + Alt + P提取参数
-
-8、控制VCS/Local History
-Ctrl + K提交项目
-Ctrl + T更新项目
-Alt + Shift + C查看最近的变化
-Alt + BackQuote(’)VCS快速弹出
-
-9、模版(Live Templates)
-Ctrl + Alt + J当前行使用模版
-Ctrl +Ｊ插入模版
-
-10、基本(General)
-Alt + #[0-9]打开相应的工具窗口
-Ctrl + Alt + Y同步
-Ctrl + Shift + F12最大化编辑开关
-Alt + Shift + F添加到最喜欢
-Alt + Shift + I根据配置检查当前文件
-Ctrl + BackQuote(’)快速切换当前计划
-Ctrl + Alt + S　打开设置页
-Ctrl + Shift + A查找编辑器里所有的动作
-Ctrl + Tab在窗口间进行切换
-
-一些常用设置：
-
-1. pycharm默认是自动保存的，习惯自己按ctrl + s 的可以进行如下设置：
-1. file -&gt; Setting -&gt; General -&gt; Synchronization -&gt; Save files on frame deactivation 和 Save files automatically if application is idle for .. sec 的勾去掉
-2. file -&gt;Setting -&gt; Editor -&gt; Editor Tabs -&gt; Mark modified tabs with asterisk 打上勾
-2. Alt + Enter: 自动添加包
-
-3. 对于常用的快捷键，可以设置为visual studio(eclipse...)一样的：
-file -&gt; Setting -&gt; Keymap -&gt; Keymaps -&gt; vuisual studio -&gt; Apply
-
-4. Pycharm中默认是不能用Ctrl+滚轮改变字体大小的，可以在file -&gt; Setting -&gt;Editor-〉Mouse中设置
-
-5. 要设置Pycharm的字体，要先在file -&gt; Setting -&gt;Editor-〉Editor中选择一种风格并保存，然后才可以改变
-
-6. 在setting中搜索theme可以改变主题，所有配色统一改变
 </code></pre>
 ]]></content>
     </entry>
