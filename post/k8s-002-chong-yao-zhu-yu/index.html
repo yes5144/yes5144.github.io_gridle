@@ -3,13 +3,13 @@
   <head>
     <meta charset="utf-8" >
 
-<title>k8s 学习 | Talk is cheap. Show me the code</title>
+<title>k8s-002-重要术语 | Talk is cheap. Show me the code</title>
 <meta name="description" content="你第十年的目标是CTO，你打算如何实现？">
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://yes5144.github.io//favicon.ico?v=1568762163895">
+<link rel="shortcut icon" href="https://yes5144.github.io//favicon.ico?v=1569037304676">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
 <link rel="stylesheet" href="https://yes5144.github.io//styles/main.css">
 
@@ -30,7 +30,7 @@
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://yes5144.github.io/">
-        <img src="https://yes5144.github.io//images/avatar.png?v=1568762163895" class="site-logo">
+        <img src="https://yes5144.github.io//images/avatar.png?v=1569037304676" class="site-logo">
         <h1 class="site-title">Talk is cheap. Show me the code</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -92,89 +92,11 @@
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
           <div class="post-detail">
-            <h2 class="post-title">k8s 学习</h2>
-            <div class="post-date">2019-08-09</div>
+            <h2 class="post-title">k8s-002-重要术语</h2>
+            <div class="post-date">2019-09-21</div>
             
             <div class="post-content">
-              <h3 id="1docker的安装">1，docker的安装</h3>
-<pre><code>## 使用阿里云镜像加速安装下载docker-ce
-## 参考链接：https://yq.aliyun.com/articles/110806
-
-# step 1: 安装必要的一些系统工具
-sudo yum install -y yum-utils device-mapper-persistent-data lvm2
-# Step 2: 添加软件源信息
-sudo yum-config-manager --add-repo http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
-# Step 3: 更新并安装 Docker-CE
-sudo yum makecache fast
-sudo yum -y install docker-ce
-# Step 4: 开启Docker服务
-sudo service docker start
-
-</code></pre>
-<h3 id="2配置-docker-加速器">2，配置 docker 加速器</h3>
-<pre><code>## 参考链接https://www.daocloud.io/mirror
-## 该脚本可以将 --registry-mirror 加入到你的 Docker 配置文件 /etc/docker/daemon.json 中。适用于 Ubuntu14.04、Debian、CentOS6 、CentOS7、Fedora、Arch Linux、openSUSE Leap 42.1，其他版本可能有细微不同。更多详情请访问文档。
-curl -sSL https://get.daocloud.io/daotools/set_mirror.sh | sh -s http://f1361db2.m.daocloud.io
-
-
-
-</code></pre>
-<h3 id="5k8s基础命令">5，k8s基础命令</h3>
-<pre><code>## https://kubernetes.io/docs/tutorials/
-
-## 
-kubectl  get  nodes
-kubectl  cluster-info
-## deployment
-kubectl  run kubernetes-bootcamp  --image=docker.io/jocatalin/kubernetes-bootcamp:v1  --port=8080
-kubectl  get  nodes
-## 
-kubectl  expose  deployment/kubernets-bootcamp  --type=&quot;NodePort&quot;  --port=8080
-kubectl  get  services
-
-kubectl delete service -l run=kubernetes-bootcamp
-kubectl get services
-
-## scale
-kubectl  get  deployments
-kubectl  scale  deployments/kubernetes-bootcamp  --replicas=3
-kubectl  get  deployments
-kubectl  get  nodes
-
-kubectl  scale  deployments/kubernetes-bootcamp  --replicas=2
-kubectl  get  deployments
-kubectl  get  nodes
-
-## 
-kubectl  set  image  deployments/kubernetes-bootcamp  kubernetes-bootcamp=jocatalin/kubernetes-bootcamp:v2
-
-kubectl  rollout  undo  deployments/kubernetes-bootcamp
-kubectl  get  nodes
-
-kubectl  get  namespace
-
-</code></pre>
-<h3 id="kubectl-管理应用程序生命周期">kubectl 管理应用程序生命周期</h3>
-<pre><code>1、创建
-kubectl run nginx --replicas=3 --image=nginx:1.14 --port=80
-kubectl get deploy,pods
-
-2、发布
-kubectl expose deployment nginx --port=80  --type=NodePort  --target-port=80  --name=nginx-service
-kubectl  get service
-
-3、更新
-kubectl  set image deployment/nginx  nginx=nginx:1.15
-
-4、回滚
-kubectl rollout history deployment/nginx
-kubectl rollout undo deployment/nginx
-
-5、删除
-kubectl  delete deploy/nginx
-kubectl  delete svc/nginx-service
-
-</code></pre>
+              <h2 id=""></h2>
 
             </div>
             
@@ -189,9 +111,9 @@ kubectl  delete svc/nginx-service
             
               <div class="next-post">
                 <div class="next">下一篇</div>
-                <a href="https://yes5144.github.io//post/linux-jie-ya-suo-ming-ling">
+                <a href="https://yes5144.github.io//post/docker-ru-men-ming-ling">
                   <h3 class="post-title">
-                    Linux 解压缩命令
+                    Docker入门命令
                   </h3>
                 </a>
               </div>

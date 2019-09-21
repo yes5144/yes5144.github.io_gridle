@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://yes5144.github.io/</id>
     <title>Talk is cheap. Show me the code</title>
-    <updated>2019-09-17T23:16:38.919Z</updated>
+    <updated>2019-09-21T13:56:56.602Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://yes5144.github.io/"/>
     <link rel="self" href="https://yes5144.github.io//atom.xml"/>
@@ -10,6 +10,15 @@
     <logo>https://yes5144.github.io//images/avatar.png</logo>
     <icon>https://yes5144.github.io//favicon.ico</icon>
     <rights>All rights reserved 2019, Talk is cheap. Show me the code</rights>
+    <entry>
+        <title type="html"><![CDATA[k8s-002-重要术语]]></title>
+        <id>https://yes5144.github.io//post/k8s-002-chong-yao-zhu-yu</id>
+        <link href="https://yes5144.github.io//post/k8s-002-chong-yao-zhu-yu">
+        </link>
+        <updated>2019-09-21T02:16:57.000Z</updated>
+        <content type="html"><![CDATA[<h2 id=""></h2>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Docker入门命令]]></title>
         <id>https://yes5144.github.io//post/docker-ru-men-ming-ling</id>
@@ -71,15 +80,19 @@ docker  run -v  /dbdata  --name dbdata2 ubuntu  /bin/bash
 docker  run --volumes-from dbdata2 -v ${pwd}:/backup busybox tar xvf /backup/backup.tar
 </code></pre>
 <h3 id="端口映射和容器互联">端口映射和容器互联</h3>
-<pre><code>## -P Docker会随机映射一个49000-49900端口到容器开放的端口，-p Host_port:Container_port指定端口
+<pre><code>## -P Docker会随机映射一个49000-49900端口到容器开放的端口
+## -p Host_port:Container_port指定端口
+
 docker run -d -P training/webapp python app.py
+
 docker logs -f Name_or_ID
 
 docker port  Name_or_ID Port
 
 docker inspect Name_or_ID
 
-docker inspect -f &quot;{{ .Name }}&quot; Name_or_ID
+## {} makedown 默认解析了，请在使用时自行删除反斜杠
+docker inspect -f &quot;\{\{ .Name \}\}&quot; Name_or_ID
 ## 容器互联 --link
 docker run -d --name db training/postgres
 
@@ -91,10 +104,6 @@ docker run --rm --name web2 --link db:db training/webapp env
 docker run -it --rm --link db:db training/webapp /bin/bash
 
 root@lkdje323k3: # cat /etc/hosts
-
-</code></pre>
-<h3 id=""></h3>
-<pre><code>
 </code></pre>
 ]]></content>
     </entry>
@@ -483,7 +492,7 @@ sudo service docker start
 ]]></content>
     </entry>
     <entry>
-        <title type="html"><![CDATA[Mysql-主从复制]]></title>
+        <title type="html"><![CDATA[Mysql-主从复制（Docker）]]></title>
         <id>https://yes5144.github.io//post/mysql-zhu-cong</id>
         <link href="https://yes5144.github.io//post/mysql-zhu-cong">
         </link>
@@ -676,9 +685,9 @@ slave&gt; SHOW DATABASES;
 ]]></content>
     </entry>
     <entry>
-        <title type="html"><![CDATA[k8s 学习]]></title>
-        <id>https://yes5144.github.io//post/k8s-xue-xi</id>
-        <link href="https://yes5144.github.io//post/k8s-xue-xi">
+        <title type="html"><![CDATA[k8s-001-入门命令]]></title>
+        <id>https://yes5144.github.io//post/k8s-001-入门命令</id>
+        <link href="https://yes5144.github.io//post/k8s-001-入门命令">
         </link>
         <updated>2019-08-08T16:12:07.000Z</updated>
         <content type="html"><![CDATA[<h3 id="1docker的安装">1，docker的安装</h3>
@@ -1037,20 +1046,6 @@ go get -u github.com/spf13/cobra/cobra
 </code></pre>
 <h4 id="vscode-go代码补全">vscode go代码补全</h4>
 <pre><code>https://maiyang.me/post/2018-09-14-tips-vscode/
-</code></pre>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[MySQL 请空表]]></title>
-        <id>https://yes5144.github.io//post/mysql-qing-kong-biao</id>
-        <link href="https://yes5144.github.io//post/mysql-qing-kong-biao">
-        </link>
-        <updated>2019-07-15T15:31:53.000Z</updated>
-        <content type="html"><![CDATA[<pre><code>SET FOREIGN_KEY_CHECKS = 0;
-TRUNCATE `events`;
-TRUNCATE `problem`;
-
-set FOREIGN_key_checks =1;
 </code></pre>
 ]]></content>
     </entry>

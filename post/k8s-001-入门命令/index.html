@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>Go语言入门 | Talk is cheap. Show me the code</title>
+<title>k8s-001-入门命令 | Talk is cheap. Show me the code</title>
 <meta name="description" content="你第十年的目标是CTO，你打算如何实现？">
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
@@ -92,137 +92,96 @@
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
           <div class="post-detail">
-            <h2 class="post-title">Go语言入门</h2>
-            <div class="post-date">2019-06-12</div>
+            <h2 class="post-title">k8s-001-入门命令</h2>
+            <div class="post-date">2019-08-09</div>
             
             <div class="post-content">
-              <h3 id="go安装">go安装</h3>
-<pre><code>1，二进制安装
-2，GVM第三方工具安装
-</code></pre>
-<h3 id="gopath设置">GOPATH设置</h3>
-<pre><code>export GOPATH=/home/apple/mygo
-</code></pre>
-<h3 id="获取远程包">获取远程包</h3>
-<pre><code>go get github.com/astaxie/beedb
+              <h3 id="1docker的安装">1，docker的安装</h3>
+<pre><code>## 使用阿里云镜像加速安装下载docker-ce
+## 参考链接：https://yq.aliyun.com/articles/110806
 
-go build
-
-go clean 移除当前源码包里面编译生成的文件。
-
-go fmt 
-
-go get 
-这个命令在内部实际上分为两步操作，1、下载；2、go install
-
-go install 这个命令在内部实际上分成两步操作：第一步是生成结果文件（可执行文件或者.a包），第二步会把编译好的结果移到$GOPATH、pkg或者$GOPATH/bin
-</code></pre>
-<h4 id="go-doc">go doc</h4>
-<pre><code>如果是buildin包，那么执行 go doc buildin;
-如果是http包，那么执行 go doc net/http;
-查看某一个包里面的函数，则执行godoc fmt Printf;
-查看相应的代码，执行godoc -src fmt Printf
+# step 1: 安装必要的一些系统工具
+sudo yum install -y yum-utils device-mapper-persistent-data lvm2
+# Step 2: 添加软件源信息
+sudo yum-config-manager --add-repo http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
+# Step 3: 更新并安装 Docker-CE
+sudo yum makecache fast
+sudo yum -y install docker-ce
+# Step 4: 开启Docker服务
+sudo service docker start
 
 </code></pre>
-<h4 id="其他命令">其他命令</h4>
-<pre><code>go fix 
-go version
-go run
-go env 
-go  list
-go help get
-</code></pre>
-<h3 id="22-go语言基础">2.2 Go语言基础</h3>
-<pre><code>## 定义变量
-var  varName type
-var  vName1,  vName2, vName3 type
-var  vName type = value
-var  vName1, vName2 type =v1, v2
+<h3 id="2配置-docker-加速器">2，配置 docker 加速器</h3>
+<pre><code>## 参考链接https://www.daocloud.io/mirror
+## 该脚本可以将 --registry-mirror 加入到你的 Docker 配置文件 /etc/docker/daemon.json 中。适用于 Ubuntu14.04、Debian、CentOS6 、CentOS7、Fedora、Arch Linux、openSUSE Leap 42.1，其他版本可能有细微不同。更多详情请访问文档。
+curl -sSL https://get.daocloud.io/daotools/set_mirror.sh | sh -s http://f1361db2.m.daocloud.io
 
-var vName1, vName2 = v1, v2
-vName1, vName2 := v1, v2 ## 简短说明，只能在函数内部使用
 
-## 常量
-const  constantName = value
-const Pi float32 = 3.141592
-const i =10000
-const MaxThread =90
-const prefix = &quot;channel&quot;
-
-## 内置数据类型
-### Boolean
-### 数值类型
-### 字符串
-### 错误类型
-err := errors.New(&quot;emit macho dwarf: elf header corrupted&quot;)
-if err != nil {
-    fmt.Print(err)
-}
 
 </code></pre>
-<h3 id="array-slice-map">array  slice  map</h3>
-<pre><code>var  arr [n]type
+<h3 id="5k8s基础命令">5，k8s基础命令</h3>
+<pre><code>## https://kubernetes.io/docs/tutorials/
 
-var arr [10]int
-</code></pre>
-<h3 id="if-for-switch">if  for  switch</h3>
-<pre><code>## if
-var x int64
-x = 11
+## 
+kubectl  get  nodes
+kubectl  cluster-info
+## deployment
+kubectl  run kubernetes-bootcamp  --image=docker.io/jocatalin/kubernetes-bootcamp:v1  --port=8080
+kubectl  get  nodes
+## 
+kubectl  expose  deployment/kubernets-bootcamp  --type=&quot;NodePort&quot;  --port=8080
+kubectl  get  services
 
-if x&gt;10 {
-	fmt.Println(&quot;x is greater than 10&quot;)
-} else{
-	fmt.Println(&quot;x is less than 10&quot;)
-}
+kubectl delete service -l run=kubernetes-bootcamp
+kubectl get services
 
-if x:=computedValue(); x&gt;10{
-	fmt.Println(&quot;x is greater than 10&quot;)
-} else {
-	fmt.Println(&quot;x is less than 10&quot;)
-}
+## scale
+kubectl  get  deployments
+kubectl  scale  deployments/kubernetes-bootcamp  --replicas=3
+kubectl  get  deployments
+kubectl  get  nodes
 
-if integer ==3{
-	fmt.Println(&quot;The integer is equal to 3&quot;)
-}else if integer&lt;3	{
-	fmt.Println(&quot;The integer is less than 3&quot;)
-}else{
-	fmt.Println(&quot;The integer is greater than 3&quot;)
-}
+kubectl  scale  deployments/kubernetes-bootcamp  --replicas=2
+kubectl  get  deployments
+kubectl  get  nodes
 
-</code></pre>
-<pre><code>## for
-	sum :=0
-	for index:=0; index&lt;10; index ++{
-		sum +=index
-	}
-	fmt.Println(&quot;sum is equel to &quot;, sum)
+## 
+kubectl  set  image  deployments/kubernetes-bootcamp  kubernetes-bootcamp=jocatalin/kubernetes-bootcamp:v2
 
-	sum :=1
-	for sum &lt;1000 {
-		sum+=sum
-	}
+kubectl  rollout  undo  deployments/kubernetes-bootcamp
+kubectl  get  nodes
 
-	// for 配合range可以读取slice和map的数据
-	for k,v :=range map{
-		fmt.Println(&quot;map's key: &quot;,k)
-		fmt.Println(&quot;map's value: &quot;,v)
-	}
-
-	for _,v :=range map{
-		fmt.Println(&quot;map's val: &quot;,v)
-	}
+kubectl  get  namespace
 
 </code></pre>
-<h3 id="一起实验楼实战一下">一起实验楼实战一下？？？</h3>
-<p>https://www.shiyanlou.com/courses/485</p>
+<h3 id="kubectl-管理应用程序生命周期">kubectl 管理应用程序生命周期</h3>
+<pre><code>1、创建
+kubectl run nginx --replicas=3 --image=nginx:1.14 --port=80
+kubectl get deploy,pods
+
+2、发布
+kubectl expose deployment nginx --port=80  --type=NodePort  --target-port=80  --name=nginx-service
+kubectl  get service
+
+3、更新
+kubectl  set image deployment/nginx  nginx=nginx:1.15
+
+4、回滚
+kubectl rollout history deployment/nginx
+kubectl rollout undo deployment/nginx
+
+5、删除
+kubectl  delete deploy/nginx
+kubectl  delete svc/nginx-service
+
+</code></pre>
 
             </div>
             
               <div class="tag-container">
                 
-                  <a href="https://yes5144.github.io//tag/og9FawtfV" class="tag">
-                    Go
+                  <a href="https://yes5144.github.io//tag/Q_WwBrXv4" class="tag">
+                    K8s
                   </a>
                 
               </div>
@@ -230,9 +189,9 @@ if integer ==3{
             
               <div class="next-post">
                 <div class="next">下一篇</div>
-                <a href="https://yes5144.github.io//post/pip-chang-yong">
+                <a href="https://yes5144.github.io//post/linux-jie-ya-suo-ming-ling">
                   <h3 class="post-title">
-                    Pip常用命令组合
+                    Linux 解压缩命令
                   </h3>
                 </a>
               </div>

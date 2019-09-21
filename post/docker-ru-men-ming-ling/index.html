@@ -9,7 +9,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://yes5144.github.io//favicon.ico?v=1568762163895">
+<link rel="shortcut icon" href="https://yes5144.github.io//favicon.ico?v=1569037304676">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
 <link rel="stylesheet" href="https://yes5144.github.io//styles/main.css">
 
@@ -30,7 +30,7 @@
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://yes5144.github.io/">
-        <img src="https://yes5144.github.io//images/avatar.png?v=1568762163895" class="site-logo">
+        <img src="https://yes5144.github.io//images/avatar.png?v=1569037304676" class="site-logo">
         <h1 class="site-title">Talk is cheap. Show me the code</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -151,15 +151,19 @@ docker  run -v  /dbdata  --name dbdata2 ubuntu  /bin/bash
 docker  run --volumes-from dbdata2 -v ${pwd}:/backup busybox tar xvf /backup/backup.tar
 </code></pre>
 <h3 id="端口映射和容器互联">端口映射和容器互联</h3>
-<pre><code>## -P Docker会随机映射一个49000-49900端口到容器开放的端口，-p Host_port:Container_port指定端口
+<pre><code>## -P Docker会随机映射一个49000-49900端口到容器开放的端口
+## -p Host_port:Container_port指定端口
+
 docker run -d -P training/webapp python app.py
+
 docker logs -f Name_or_ID
 
 docker port  Name_or_ID Port
 
 docker inspect Name_or_ID
 
-docker inspect -f &quot;{{ .Name }}&quot; Name_or_ID
+## {} makedown 默认解析了，请在使用时自行删除反斜杠
+docker inspect -f &quot;\{\{ .Name \}\}&quot; Name_or_ID
 ## 容器互联 --link
 docker run -d --name db training/postgres
 
@@ -171,10 +175,6 @@ docker run --rm --name web2 --link db:db training/webapp env
 docker run -it --rm --link db:db training/webapp /bin/bash
 
 root@lkdje323k3: # cat /etc/hosts
-
-</code></pre>
-<h3 id=""></h3>
-<pre><code>
 </code></pre>
 
             </div>
