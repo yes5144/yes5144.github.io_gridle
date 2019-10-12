@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://yes5144.github.io/</id>
     <title>Talk is cheap. Show me the code</title>
-    <updated>2019-10-10T15:31:57.666Z</updated>
+    <updated>2019-10-12T15:44:33.013Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://yes5144.github.io/"/>
     <link rel="self" href="https://yes5144.github.io//atom.xml"/>
@@ -228,6 +228,8 @@ kubectl apply -f httpd.v3.yml  --record</p>
 <p>kubectl get deployment httpd -o wide</p>
 <h2 id="数据管理">数据管理</h2>
 <p>k8s volume支持多种backend 类型，包括 emptyDir, hostPath, GCE Persistent Disk, AWS Elastic Block Store, NFS, Ceph等</p>
+<h2 id="监控">监控</h2>
+<h2 id="ui">UI</h2>
 ]]></content>
     </entry>
     <entry>
