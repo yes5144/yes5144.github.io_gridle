@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://yes5144.github.io/</id>
     <title>Talk is cheap. Show me the code</title>
-    <updated>2019-10-12T15:44:33.013Z</updated>
+    <updated>2019-10-25T15:35:19.063Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://yes5144.github.io/"/>
     <link rel="self" href="https://yes5144.github.io//atom.xml"/>
@@ -10,6 +10,33 @@
     <logo>https://yes5144.github.io//images/avatar.png</logo>
     <icon>https://yes5144.github.io//favicon.ico</icon>
     <rights>All rights reserved 2019, Talk is cheap. Show me the code</rights>
+    <entry>
+        <title type="html"><![CDATA[Django 眼高手低001]]></title>
+        <id>https://yes5144.github.io//post/django-yan-gao-shou-di-001</id>
+        <link href="https://yes5144.github.io//post/django-yan-gao-shou-di-001">
+        </link>
+        <updated>2019-10-22T14:21:44.000Z</updated>
+        <content type="html"><![CDATA[<h2 id="django创建model后">Django创建model后</h2>
+<p>model.table.objects.all()
+model.table.objects.filter(id=1)
+QuerySet 可迭代</p>
+<p>model.table.objects.get(id=1)
+不可迭代</p>
+<p>https://www.django.cn/course/show-31.html</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[ELK日志监控]]></title>
+        <id>https://yes5144.github.io//post/elk-ri-zhi-jian-kong</id>
+        <link href="https://yes5144.github.io//post/elk-ri-zhi-jian-kong">
+        </link>
+        <updated>2019-10-16T16:31:02.000Z</updated>
+        <content type="html"><![CDATA[<p>Fluentd 主要负责日志采集，其他开源组件还有Filebeat、Flume、Fluent Bit等，也有一些应用采集Log4g等日志组件直接输出日志。
+Kafka 主要负责数据整流合并，避免突发日志流量直接冲击Logstash，业内也有用Redis的方案。
+Logstash 负责日志整理，可以完成日志过滤、日志修改等功能。
+Elasticsearch 负责日志储存和日志检索，自带分布式存储，可以将采集的日志进行分片存储。为保证数据高可用，Elasticsearch引入了多副本概念，并通过Lucene实现日志的索引和查询。</p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[k8s-002-重要术语]]></title>
         <id>https://yes5144.github.io//post/k8s-002-zhong-yao-zhu-yu</id>
@@ -1201,64 +1228,6 @@ summarize  选项的含义是只显示结果的概要，不显示文件的具体
 
 有了diff.txt，就可以知道需要部署哪些文件了，感觉很方便
 
-</code></pre>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[沉迷学习]]></title>
-        <id>https://yes5144.github.io//post/chen-mi-xue-xi</id>
-        <link href="https://yes5144.github.io//post/chen-mi-xue-xi">
-        </link>
-        <updated>2019-07-18T01:00:32.000Z</updated>
-        <content type="html"><![CDATA[<ul>
-<li>Python</li>
-<li>Django</li>
-<li>Golang</li>
-<li>Beego</li>
-<li>Docker</li>
-<li>K8s</li>
-<li>Linux架构师</li>
-<li>chinaielts</li>
-</ul>
-<pre><code>## python
-https://github.com/jackfrued/Python-100-Days
-
-## k8s
-https://github.com/opsnull/follow-me-install-kubernetes-cluster
-
-## beego
-https://www.jianshu.com/nb/27703855
-</code></pre>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[Go 开发环境部署]]></title>
-        <id>https://yes5144.github.io//post/go-kai-fa-huan-jing-bu-shu</id>
-        <link href="https://yes5144.github.io//post/go-kai-fa-huan-jing-bu-shu">
-        </link>
-        <updated>2019-07-16T15:14:03.000Z</updated>
-        <content type="html"><![CDATA[<h4 id="依赖包在golangorg">依赖包在golang.org ???</h4>
-<pre><code>git clone https://github.com/golang/net.git $GOPATH/src/github.com/golang/net
-git clone https://github.com/golang/sys.git $GOPATH/src/github.com/golang/sys
-git clone https://github.com/golang/tools.git $GOPATH/src/github.com/golang/tools
-git clone https://github.com/golang/sync.git $GOPATH/src/github.com/golang/sync
-git clone https://github.com/golang/lint.git $GOPATH/src/github.com/golang/lint
-git clone https://github.com/golang/text.git $GOPATH/src/github.com/golang/text
-
-mkdir -p  $GOPATH/src/golang.org/x
-cp -a $GOPATH/src/github.com/golang/  $GOPATH/src/golang.org/x
-
-go get -v github.com/rogpeppe/godef
-go get -v github.com/mdempsky/gocode
-go get -v github.com/stamblerre/gocode
-go get -v golang.org/x/tools/cmd/goimports
-go get -v github.com/ramya-rao-a/go-outline
-go get -v golang.org/x/tools/cmd/gopls
-go get -u github.com/spf13/cobra/cobra
-
-</code></pre>
-<h4 id="vscode-go代码补全">vscode go代码补全</h4>
-<pre><code>https://maiyang.me/post/2018-09-14-tips-vscode/
 </code></pre>
 ]]></content>
     </entry>
