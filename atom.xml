@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://yes5144.github.io/</id>
     <title>Talk is cheap. Show me the code</title>
-    <updated>2019-11-01T15:17:30.806Z</updated>
+    <updated>2019-11-18T15:31:26.890Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://yes5144.github.io/"/>
     <link rel="self" href="https://yes5144.github.io//atom.xml"/>
@@ -11,17 +11,46 @@
     <icon>https://yes5144.github.io//favicon.ico</icon>
     <rights>All rights reserved 2019, Talk is cheap. Show me the code</rights>
     <entry>
+        <title type="html"><![CDATA[TheadPool片段]]></title>
+        <id>https://yes5144.github.io//post/theadpool-pian-duan</id>
+        <link href="https://yes5144.github.io//post/theadpool-pian-duan">
+        </link>
+        <updated>2019-11-18T15:30:08.000Z</updated>
+        <content type="html"><![CDATA[<pre><code>def foo():
+    import time
+    import datetime
+    print(datetime.datetime.now())
+    time.sleep(1)
+
+from concurrent.futures import ThreadPoolExecutor
+pool = ThreadPoolExecutor(2)
+for i in range(10):
+    pool.submit(foo)
+
+pool.shutdown(wait=True)
+</code></pre>
+]]></content>
+    </entry>
+    <entry>
         <title type="html"><![CDATA[k8s 实战]]></title>
         <id>https://yes5144.github.io//post/k8s-shi-zhan</id>
         <link href="https://yes5144.github.io//post/k8s-shi-zhan">
         </link>
         <updated>2019-11-01T02:56:59.000Z</updated>
         <content type="html"><![CDATA[<h3 id="k8s集群一键部署">k8s集群一键部署</h3>
+<p>https://www.kubernetes.org.cn/5462.html</p>
 <h3 id="k8sui展示">k8sUI展示</h3>
 <h3 id="k8s集成ceph分布式存储">k8s集成ceph分布式存储</h3>
 <h3 id="k8s服务部署">k8s服务部署</h3>
 <h3 id="k8s集群监控">k8s集群监控</h3>
 <h3 id="k8s日志监控">k8s日志监控</h3>
+<h3 id="k8s常用命令">k8s常用命令</h3>
+<pre><code>## kubectl命令行工具设置别名和tab补全
+
+## 列出集群中节点、pod、服务和ReplicationController
+
+##
+</code></pre>
 ]]></content>
     </entry>
     <entry>
@@ -991,93 +1020,6 @@ slave&gt; SHOW DATABASES;
 4、Slave端的SQL线程会定期读取relaylog，把二进制的日志解析成SQL语句，并执行这些SQL语句，同步数据到从库中
 
 原文链接：https://blog.csdn.net/weixin_43407305/article/details/87911235
-</code></pre>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[k8s-001-入门命令]]></title>
-        <id>https://yes5144.github.io//post/k8s-001-入门命令</id>
-        <link href="https://yes5144.github.io//post/k8s-001-入门命令">
-        </link>
-        <updated>2019-08-08T16:12:07.000Z</updated>
-        <content type="html"><![CDATA[<h3 id="1docker的安装">1，docker的安装</h3>
-<pre><code>## 使用阿里云镜像加速安装下载docker-ce
-## 参考链接：https://yq.aliyun.com/articles/110806
-
-# step 1: 安装必要的一些系统工具
-sudo yum install -y yum-utils device-mapper-persistent-data lvm2
-# Step 2: 添加软件源信息
-sudo yum-config-manager --add-repo http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
-# Step 3: 更新并安装 Docker-CE
-sudo yum makecache fast
-sudo yum -y install docker-ce
-# Step 4: 开启Docker服务
-sudo service docker start
-
-</code></pre>
-<h3 id="2配置-docker-加速器">2，配置 docker 加速器</h3>
-<pre><code>## 参考链接https://www.daocloud.io/mirror
-## 该脚本可以将 --registry-mirror 加入到你的 Docker 配置文件 /etc/docker/daemon.json 中。适用于 Ubuntu14.04、Debian、CentOS6 、CentOS7、Fedora、Arch Linux、openSUSE Leap 42.1，其他版本可能有细微不同。更多详情请访问文档。
-curl -sSL https://get.daocloud.io/daotools/set_mirror.sh | sh -s http://f1361db2.m.daocloud.io
-
-
-
-</code></pre>
-<h3 id="5k8s基础命令">5，k8s基础命令</h3>
-<pre><code>## https://kubernetes.io/docs/tutorials/
-
-## 
-kubectl  get  nodes
-kubectl  cluster-info
-## deployment
-kubectl  run kubernetes-bootcamp  --image=docker.io/jocatalin/kubernetes-bootcamp:v1  --port=8080
-kubectl  get  nodes
-## 
-kubectl  expose  deployment/kubernets-bootcamp  --type=&quot;NodePort&quot;  --port=8080
-kubectl  get  services
-
-kubectl delete service -l run=kubernetes-bootcamp
-kubectl get services
-
-## scale
-kubectl  get  deployments
-kubectl  scale  deployments/kubernetes-bootcamp  --replicas=3
-kubectl  get  deployments
-kubectl  get  nodes
-
-kubectl  scale  deployments/kubernetes-bootcamp  --replicas=2
-kubectl  get  deployments
-kubectl  get  nodes
-
-## 
-kubectl  set  image  deployments/kubernetes-bootcamp  kubernetes-bootcamp=jocatalin/kubernetes-bootcamp:v2
-
-kubectl  rollout  undo  deployments/kubernetes-bootcamp
-kubectl  get  nodes
-
-kubectl  get  namespace
-
-</code></pre>
-<h3 id="kubectl-管理应用程序生命周期">kubectl 管理应用程序生命周期</h3>
-<pre><code>1、创建
-kubectl run nginx --replicas=3 --image=nginx:1.14 --port=80
-kubectl get deploy,pods
-
-2、发布
-kubectl expose deployment nginx --port=80  --type=NodePort  --target-port=80  --name=nginx-service
-kubectl  get service
-
-3、更新
-kubectl  set image deployment/nginx  nginx=nginx:1.15
-
-4、回滚
-kubectl rollout history deployment/nginx
-kubectl rollout undo deployment/nginx
-
-5、删除
-kubectl  delete deploy/nginx
-kubectl  delete svc/nginx-service
-
 </code></pre>
 ]]></content>
     </entry>

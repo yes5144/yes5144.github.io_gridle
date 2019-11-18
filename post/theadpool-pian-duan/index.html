@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>Saltstack常用操作 | Talk is cheap. Show me the code</title>
+<title>TheadPool片段 | Talk is cheap. Show me the code</title>
 <meta name="description" content="你第十年的目标是CTO，你打算如何实现？">
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
@@ -92,75 +92,30 @@
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
           <div class="post-detail">
-            <h2 class="post-title">Saltstack常用操作</h2>
-            <div class="post-date">2019-06-23</div>
+            <h2 class="post-title">TheadPool片段</h2>
+            <div class="post-date">2019-11-18</div>
             
             <div class="post-content">
-              <blockquote>
-<p>saltstack采用c/s架构，角色分为master/slave，建议采用yum部署</p>
-</blockquote>
-<h4 id="配置minion">配置minion</h4>
-<pre><code>vim  /etc/salt/minion
-master: master-id
-id: hostname&lt;weiyi&gt;
+              <pre><code>def foo():
+    import time
+    import datetime
+    print(datetime.datetime.now())
+    time.sleep(1)
 
-</code></pre>
-<h4 id="管理-salt-key">管理 salt key</h4>
-<pre><code>salt-key  -L
-salt-key  -A
-salt-key  -D
-salt-key  -a &lt;ID&gt;
-salt-key  -d &lt;ID&gt;
-salt-key  -l acc|grep -c -v 'Accepted Keys:'
-</code></pre>
-<h4 id="组织主机节点">组织主机节点</h4>
-<pre><code>vim  /etc/salt/master
-nodegroups:
-  web: 'L@192.168.204.12,192.168.204.13'
-  db: 'L@192.168.204.32,192.168.204.33'
-## 无需重启salt-master，保存即可生效
-salt -N web test.ping
-salt -N db test.ping
-</code></pre>
-<h4 id="模块的调用">模块的调用</h4>
-<pre><code>## ping模块
-salt node1 test.ping
-## cmd模块
-salt node2 cmd.run 'id'
-salt node2 cmd.run 'curl -L http://scripts.example.com/scripts/example.sh |bash'
-### 想携带参数？
-salt node2 cmd.scripts salt://scripts/example.sh &quot;arg1 arg2 'arg   3'&quot;
-salt node2 cmd.scripts http://scripts.example.com/scripts/example.sh &quot;arguments&quot;
+from concurrent.futures import ThreadPoolExecutor
+pool = ThreadPoolExecutor(2)
+for i in range(10):
+    pool.submit(foo)
 
-## pkg模块
-salt node2 pkg.install 'vsftpd,lftp'
-salt node2 pkg.remove 'vsftpd,lftp'
-
-## file.replace
-salt node1 file.replace /ets/ssh/sshd_config pattern='#Port 22' repl='Port 22'
-
-## manage
+pool.shutdown(wait=True)
 </code></pre>
-<h4 id="slssalt-state">SLS(salt state)</h4>
-<h4 id="grain">Grain</h4>
-<pre><code>salt node1 grains.ls |wc -l
-salt node1 grains.item server_type
-salt node1 grains.item ip4_interfaces:eth0
-
-</code></pre>
-<h4 id="pillar">Pillar</h4>
-<blockquote>
-<p>Pillar和Grain的区别是什么？
-Grain是在Master上面创建的，但它的取值来自于Minion，而且Grain的代码是通过调用模块saltutil.sync_grains将其同步到Minion上面执行的。在执行结果没有返回之前，Grain的值时未知的，需要根据Minion的实际环境确认。
-和Grain不同的是，Pillar是在Master上定义和存储的，是为了编写sls文件时便于引用而创建的，它的变量和赋值在执行之前就已经确定好了，和Minion的状态没有关系。</p>
-</blockquote>
 
             </div>
             
               <div class="tag-container">
                 
-                  <a href="https://yes5144.github.io//tag/GLOVoicTa" class="tag">
-                    Saltstack
+                  <a href="https://yes5144.github.io//tag/t3sU7dkeO" class="tag">
+                    Python
                   </a>
                 
               </div>
@@ -168,9 +123,9 @@ Grain是在Master上面创建的，但它的取值来自于Minion，而且Grain�
             
               <div class="next-post">
                 <div class="next">下一篇</div>
-                <a href="https://yes5144.github.io//post/python-zi-fu-bian-ma-zhuan-huan-unicode-he-str">
+                <a href="https://yes5144.github.io//post/k8s-shi-zhan">
                   <h3 class="post-title">
-                    Python字符编码转换Unicode和str
+                    k8s 实战
                   </h3>
                 </a>
               </div>
