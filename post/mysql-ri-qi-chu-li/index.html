@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>Grafana | Talk is cheap. Show me the code</title>
+<title>Mysql 日期处理 | Talk is cheap. Show me the code</title>
 <meta name="description" content="你第十年的目标是CTO，你打算如何实现？">
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
@@ -91,28 +91,55 @@
 
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
-          <h2 class="current-tag">标签: Grafana</h2>
-          
-            <article class="post-item">
-              <div class="left">
-                <a href="https://yes5144.github.io//post/grafana-zabbix-da-zao-jian-kong-da-ping">
-                  <h2 class="post-title">Grafana + zabbix 打造监控大屏</h2>
-                </a>
-                <div class="post-date">
-                  2019-07-28
-                </div>
-                <div class="post-abstract">
-                  
-                </div>
-              </div>
-              
-            </article>
-          
+          <div class="post-detail">
+            <h2 class="post-title">Mysql 日期处理</h2>
+            <div class="post-date">2019-12-01</div>
+            
+            <div class="post-content">
+              <pre><code>https://www.jb51.net/article/132425.htm
 
-          <div class="pagination-container">
-  
-  
-</div>
+## 1、当前日期
+select DATE_SUB(curdate(),INTERVAL 0 DAY) ;
+## 2、明天日期
+select DATE_SUB(curdate(),INTERVAL -1 DAY) ;
+## 3、昨天日期
+select DATE_SUB(curdate(),INTERVAL 1 DAY) ;
+## 4、前一个小时时间
+select date_sub(now(), interval 1 hour);
+## 5、后一个小时时间
+select date_sub(now(), interval -1 hour);
+## 6、前30分钟时间
+select date_add(now(),interval -30 minute)
+## 7、后30分钟时间
+select date_add(now(),interval 30 minute)
+## 8、取得当天：
+SELECT curdate();
+</code></pre>
+
+            </div>
+            
+              <div class="tag-container">
+                
+                  <a href="https://yes5144.github.io//tag/ntJM9tjT5" class="tag">
+                    Mysql
+                  </a>
+                
+              </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://yes5144.github.io//post/theadpool-pian-duan">
+                  <h3 class="post-title">
+                    TheadPool片段
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+
+          </div>
 
         </div>
       </div>
