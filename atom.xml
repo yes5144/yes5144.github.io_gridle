@@ -2,14 +2,43 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://yes5144.github.io/</id>
     <title>Talk is cheap. Show me the code</title>
-    <updated>2019-12-15T14:32:04.430Z</updated>
+    <updated>2020-03-16T15:49:45.999Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://yes5144.github.io/"/>
     <link rel="self" href="https://yes5144.github.io//atom.xml"/>
     <subtitle>你第十年的目标是CTO，你打算如何实现？</subtitle>
     <logo>https://yes5144.github.io//images/avatar.png</logo>
     <icon>https://yes5144.github.io//favicon.ico</icon>
-    <rights>All rights reserved 2019, Talk is cheap. Show me the code</rights>
+    <rights>All rights reserved 2020, Talk is cheap. Show me the code</rights>
+    <entry>
+        <title type="html"><![CDATA[golang 前置补0]]></title>
+        <id>https://yes5144.github.io//post/golang-qian-zhi-bu-0</id>
+        <link href="https://yes5144.github.io//post/golang-qian-zhi-bu-0">
+        </link>
+        <updated>2020-03-16T15:23:51.000Z</updated>
+        <content type="html"><![CDATA[<pre><code>// https://www.cnblogs.com/forrestsun/p/3666069.html
+package main
+
+import (
+    &quot;fmt&quot;
+)
+
+func main() {
+    a := 1
+    fmt.Println(a)
+    //前置补0
+    fmt.Printf(&quot;%03d&quot;, a)
+    fmt.Println(&quot;&quot;)
+    fmt.Printf(&quot;%0*d&quot;, 3, a)
+}
+
+	// proName := []string{&quot;Coder&quot;, &quot;鹿鼎记&quot;, &quot;天龙八部&quot;, &quot;连城诀&quot;}
+	// appName := []string{&quot;golang&quot;, &quot;python&quot;, &quot;虚竹&quot;, &quot;段誉&quot;, &quot;水生&quot;, &quot;韦小宝&quot;, &quot;狄云&quot;, &quot;丁典&quot;}
+	// log.Println(proName[rand.Intn(len(proName))])
+	// log.Println(appName[rand.Intn(len(appName))])
+</code></pre>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Mysql 日期处理]]></title>
         <id>https://yes5144.github.io//post/mysql-ri-qi-chu-li</id>
@@ -889,23 +918,6 @@ relay-log-index=slave-relay-bin.index
 relay-log=slave-relay-bin
 relay_log_recovery=1
 
-</code></pre>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[Mysql-Docker部署mha]]></title>
-        <id>https://yes5144.github.io//post/mysql-mha</id>
-        <link href="https://yes5144.github.io//post/mysql-mha">
-        </link>
-        <updated>2019-08-11T03:23:04.000Z</updated>
-        <content type="html"><![CDATA[<h3 id="docker搭建mariadbmysql-mha高可用集群">Docker搭建MariaDB/Mysql MHA高可用集群</h3>
-<pre><code>原文链接：https://blog.csdn.net/clearlxj/article/details/88422206
-
-## Checking if super_read_only is defined and turned on..DBD::mysql::st execute failed: Unknown system variable 'super_read_only' at /usr/share/perl5/vendor_perl/MHA/SlaveUtil.pm line 245.
-报错原因：mha4mysql版本问题，
-解决办法：最后将MHA的版本换成mha4mysql-0.56。
-
-### mysql--docker化实践：https://blog.csdn.net/weixin_34290390/article/details/89123731
 </code></pre>
 ]]></content>
     </entry>
